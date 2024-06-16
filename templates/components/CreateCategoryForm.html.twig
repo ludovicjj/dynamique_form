@@ -1,0 +1,37 @@
+<div {{ attributes }}>
+    <form
+            data-action="live#action:prevent"
+            data-live-action-param="saveCategory"
+    >
+
+        {% if this.isLoad %}
+            Loading
+        {% else %}
+            {# Product Name #}
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label for="category-name" class="form-label">Name</label>
+
+                        <input
+                                type="text"
+                                data-model="name"
+                                class="form-control {{ _errors.has('name') ? 'is-invalid' }}"
+                                id="category-name"
+                        >
+                        {% if _errors.has('name') %}
+                            <div class="invalid-feedback">
+                                {{ _errors.get('name') }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-secondary">Save Category</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </form>
+</div>

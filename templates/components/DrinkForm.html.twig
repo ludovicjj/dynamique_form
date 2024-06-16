@@ -1,0 +1,17 @@
+<div{{ attributes }}>
+    {{ form_start(form) }}
+
+    {{ form_row(form.product) }}
+
+    {% if form.type is defined %}
+        {{ form_row(form.type) }}
+    {% endif %}
+
+    {{ form_row(form.sugar) }}
+
+    <div class="mb-3 text-center">
+        <button type="button" class="btn btn-primary">Commander</button>
+    </div>
+
+    {{ form_end(form) }}
+</div>

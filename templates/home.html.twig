@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hey 🎉{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% block importmap %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <div class="content">
+            <twig:DrinkForm />
+        </div>
+    </main>
+{% endblock %}
