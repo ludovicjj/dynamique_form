@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/login.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {% block importmap %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+    <div class="form-wrapper p-4 bg-body">
+
+        <div class="brand text-center mb-4">
+            <img src="https://getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo.svg" alt="Logo" width="60" height="48" class="d-inline-block">
+        </div>
+
+        <form action="{{ path('app_login') }}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Email</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="_password" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-secondary">login</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

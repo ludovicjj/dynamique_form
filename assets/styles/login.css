@@ -1,0 +1,28 @@
+.form-wrapper {
+    border: 1px solid var(--bs-secondary-bg-subtle);
+    border-radius: .75rem;
+
+    width: 35%;
+    min-width: 540px;
+    max-width: 600px;
+
+    height: auto;
+    position: relative;
+    --gradient: linear-gradient(113.84deg, #D65831 0%, #D2D631 36.52%, #31D673 71.83%, #3aa3ff 100%);
+}
+
+.form-wrapper:after {
+    position: absolute;
+    content: "";
+    z-index: -1;
+    background: var(--gradient);
+    inset: 3rem;
+    border-radius: 3rem;
+    bottom: 0;
+    filter: blur(3rem);
+}
+
+.App {
+    justify-content: center;
+    align-items: center !important;
+}
