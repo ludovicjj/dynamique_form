@@ -14,7 +14,7 @@ class Alert
     {
         return match ($this->type) {
             'success' => 'circle-check',
-            'danger' => 'circle-exclamation',
+            'danger' => 'alert-circle',
             default => 'circle-check'
         };
     }

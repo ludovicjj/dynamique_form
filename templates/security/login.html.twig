@@ -19,16 +19,27 @@
             <img src="https://getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo.svg" alt="Logo" width="60" height="48" class="d-inline-block">
         </div>
 
+        {% if error %}
+            <twig:Alert type="danger" message="{{ error.messageKey|trans(error.messageData, 'security') }}"/>
+        {% endif %}
+
         <form action="{{ path('app_login') }}" method="post">
             <div class="mb-3">
-                <label for="username" class="form-label">Email</label>
-                <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" name="_email" value="{{ last_username }}" class="form-control">
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" name="_password" class="form-control">
             </div>
+
+            <div class="mb-4">
+                <input id="_remember_me" name="_remember_me" type="checkbox">
+                <label class="text-muted" for="_remember_me">Se souvenir de moi</label>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             <div class="mb-3">
                 <button type="submit" class="btn btn-secondary">login</button>
