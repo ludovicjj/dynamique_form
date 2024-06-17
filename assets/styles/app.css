@@ -4,12 +4,68 @@ body {
 
 .App {
     align-items: stretch;
-    flex-direction: column;
+    flex-direction: row;
     display: flex;
     min-height: 100vh;
     min-width: 320px;
     overflow-x: clip;
 }
+
+.menu {
+    --glass-color: 0 0 0;
+    --glass-opacity: .75;
+    background: rgba(var(--glass-color) / var(--glass-opacity));
+    border-right: 1px solid var(--bs-secondary-bg-subtle);
+}
+.menu.close {
+    width: 55px;
+}
+.menu.open {
+    width: 200px;
+}
+.menu .menu-brand {
+    border-bottom: 1px solid var(--bs-secondary-bg-subtle);
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu li {
+    border: 1px solid transparent;
+}
+
+.menu li a{
+    flex-wrap: nowrap;
+}
+.menu li a {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    border: 1px solid var(--bs-secondary-bg-subtle);
+    border-radius: .25rem;
+    margin: 2px 5px;
+}
+.menu li a:hover {
+    background-color: #161719;
+    border-color: #41464b;
+}
+.menu.close li a {
+    justify-content: center;
+}
+.menu.open li a {
+    padding-left: 1.5rem;
+}
+.menu.close li a .label-link {
+    display: none;
+}
+
+
+/*.menu li:hover {*/
+/*    background-color: #161719;*/
+/*    border: 1px solid #41464b;*/
+/*}*/
+
+
 
 main {
     flex-shrink: 0;

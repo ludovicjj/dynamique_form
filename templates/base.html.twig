@@ -13,8 +13,10 @@
         {% endblock %}
     </head>
     <body>
-        {% include '_partial/menu.html.twig' %}
         <div class="App">
+            {% if is_granted('ROLE_USER') %}
+                <twig:Menu/>
+            {% endif %}
             {% block body %}{% endblock %}
         </div>
     </body>
