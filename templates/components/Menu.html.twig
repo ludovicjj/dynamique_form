@@ -1,5 +1,6 @@
 <div {{ attributes.defaults({
     class: open ? 'menu my-0 p-0 open' : 'menu my-0 p-0 close',
+    'data-url': path('app_toggle_menu'),
 }) }} data-controller="menu"
 >
 
@@ -20,7 +21,7 @@
                     href="{{ path(link.route) }}"
                 >
                     <span class="icon-link">
-                        <twig:Icon name="home"/>
+                        <twig:Icon name="{{ link.icon }}"/>
                     </span>
                     <span class="label-link ps-2">{{ link.label }}</span>
                 </a>

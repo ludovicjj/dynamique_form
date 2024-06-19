@@ -6,6 +6,7 @@ export default class extends Controller {
 
     connect() {
         this.menu = this.element;
+        const url = this.menu.dataset.url
 
         this.menu.addEventListener('click', async (e) => {
             if (!e.target.classList.contains('menu')) {
@@ -22,7 +23,7 @@ export default class extends Controller {
                 this.menu.classList.remove('close')
             }
 
-            await fetch('/toggle-menu', {
+            await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

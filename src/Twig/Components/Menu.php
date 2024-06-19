@@ -16,20 +16,24 @@ class Menu
 
     public array $links = [
         [
-            'label' => 'Home',
-            'route' => 'app_home'
-        ],
-        [
             'label' => 'Registration',
-            'route' => 'app_registration'
+            'route' => 'app_registration',
+            'icon' => 'file'
         ],
         [
             'label' => 'Products',
-            'route' => 'app_product'
+            'route' => 'app_product',
+            'icon' => 'users-plus'
         ],
         [
             'label' => 'Categories',
-            'route' => 'app_category'
+            'route' => 'app_category',
+            'icon' => 'building-community'
+        ],
+        [
+            'label' => 'Deconnection',
+            'route' => 'app_logout',
+            'icon' => 'logout'
         ],
     ];
 
