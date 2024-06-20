@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClientCaseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use DateTime;
@@ -42,6 +44,17 @@ class ClientCase
 
     #[ORM\Column(nullable: true)]
     private ?DateTime $signedAt = null;
+
+    /**
+     * @var Collection<int, PartnerContact>
+     */
+    #[ORM\ManyToMany(targetEntity: PartnerContact::class, inversedBy: 'clientCases')]
+    private Collection $PartnerContacts;
+
+    public function __construct()
+    {
+        $this->PartnerContacts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -116,6 +129,30 @@ class ClientCase
     public function setSignedAt(?DateTime $signedAt): static
     {
         $this->signedAt = $signedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PartnerContact>
+     */
+    public function getPartnerContacts(): Collection
+    {
+        return $this->PartnerContacts;
+    }
+
+    public function addPartnerContact(PartnerContact $partnerContact): static
+    {
+        if (!$this->PartnerContacts->contains($partnerContact)) {
+            $this->PartnerContacts->add($partnerContact);
+        }
+
+        return $this;
+    }
+
+    public function removePartnerContact(PartnerContact $partnerContact): static
+    {
+        $this->PartnerContacts->removeElement($partnerContact);
 
         return $this;
     }

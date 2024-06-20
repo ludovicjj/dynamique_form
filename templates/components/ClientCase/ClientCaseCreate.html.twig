@@ -1,0 +1,51 @@
+<div {{ attributes }}>
+    {{ form_start(form) }}
+
+    <h5 class="mb-3">Informations de l'affaire</h5>
+
+    <div class="row">
+        <div class="col-6">
+           {{ form_row(form.projectName) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.reference) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.partner) }}
+        </div>
+
+        <div class="col-6">
+        {% if form.partnerContacts is defined %}
+            {% if form.partnerContacts.vars.choices|length == 0 %}
+                <span class="form-label">Partenaire Contact</span>
+                <div class="alert alert-info mt-2" style="padding-top:7px; padding-bottom:7px;">Aucun contact associé à ce partenaire n'est disponible.</div>
+            {% else %}
+                {{ form_row(form.partnerContacts) }}
+            {% endif %}
+        {% else %}
+            <span class="form-label">Partenaire Contact</span>
+            <div class="alert alert-info mt-2" style="padding-top:7px; padding-bottom:7px;">Vous devez selectionner un partenaire</div>
+        {% endif %}
+        </div>
+    </div>
+
+    <h5 class="mt-4 mb-3">Adresse</h5>
+
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(form.address1) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.city) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.zipcode) }}
+        </div>
+    </div>
+
+    <div class="mb-3 text-center">
+        <button type="button" class="btn btn-secondary">Valider</button>
+    </div>
+
+    {{ form_end(form, {render_rest: false}) }}
+</div>

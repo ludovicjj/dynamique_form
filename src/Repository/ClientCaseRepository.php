@@ -16,28 +16,16 @@ class ClientCaseRepository extends ServiceEntityRepository
         parent::__construct($registry, ClientCase::class);
     }
 
-    //    /**
-    //     * @return ClientCase[] Returns an array of ClientCase objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function search(string $query): array
+    {
+        $queryBuilder = $this->createQueryBuilder('cc');
 
-    //    public function findOneBySomeField($value): ?ClientCase
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($query) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->like('cc.projectName', ':project_name'))
+                ->setParameter('project_name', "%".$query."%");
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

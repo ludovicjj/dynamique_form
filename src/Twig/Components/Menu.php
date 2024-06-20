@@ -16,8 +16,13 @@ class Menu
 
     public array $links = [
         [
-            'label' => 'Registration',
+            'label' => 'Register',
             'route' => 'app_registration',
+            'icon' => 'file'
+        ],
+        [
+            'label' => 'Affaires',
+            'route' => 'app_client_case',
             'icon' => 'file'
         ],
         [

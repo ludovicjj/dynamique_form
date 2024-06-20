@@ -1,0 +1,64 @@
+<div {{ attributes }}>
+    <div class="container-fluid px-4 px-md-5 py-3">
+        <div class="p-4 markdown-container background-glass mt-5" style="border-radius: .75rem">
+            <fieldset class="d-flex gap-4">
+                <div class="input-group" style="max-width: 30%;">
+                    <label class="input-group-text" for="search">
+                        <twig:Icon name="user"/>
+                    </label>
+                    <select class="form-select" id="search">
+                        <option value="0">Tous les Collaborateurs</option>
+                        <option value="-1">Sans Collaborateur</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-group-text" for="filter">
+                        <twig:Icon name="search"/>
+                    </label>
+                    <input type="search" id="filter" data-model="debounce(300)|filter" class="form-control">
+                </div>
+                <div class="input-group" style="max-width: 50px">
+                    <a
+                            class="btn btn-secondary"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#client-case-modal"
+                    >
+                        <twig:Icon name="plus"/>
+                    </a>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+
+    <div class="container-fluid pt-4 px-4 px-md-5 my-5">
+        <div class="mb-5">
+            <div class="p-4 markdown-container bg-body shadow-blur--rainbow">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Reference</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Vile</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for clientcase in this.clientCases %}
+                        <tr>
+                            <td>{{ clientcase.reference }}</td>
+                            <td>{{ clientcase.projectName }}</td>
+                            <td>{{ clientcase.signedAt | date('d/m/Y') }}</td>
+                            <td>{{ clientcase.city }}</td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

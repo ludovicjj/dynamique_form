@@ -118,11 +118,14 @@ h1, .h1 {
     border-radius: .75rem;
     height: 100%;
     width: 100%;
+}
+
+.shadow-blur--rainbow {
     position: relative;
     --gradient: linear-gradient(113.84deg, #D65831 0%, #D2D631 36.52%, #31D673 71.83%, #3aa3ff 100%);
 }
 
-.markdown-container:after {
+.shadow-blur--rainbow:after {
     position: absolute;
     content: "";
     z-index: -1;
@@ -131,4 +134,14 @@ h1, .h1 {
     border-radius: 3rem;
     bottom: 0;
     filter: blur(3rem);
+}
+
+.background-glass {
+    --glass-opacity: .75;
+    --glass-color: 0 0 0;
+    background: rgba(var(--glass-color) / var(--glass-opacity));
+}
+
+.mandatory {
+    color: var(--bs-danger)
 }
