@@ -51,6 +51,9 @@ class ClientCase
     #[ORM\ManyToMany(targetEntity: PartnerContact::class, inversedBy: 'clientCases')]
     private Collection $PartnerContacts;
 
+    #[ORM\ManyToOne(inversedBy: 'clientCases')]
+    private ?Country $country = null;
+
     public function __construct()
     {
         $this->PartnerContacts = new ArrayCollection();
@@ -153,6 +156,18 @@ class ClientCase
     public function removePartnerContact(PartnerContact $partnerContact): static
     {
         $this->PartnerContacts->removeElement($partnerContact);
+
+        return $this;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }
