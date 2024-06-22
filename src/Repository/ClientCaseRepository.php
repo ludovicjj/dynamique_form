@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ClientCase;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,7 +17,7 @@ class ClientCaseRepository extends ServiceEntityRepository
         parent::__construct($registry, ClientCase::class);
     }
 
-    public function search(string $query): array
+    public function searchPaginated(string $query): Query
     {
         $queryBuilder = $this->createQueryBuilder('cc');
 
@@ -28,6 +29,6 @@ class ClientCaseRepository extends ServiceEntityRepository
 
         $queryBuilder->addOrderBy('cc.signedAt', 'DESC');
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery();
     }
 }

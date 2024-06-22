@@ -12,6 +12,8 @@ use DateTime;
 #[ORM\Entity(repositoryClass: ClientCaseRepository::class)]
 class ClientCase
 {
+    public const ITEMS_PER_PAGE = 25;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

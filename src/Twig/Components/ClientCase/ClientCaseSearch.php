@@ -2,7 +2,11 @@
 
 namespace App\Twig\Components\ClientCase;
 
+use App\Entity\ClientCase;
 use App\Repository\ClientCaseRepository;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
@@ -11,7 +15,7 @@ use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AsLiveComponent]
-class ClientCaseSearch
+class ClientCaseSearch extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentToolsTrait;
@@ -28,18 +32,19 @@ class ClientCaseSearch
 
     public function __construct(
         private readonly ClientCaseRepository $clientCaseRepository,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly PaginatorInterface $paginator
     )
     {
     }
 
-    public function getClientCases(): array
+    public function getClientCases(): PaginationInterface
     {
         $request = $this->requestStack->getMainRequest();
-
         $page = max($request->query->get('page', 1), 1);
 
-        return $this->clientCaseRepository->search($this->filter);
+        $query = $this->clientCaseRepository->searchPaginated($this->filter);
+        return $this->paginator->paginate($query, $page, ClientCase::ITEMS_PER_PAGE);
     }
 
     #[LiveListener('clientCase:created')]
