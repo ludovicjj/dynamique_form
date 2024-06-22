@@ -3,8 +3,10 @@
 namespace App\Form\Type;
 
 use App\Entity\ClientCase;
+use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\PartnerContact;
+use App\Repository\CountryRepository;
 use App\Repository\PartnerContactRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -24,7 +26,7 @@ class ClientCaseType extends AbstractType
 
         $builder
             ->add('projectName', TextType::class, [
-                'label' => 'Nom<span class="mandatory">*</span>',
+                'label' => 'Nom de l\'affaire<span class="mandatory">*</span>',
                 'label_html' => true
             ])
             ->add('reference', TextType::class, [
@@ -72,7 +74,19 @@ class ClientCaseType extends AbstractType
             ->add('zipcode', TextType::class, [
                 'label' => 'Code Postal<span class="mandatory">*</span>',
                 'label_html' => true
-            ]);
+            ])
+            ->add('country', EntityType::class, [
+                'class' => Country::class,
+                'multiple' => false,
+                'choice_label' => 'name',
+                'query_builder' => function(CountryRepository $er): QueryBuilder {
+                    return $er->findAllOrderByNameQueryBuilder();
+                },
+                'label' => 'Pays<span class="mandatory">*</span>',
+                'label_html' => true,
+                'placeholder' => 'Choisissez un pays'
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

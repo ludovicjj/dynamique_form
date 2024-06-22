@@ -1,5 +1,11 @@
 <div {{ attributes }}>
-    {{ form_start(form) }}
+    {{ form_start(form, {
+        attr: {
+            'novalidate': 'novalidate',
+            'data-action': 'live#action:prevent',
+            'data-live-action-param': 'save'
+        }
+    }) }}
 
     <h5 class="mb-3">Informations de l'affaire</h5>
 
@@ -41,10 +47,13 @@
         <div class="col-6">
             {{ form_row(form.zipcode) }}
         </div>
+        <div class="col-6">
+            {{ form_row(form.country) }}
+        </div>
     </div>
 
     <div class="mb-3 text-center">
-        <button type="button" class="btn btn-secondary">Valider</button>
+        <button type="submit" class="btn btn-secondary {{ this.hasValidationErrors ? 'disabled' : '' }}">Valider</button>
     </div>
 
     {{ form_end(form, {render_rest: false}) }}

@@ -26,6 +26,8 @@ class ClientCaseRepository extends ServiceEntityRepository
                 ->setParameter('project_name', "%".$query."%");
         }
 
+        $queryBuilder->addOrderBy('cc.signedAt', 'DESC');
+
         return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -52,6 +52,7 @@ class ClientCase
     private Collection $PartnerContacts;
 
     #[ORM\ManyToOne(inversedBy: 'clientCases')]
+    #[Assert\NotBlank]
     private ?Country $country = null;
 
     public function __construct()

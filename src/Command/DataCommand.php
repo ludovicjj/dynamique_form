@@ -94,7 +94,7 @@ class DataCommand extends Command
         $platform = $connection->getDatabasePlatform();
 
         $tables = [
-            'user', 'client_case', 'partner', 'partner_contact'
+            'user', 'client_case', 'partner', 'partner_contact', 'country'
         ];
 
         //$connection->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');
