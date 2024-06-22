@@ -31,13 +31,11 @@
 
     {{ component('ClientCase:ClientCaseSearch') }}
 
-    {% component BootstrapModal with {id: 'client-case-modal', size: 'modal-xl'} %}
-
+    {% component BootstrapModal with {id: 'client-case-create-modal', size: 'modal-xl'} %}
         {% block modal_header %}
-            <h5>Affaire</h5>
+            <h5>Création Affaire</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         {% endblock %}
-
         {% block modal_body %}
             <twig:ClientCase:ClientCaseCreate />
         {% endblock %}

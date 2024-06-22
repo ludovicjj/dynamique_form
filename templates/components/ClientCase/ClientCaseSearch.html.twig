@@ -22,7 +22,7 @@
                             class="btn btn-secondary"
                             type="button"
                             data-bs-toggle="modal"
-                            data-bs-target="#client-case-modal"
+                            data-bs-target="#client-case-create-modal"
                     >
                         <twig:Icon name="plus"/>
                     </a>
@@ -31,13 +31,13 @@
         </div>
     </div>
 
-    {% if this.isCreated %}
-    <div class="container-fluid pt-4 px-4 px-md-5 my-5">
+    {% if isSuccess %}
+    <div class="container-fluid px-4 px-md-5 mt-4">
         {{ component('Alert', {message: message}) }}
     </div>
     {% endif %}
 
-    <div class="container-fluid pt-4 px-4 px-md-5 my-5">
+    <div class="container-fluid px-4 px-md-5 my-4">
         <div class="mb-5">
             <div class="p-4 markdown-container bg-body shadow-blur--rainbow">
                 <table class="table">
@@ -52,22 +52,65 @@
                     </thead>
 
                     <tbody>
-                    {% for clientcase in this.clientCases %}
+                    {% for clientCase in this.clientCases %}
                         <tr>
-                            <td>{{ clientcase.reference }}</td>
-                            <td>{{ clientcase.projectName }}</td>
-                            <td>{{ clientcase.signedAt | date('d/m/Y') }}</td>
-                            <td>{{ clientcase.city }}</td>
-                            <td></td>
+                            <td>{{ clientCase.reference }}</td>
+                            <td>{{ clientCase.projectName }}</td>
+                            <td>{{ clientCase.signedAt | date('d/m/Y') }}</td>
+                            <td>{{ clientCase.city }}</td>
+                            <td>
+                                <button
+                                        class="btn btn-secondary"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#client-case-update-modal"
+                                        data-action="live#emit"
+                                        data-live-event-param="clientCase:update:modal"
+                                        data-live-id-param="{{ clientCase.id }}"
+                                >
+                                    <twig:Icon name="edit"/>
+                                </button>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-
-        <nav aria-label="Affaire navigation" class="navigation">
-            {{ knp_pagination_render(this.clientCases) }}
-        </nav>
     </div>
+
+    {% component BootstrapModal with {id: 'client-case-update-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emit"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Modification Affaire</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emit"
+                    data-live-event-param="reset"
+            >
+                <twig:Icon name="x"/>
+            </button>
+        {% endblock %}
+
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                <div class="d-none"></div>
+                {{ component('ClientCase:ClientCaseUpdate', {
+                    id: clientCaseUpdateId
+                }) }}
+
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
 </div>

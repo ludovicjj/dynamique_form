@@ -24,6 +24,44 @@ body {
     cursor: default;
 }
 
+/* Loader */
+.modal .loader-wrapper {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal .loader-wrapper .spinner {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: conic-gradient(#0000 10%,#474bff);
+    -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 0);
+    animation: spinner 1s infinite linear;
+}
+
+.modal .ghost {
+    position: absolute;
+    border-width: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    cursor: default !important;
+    background-color: transparent;
+}
+.modal .btn-modal-close {
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
 .menu {
     --glass-color: 0 0 0;
     --glass-opacity: .75;

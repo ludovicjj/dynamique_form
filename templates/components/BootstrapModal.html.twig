@@ -5,8 +5,11 @@
     id: id ? id : false,
 }) }} data-controller="bootstrap-modal"
 >
-
+    {% if block('modal_ghost') %}
+        {% block modal_ghost %}{% endblock %}
+    {% endif %}
     <div class="modal-dialog modal-dialog-centered {{ this.size }}">
+
         <div class="modal-content">
             {% block modal_full_content %}
                 {# HEADER #}
