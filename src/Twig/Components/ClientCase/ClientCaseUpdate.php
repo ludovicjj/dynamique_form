@@ -53,7 +53,6 @@ class ClientCaseUpdate extends AbstractController
     ): void {
         $this->submitForm();
 
-
         /** @var ClientCase $clientCase */
         $clientCase = $this->getForm()->getData();
         $entityManager->flush();

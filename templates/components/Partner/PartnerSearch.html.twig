@@ -1,0 +1,111 @@
+<div {{ attributes }}>
+    <div class="container-fluid px-4 px-md-5 py-3">
+        <div class="p-4 markdown-container background-glass mt-5" style="border-radius: .75rem">
+            <fieldset class="d-flex gap-4 justify-content-end">
+                <div class="input-group" style="max-width: 30%">
+                    <label class="input-group-text" for="filter">
+                        <twig:Icon name="search"/>
+                    </label>
+                    <input
+                            type="search"
+                            id="filter"
+                            data-model="debounce(500)|filter"
+                            class="form-control"
+                            data-action="live#emit"
+                            data-live-event-param="clientCase:filter"
+                    >
+                </div>
+                <div class="input-group" style="max-width: 50px">
+                    <a
+                            class="btn btn-secondary"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#partner-create-modal"
+                    >
+                        <twig:Icon name="plus"/>
+                    </a>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    {% if isSuccess %}
+        <div class="container-fluid px-4 px-md-5 mt-4">
+            {{ component('Alert', {message: message}) }}
+        </div>
+    {% endif %}
+
+    <div class="container-fluid px-4 px-md-5 my-4">
+        <div class="p-4 markdown-container bg-body shadow-blur--rainbow">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Companie</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">Code Postal</th>
+                    <th scope="col">Vile</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for partner in this.partners %}
+                    <tr>
+                        <td>{{ partner.companyName }}</td>
+                        <td>{{ partner.address1 }}</td>
+                        <td>{{ partner.zipcode }}</td>
+                        <td>{{ partner.city }}</td>
+                        <td>
+                            <button
+                                    class="btn btn-secondary"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#partner-update-modal"
+                                    data-action="live#emit"
+                                    data-live-event-param="partner:update:modal"
+                                    data-live-id-param="{{ partner.id }}"
+                            >
+                                <twig:Icon name="edit"/>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% component BootstrapModal with {id: 'partner-update-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emit"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Modification Partenaire</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emit"
+                    data-live-event-param="reset"
+            >
+                <twig:Icon name="x"/>
+            </button>
+        {% endblock %}
+
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                <div class="d-none"></div>
+                {{ component('Partner:PartnerUpdate', {
+                    id: partnerUpdateId
+                }) }}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+</div>

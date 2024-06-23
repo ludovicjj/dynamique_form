@@ -16,9 +16,10 @@ class ClientCaseRepository extends ServiceEntityRepository
         parent::__construct($registry, ClientCase::class);
     }
 
-    // Query
-    public function searchPaginated(string $query): array
+    public function searchPaginated(string $query, int $page, int $itemPerPage): array
     {
+        $offset = $page * $itemPerPage;
+
         $queryBuilder = $this->createQueryBuilder('cc');
 
         if ($query) {
@@ -28,9 +29,23 @@ class ClientCaseRepository extends ServiceEntityRepository
         }
 
         $queryBuilder
-            ->setMaxResults(ClientCase::ITEMS_PER_PAGE)
+            ->setMaxResults($offset)
             ->addOrderBy('cc.signedAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function clientCaseCount(string $query): int
+    {
+        $queryBuilder = $this->createQueryBuilder('cc');
+        $queryBuilder->select('COUNT(cc)');
+
+        if ($query) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->like('cc.projectName', ':project_name'))
+                ->setParameter('project_name', "%".$query."%");
+        }
+
+        return $queryBuilder->getQuery()->getSingleScalarResult() ?? 0;
     }
 }

@@ -3,10 +3,9 @@
 namespace App\Twig\Components\ClientCase;
 
 use App\Repository\ClientCaseRepository;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
+use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -19,8 +18,13 @@ class ClientCaseSearch extends AbstractController
     use DefaultActionTrait;
     use ComponentToolsTrait;
 
-    #[LiveProp(writable: true)]
+    #[LiveProp(writable: true, url: true)]
     public string $filter = '';
+
+    #[LiveProp(writable: true)]
+    public int $page = 1;
+
+    private const PER_PAGE = 25;
 
     #[LiveProp]
     public ?int $clientCaseUpdateId = null;
@@ -32,20 +36,32 @@ class ClientCaseSearch extends AbstractController
     public bool $isLoading = true;
 
     public function __construct(
-        private readonly ClientCaseRepository $clientCaseRepository,
-        private readonly RequestStack $requestStack,
-        private readonly PaginatorInterface $paginator
-    )
-    {
+        private readonly ClientCaseRepository $clientCaseRepository
+    ) {
     }
-
 
     public function getClientCases(): array
     {
-        $request = $this->requestStack->getMainRequest();
-        $page = max($request->query->get('page', 1), 1);
+        $page = max($this->page, 1);
 
-        return $this->clientCaseRepository->searchPaginated($this->filter);
+        return  $this->clientCaseRepository->searchPaginated($this->filter, $page, self::PER_PAGE);
+    }
+
+    public function hasMore(): bool
+    {
+        return $this->clientCaseRepository->clientCaseCount($this->filter) > ($this->page * self::PER_PAGE);
+    }
+
+    #[LiveAction]
+    public function more(): void
+    {
+        ++$this->page;
+    }
+
+    #[LiveListener('clientCase:filter')]
+    public function onFilter(): void
+    {
+        $this->page = 1;
     }
 
     #[LiveListener('clientCase:created')]

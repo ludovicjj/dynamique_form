@@ -6,6 +6,8 @@ use App\Repository\PartnerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
 
 #[ORM\Entity(repositoryClass: PartnerRepository::class)]
 class Partner
@@ -16,6 +18,7 @@ class Partner
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $companyName = null;
 
     #[ORM\Column(length: 255)]
@@ -36,12 +39,20 @@ class Partner
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $siret = null;
 
+    #[ORM\Column]
+    private DateTime $createdAt;
+
+    #[ORM\ManyToOne(targetEntity: Country::class)]
+    #[Assert\NotBlank]
+    private ?Country $country = null;
+
     #[ORM\OneToMany(targetEntity: PartnerContact::class, mappedBy: 'partner')]
     private Collection $partnerContacts;
 
     public function __construct()
     {
         $this->partnerContacts = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -54,7 +65,7 @@ class Partner
         return $this->companyName;
     }
 
-    public function setCompanyName(string $companyName): static
+    public function setCompanyName(?string $companyName): static
     {
         $this->companyName = $companyName;
 
@@ -66,7 +77,7 @@ class Partner
         return $this->address1;
     }
 
-    public function setAddress1(string $address1): static
+    public function setAddress1(?string $address1): static
     {
         $this->address1 = $address1;
 
@@ -78,7 +89,7 @@ class Partner
         return $this->zipcode;
     }
 
-    public function setZipcode(string $zipcode): static
+    public function setZipcode(?string $zipcode): static
     {
         $this->zipcode = $zipcode;
 
@@ -90,7 +101,7 @@ class Partner
         return $this->city;
     }
 
-    public function setCity(string $city): static
+    public function setCity(?string $city): static
     {
         $this->city = $city;
 
@@ -129,6 +140,30 @@ class Partner
     public function setSiret(?string $siret): static
     {
         $this->siret = $siret;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

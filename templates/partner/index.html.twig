@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Partenaire{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% block importmap %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+    <main>
+    <div class="hero">
+        <div class="container-fluid pt-4 px-4 px-md-5 my-5">
+            <div class="text-center">
+                <p class="eyebrows">DEMOS / Live Component</p>
+                <h1 class="text-center">
+                    Partner
+                </h1>
+                <div class="intro mt-4">
+                    <p>
+                        Handle a classic CRUD with LiveComponent and EventListener
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ component('Partner:PartnerSearch') }}
+
+    {% component BootstrapModal with {id: 'partner-create-modal', size: 'modal-xl'} %}
+        {% block modal_header %}
+            <h5>Création Partenaire</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        {% endblock %}
+        {% block modal_body %}
+            <twig:Partner:PartnerCreate />
+        {% endblock %}
+    {% endcomponent %}
+{% endblock %}

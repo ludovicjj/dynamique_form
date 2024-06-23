@@ -58,7 +58,7 @@ class DataCommand extends Command
     {
         ClientCaseFactory::createSequence(
             function() {
-                foreach (range(1, 10) as $i) {
+                foreach (range(1, 200) as $i) {
                     yield ['country' => CountryFactory::random()];
                 }
             }
@@ -70,7 +70,7 @@ class DataCommand extends Command
         PartnerFactory::createSequence(
             function() {
                 foreach (range(1, 3) as $i) {
-                    yield [];
+                    yield ['country' => CountryFactory::random()];
                 }
             }
         );

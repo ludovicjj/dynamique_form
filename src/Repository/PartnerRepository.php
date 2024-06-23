@@ -16,28 +16,14 @@ class PartnerRepository extends ServiceEntityRepository
         parent::__construct($registry, Partner::class);
     }
 
-    //    /**
-    //     * @return Partner[] Returns an array of Partner objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function searchPaginated(int $page, int $itemPerPage): array
+    {
+        $offset = $page * $itemPerPage;
 
-    //    public function findOneBySomeField($value): ?Partner
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $queryBuilder = $this->createQueryBuilder('p');
+
+        $queryBuilder->setMaxResults($offset);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

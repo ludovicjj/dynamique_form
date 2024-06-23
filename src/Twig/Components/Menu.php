@@ -16,22 +16,17 @@ class Menu
 
     public array $links = [
         [
-            'label' => 'Register',
-            'route' => 'app_registration',
-            'icon' => 'file'
-        ],
-        [
             'label' => 'Affaires',
             'route' => 'app_client_case',
             'icon' => 'file'
         ],
         [
-            'label' => 'Products',
-            'route' => 'app_product',
+            'label' => 'Partenaires',
+            'route' => 'app_partner',
             'icon' => 'users-plus'
         ],
         [
-            'label' => 'Categories',
+            'label' => 'Clients',
             'route' => 'app_category',
             'icon' => 'building-community'
         ],

@@ -15,7 +15,14 @@
                     <label class="input-group-text" for="filter">
                         <twig:Icon name="search"/>
                     </label>
-                    <input type="search" id="filter" data-model="debounce(300)|filter" class="form-control">
+                    <input
+                            type="search"
+                            id="filter"
+                            data-model="debounce(500)|filter"
+                            class="form-control"
+                            data-action="live#emit"
+                            data-live-event-param="clientCase:filter"
+                    >
                 </div>
                 <div class="input-group" style="max-width: 50px">
                     <a
@@ -77,6 +84,16 @@
                 </table>
             </div>
         </div>
+
+        {% if this.hasMore %}
+            <button
+                    data-action="live#action"
+                    data-live-action-param="more"
+                    class="btn btn-secondary"
+            >
+                Load More
+            </button>
+        {% endif %}
     </div>
 
     {% component BootstrapModal with {id: 'client-case-update-modal', size: 'modal-xl'} %}
@@ -109,7 +126,6 @@
                 {{ component('ClientCase:ClientCaseUpdate', {
                     id: clientCaseUpdateId
                 }) }}
-
             {% endif %}
         {% endblock %}
     {% endcomponent %}

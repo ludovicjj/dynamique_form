@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Controller\ClientCase;
+namespace App\Controller\Partner;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class ClientCaseController extends AbstractController
+class PartnerController extends AbstractController
 {
-    #[Route('/client-case', name: "app_client_case")]
+    #[Route('/partner', name: 'app_partner')]
     public function index(): Response
     {
-        return $this->render('client_case/index.html.twig');
+        return $this->render('partner/index.html.twig');
     }
 }

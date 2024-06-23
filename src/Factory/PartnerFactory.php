@@ -30,7 +30,8 @@ final class PartnerFactory extends PersistentProxyObjectFactory
             'zipcode' => self::faker()->postcode,
             'phone' => self::faker()->phoneNumber,
             'email' => self::faker()->email,
-            'siret' => '123 456 789'
+            'siret' => '123456789',
+            'country' => CountryFactory::new()
         ];
     }
 

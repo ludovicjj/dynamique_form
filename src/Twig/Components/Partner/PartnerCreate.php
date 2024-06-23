@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Twig\Components\ClientCase;
+namespace App\Twig\Components\Partner;
 
-use App\Entity\ClientCase;
-use App\Form\Type\ClientCaseType;
+use App\Entity\Partner;
+use App\Form\Type\PartnerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -15,7 +15,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 
 #[AsLiveComponent]
-class ClientCaseCreate extends AbstractController
+class PartnerCreate extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentToolsTrait;
@@ -24,7 +24,7 @@ class ClientCaseCreate extends AbstractController
 
     protected function instantiateForm(): FormInterface
     {
-        return $this->createForm(ClientCaseType::class);
+        return $this->createForm(PartnerType::class);
     }
 
     public function hasValidationErrors(): bool
@@ -37,14 +37,14 @@ class ClientCaseCreate extends AbstractController
     {
         $this->submitForm();
 
-        /** @var ClientCase $clientCase */
+        /** @var Partner $partner */
         $clientCase = $this->getForm()->getData();
 
         $entityManager->persist($clientCase);
         $entityManager->flush();
 
-        $this->emit('clientCase:created', [
-            'clientCase' => $clientCase->getId()
+        $this->emit('partner:created', [
+            'message' => "Le partenaire a été créée avec succès"
         ]);
 
         $this->dispatchBrowserEvent('modal:close');
