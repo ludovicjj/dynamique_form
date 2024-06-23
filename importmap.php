@@ -42,4 +42,10 @@ return [
         'version' => '2.3.1',
         'type' => 'css',
     ],
+    '@easepick/core' => [
+        'version' => '1.2.1',
+    ],
+    '@easepick/datetime' => [
+        'version' => '1.2.1',
+    ],
 ];

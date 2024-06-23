@@ -23,6 +23,31 @@ body {
     user-select: none;
     cursor: default;
 }
+/* Datepicker */
+.datepicker-wrapper div.calendar-icon {
+    position: absolute;
+    top: 50%;
+    right: .5rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    /* fix center svg */
+    display: flex;
+    align-items: center;
+}
+.datepicker-wrapper .error div.calendar-icon {
+    right: 2rem;
+}
+.datepicker-wrapper input.js-datepicker {
+    border-right-width: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: pointer;
+}
+.datepicker-wrapper button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
 
 /* Loader */
 .modal .loader-wrapper {
@@ -67,6 +92,10 @@ body {
     --glass-opacity: .75;
     background: rgba(var(--glass-color) / var(--glass-opacity));
     border-right: 1px solid var(--bs-secondary-bg-subtle);
+}
+.menu .sticky-wrapper {
+    position: sticky;
+    top: 0;
 }
 .menu.close {
     width: 55px;

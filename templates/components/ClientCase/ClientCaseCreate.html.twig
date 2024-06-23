@@ -16,6 +16,25 @@
         <div class="col-6">
             {{ form_row(form.reference) }}
         </div>
+        <div class="col-6 mb-3 datepicker-wrapper">
+            <div data-live-rerender="always" {{ stimulus_controller('datepicker') }}>
+                {{ form_label(form.signedAt) }}
+                <div class="d-flex flex-row">
+                    {% set hasError = form_errors(form.signedAt) is not same as('') %}
+                    <div class="flex-grow-1 position-relative {{ hasError ? 'error' : '' }}">
+                        {{ form_widget(form.signedAt) }}
+                        <div class="calendar-icon" data-datepicker-target="calendar">
+                            <twig:Icon name="calendar-month"/>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-datepicker-target="reset">
+                        <twig:Icon name="x"/>
+                    </button>
+                </div>
+                {{ form_errors(form.signedAt) }}
+            </div>
+        </div>
+        <div class="col-6"></div>
         <div class="col-6">
             {{ form_row(form.partner) }}
         </div>

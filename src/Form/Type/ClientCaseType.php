@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -85,6 +86,18 @@ class ClientCaseType extends AbstractType
                 'label' => 'Pays<span class="mandatory">*</span>',
                 'label_html' => true,
                 'placeholder' => 'Choisissez un pays'
+            ])
+            ->add('signedAt', DateType::class, [
+                'label' => 'Date de signature',
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'dd-MM-yyyy',
+                'input'  => 'datetime',
+                'attr' => [
+                    'class' => 'js-datepicker',
+                    'autocomplete'=> 'off',
+                    'data-datepicker-target' => 'input',
+                ],
             ])
         ;
     }

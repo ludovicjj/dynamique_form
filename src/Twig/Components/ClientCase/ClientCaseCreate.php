@@ -41,8 +41,6 @@ class ClientCaseCreate extends AbstractController
         /** @var ClientCase $clientCase */
         $clientCase = $this->getForm()->getData();
 
-        $clientCase->setSignedAt(new DateTime());
-
         $entityManager->persist($clientCase);
         $entityManager->flush();
 

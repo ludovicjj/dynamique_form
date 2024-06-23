@@ -44,7 +44,11 @@ class ClientCase
     #[Assert\Length(max: 255)]
     private ?string $city = null;
 
+    #[ORM\Column]
+    private DateTime $createdAt;
+
     #[ORM\Column(nullable: true)]
+    #[Assert\LessThanOrEqual('today')]
     private ?DateTime $signedAt = null;
 
     /**
@@ -60,6 +64,7 @@ class ClientCase
     public function __construct()
     {
         $this->PartnerContacts = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -123,6 +128,18 @@ class ClientCase
     public function setCity(?string $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
