@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Affaires{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+    {% block importmap %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="container-fluid px-4 px-md-5 my-4">
+            {{ component('CkEditor') }}
+        </div>
+    </main>
+{% endblock %}

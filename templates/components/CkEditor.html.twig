@@ -1,0 +1,28 @@
+<div {{ attributes }}>
+    {{ form_start(form, {
+        attr: {
+            'novalidate': 'novalidate',
+            'data-action': 'live#action:prevent',
+            'data-live-action-param': 'save'
+        }
+    }) }}
+
+    <h5 class="mb-3">Editeur de texte</h5>
+
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="col-12">
+            <div data-live-rerender="always" {{ stimulus_controller('ckeditor') }}>
+                {{ form_row(form.message) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 text-center">
+        <button type="submit" class="btn btn-secondary">Valider</button>
+    </div>
+
+    {{ form_end(form, {render_rest: false}) }}
+</div>
