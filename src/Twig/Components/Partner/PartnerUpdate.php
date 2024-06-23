@@ -46,12 +46,9 @@ class PartnerUpdate extends AbstractController
         EntityManagerInterface $entityManager
     ): void {
         $this->submitForm();
-
-//        /** @var Partner $partner */
-//        $partner = $this->getForm()->getData();
         $entityManager->flush();
 
-        $this->emit('partner:event', [
+        $this->emit('partner:alert', [
             'message' => "Le partner a été modifié avec succès"
         ]);
 

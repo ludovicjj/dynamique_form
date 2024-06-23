@@ -2,7 +2,6 @@
 
 namespace App\Twig\Components\ClientCase;
 
-use App\Entity\ClientCase;
 use App\Form\Type\ClientCaseType;
 use App\Repository\ClientCaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +15,6 @@ use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
-use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
 class ClientCaseUpdate extends AbstractController
@@ -52,13 +50,10 @@ class ClientCaseUpdate extends AbstractController
         EntityManagerInterface $entityManager
     ): void {
         $this->submitForm();
-
-        /** @var ClientCase $clientCase */
-        $clientCase = $this->getForm()->getData();
         $entityManager->flush();
 
-        $this->emit('clientCase:updated', [
-            'clientCase' => $clientCase->getId()
+        $this->emit('clientCase:alert', [
+            'message' => "L'affaire a été modifié avec succès"
         ]);
 
         $this->emit('reset');

@@ -43,7 +43,7 @@ class PartnerCreate extends AbstractController
         $entityManager->persist($clientCase);
         $entityManager->flush();
 
-        $this->emit('partner:created', [
+        $this->emit('partner:alert', [
             'message' => "Le partenaire a été créée avec succès"
         ]);
 

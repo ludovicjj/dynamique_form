@@ -45,8 +45,8 @@ class PartnerSearch
         return  $this->partnerRepository->searchPaginated($page, self::PER_PAGE);
     }
 
-    #[LiveListener('partner:event')]
-    public function onCategoryCreated(#[LiveArg] string $message = ''): void
+    #[LiveListener('partner:alert')]
+    public function onCategoryAlert(#[LiveArg] string $message = ''): void
     {
         $this->isSuccess = true;
         $this->message = $message;

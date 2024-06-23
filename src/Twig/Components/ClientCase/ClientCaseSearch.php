@@ -64,18 +64,11 @@ class ClientCaseSearch extends AbstractController
         $this->page = 1;
     }
 
-    #[LiveListener('clientCase:created')]
-    public function onCategoryCreated(): void
+    #[LiveListener('clientCase:alert')]
+    public function onClientCaseAlert(#[LiveArg] string $message = ''): void
     {
         $this->isSuccess = true;
-        $this->message = "L'affaire a été créée avec succès";
-    }
-
-    #[LiveListener('clientCase:updated')]
-    public function onCategoryUpdated(): void
-    {
-        $this->isSuccess = true;
-        $this->message = "L'affaire a été modifié avec succès";
+        $this->message = $message;
     }
 
     #[LiveListener('clientCase:update:modal')]

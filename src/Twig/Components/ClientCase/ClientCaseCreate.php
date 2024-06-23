@@ -43,8 +43,8 @@ class ClientCaseCreate extends AbstractController
         $entityManager->persist($clientCase);
         $entityManager->flush();
 
-        $this->emit('clientCase:created', [
-            'clientCase' => $clientCase->getId()
+        $this->emit('clientCase:alert', [
+            'message' => "L'affaire a été créée avec succès"
         ]);
 
         $this->dispatchBrowserEvent('modal:close');
