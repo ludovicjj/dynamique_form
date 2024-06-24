@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus';
-import { easepick } from '@easepick/core';
 
 
 export default class extends Controller {
@@ -7,6 +6,11 @@ export default class extends Controller {
     datepicker
 
     connect() {
+        import('duck').then(module => {
+            const duck = new module.Duck()
+            duck.sayHello()
+        })
+
 
         ClassicEditor
             .create( this.inputTarget , {

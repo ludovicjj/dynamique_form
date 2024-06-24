@@ -16,6 +16,10 @@ return [
         'path' => './assets/js/app.js',
         'entrypoint' => true,
     ],
+    'duck' => [
+        'path' => './assets/js/duck.js',
+        'entrypoint' => false,
+    ],
     'bootstrap' => [
         'version' => '5.3.3',
     ],
