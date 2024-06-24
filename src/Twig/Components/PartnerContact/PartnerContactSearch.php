@@ -21,7 +21,12 @@ class PartnerContactSearch extends AbstractController
     #[LiveProp(writable: true)]
     public ?Partner $partner = null;
 
+    #[LiveProp]
+    public ?int $partnerContactUpdateId = null;
+
     private const PER_PAGE = 25;
+
+    public bool $isLoading = true;
 
     public bool $isSuccess = false;
 
@@ -32,6 +37,11 @@ class PartnerContactSearch extends AbstractController
     ) {
     }
 
+    public function getPartnerContacts(): array
+    {
+        return $this->partnerContactRepository->searchPaginated($this->partner);
+    }
+
     #[LiveListener('partnerContact:alert')]
     public function onCategoryAlert(#[LiveArg] string $message = ''): void
     {
@@ -39,8 +49,18 @@ class PartnerContactSearch extends AbstractController
         $this->message = $message;
     }
 
-    public function getPartnerContacts(): array
+    #[LiveListener('partnerContact:update:modal')]
+    public function onUpdateModal(#[LiveArg] int $id): void
     {
-        return $this->partnerContactRepository->searchPaginated($this->partner);
+        $this->isLoading = false;
+        $this->partnerContactUpdateId = $id;
+    }
+
+    #[LiveListener('reset')]
+    public function onReset(): void
+    {
+        $this->partnerContactUpdateId = null;
+        $this->isLoading = true;
+        $this->dispatchBrowserEvent('modal:close');
     }
 }

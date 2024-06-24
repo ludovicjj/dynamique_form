@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components\Partner;
 
+use App\Entity\Country;
 use App\Repository\PartnerRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
@@ -21,6 +22,9 @@ class PartnerSearch
 
     #[LiveProp(writable: true)]
     public ?string $filter = '';
+
+    #[LiveProp(writable: true, hydrateWith: 'hydrateCountry', dehydrateWith: 'dehydrateCountry')]
+    public array $countries = [];
 
     #[LiveProp]
     public ?int $partnerUpdateId = null;
@@ -43,6 +47,29 @@ class PartnerSearch
         $page = max($this->page, 1);
 
         return  $this->partnerRepository->searchPaginated($page, self::PER_PAGE);
+    }
+
+    public function dehydrateCountry(array $countries): array
+    {
+        return array_map(function($country) {
+            return [
+                'id' => $country->getId(),
+                'name' => $country->getName()
+            ];
+        }, $countries);
+    }
+
+    public function hydrateCountry($data)
+    {
+
+        $countries = [];
+        foreach ($data as $country) {
+            $countries[] = (new Country())
+                ->setId($country['id'])
+                ->setName($country['name']);
+        }
+
+        return $countries;
     }
 
     #[LiveListener('partner:alert')]

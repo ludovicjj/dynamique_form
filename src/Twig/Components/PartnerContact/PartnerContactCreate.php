@@ -50,7 +50,7 @@ class PartnerContactCreate extends AbstractController
         $entityManager->flush();
 
         $this->emit('partnerContact:alert', [
-            'message' => "Le partenaire contact a été créée avec succès"
+            'message' => "Le contact a été créée avec succès"
         ]);
 
         $this->dispatchBrowserEvent('modal:close');

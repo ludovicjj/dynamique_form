@@ -2,7 +2,18 @@
     <div class="container-fluid px-4 px-md-5 py-3">
         <div class="p-4 markdown-container background-glass mt-5" style="border-radius: .75rem">
             <fieldset class="d-flex gap-4 justify-content-end">
-                <div class="input-group" style="max-width: 30%">
+                <div class="input-group" style="max-width: 30%;">
+                    <label class="input-group-text" for="country">
+                        <twig:Icon name="map-pin"/>
+                    </label>
+                    <select class="form-select" id="country" data-model="country">
+                        <option>Cherche par pays</option>
+                        {% for country in countries %}
+                            <option value="{{ country.id }}">{{ country.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group">
                     <label class="input-group-text" for="filter">
                         <twig:Icon name="search"/>
                     </label>
@@ -44,6 +55,7 @@
                     <th scope="col">Adresse</th>
                     <th scope="col">Code Postal</th>
                     <th scope="col">Vile</th>
+                    <th scope="col">Pays</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
@@ -55,6 +67,7 @@
                         <td>{{ partner.address1 }}</td>
                         <td>{{ partner.zipcode }}</td>
                         <td>{{ partner.city }}</td>
+                        <td>{{ partner.country.name }}</td>
                         <td>
                             <a
                                 type="button"

@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PartnerContactController extends AbstractController
 {
-    #[Route('/partner-contact/{id}', name: 'app_partner_contact')]
+    #[Route('/partner/{id}/contact', name: 'app_partner_contact')]
     public function index(Partner $partner): Response
     {
         return $this->render('partner_contact/index.html.twig', [

@@ -60,10 +60,10 @@
                                     class="btn btn-secondary"
                                     type="button"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#partner-update-modal"
+                                    data-bs-target="#partner-contact-update-modal"
                                     data-action="live#emit"
-                                    data-live-event-param="partner:update:modal"
-                                    data-live-id-param="{{ partner.id }}"
+                                    data-live-event-param="partnerContact:update:modal"
+                                    data-live-id-param="{{ partnerContact.id }}"
                             >
                                 <twig:Icon name="edit"/>
                             </button>
@@ -80,4 +80,38 @@
             </table>
         </div>
     </div>
+
+    {% component BootstrapModal with {id: 'partner-contact-update-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emit"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Modification du contact</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emit"
+                    data-live-event-param="reset"
+            >
+                <twig:Icon name="x"/>
+            </button>
+        {% endblock %}
+
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                <div class="d-none"></div>
+                {{ component('PartnerContact:PartnerContactUpdate', {
+                    id: partnerContactUpdateId
+                }) }}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
 </div>

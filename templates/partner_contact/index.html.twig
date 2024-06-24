@@ -13,31 +13,50 @@
 
 {% block body %}
     <main>
-    <div class="hero">
-        <div class="container-fluid pt-4 px-4 px-md-5 my-5">
-            <div class="text-center">
-                <p class="eyebrows">DEMOS / Live Component</p>
-                <h1 class="text-center">
-                    Partner Contact
-                </h1>
-                <div class="intro mt-4">
-                    <p>
-                        Handle a classic CRUD with LiveComponent and EventListener
-                    </p>
+        <div class="hero">
+            <div class="container-fluid pt-4 px-4 px-md-5 my-5">
+                <div class="text-center">
+                    <p class="eyebrows">DEMOS / Live Component</p>
+                    <h1 class="text-center">
+                        Partner Contact
+                    </h1>
+                    <div class="intro mt-4">
+                        <p>
+                            Handle a classic CRUD with LiveComponent and EventListener
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {{ component('PartnerContact:PartnerContactSearch', {partner: partner}) }}
+        <div class="container-fluid">
+            {{ component('Core:Breadcrumbs', {
+                items: [
+                    {
+                        'label': 'Dashboard',
+                        'url': path('app_home')
+                    },
+                    {
+                        'label': 'Partenaire',
+                        'url': path('app_partner')
+                    },
+                    {
+                        'text': 'Partenaire Contact'
+                    }
+                ]
+            }) }}
+        </div>
 
-    {% component BootstrapModal with {id: 'partner-contact-create-modal', size: 'modal-xl'} %}
-        {% block modal_header %}
-            <h5>Création Partenaire Contact</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        {% endblock %}
-        {% block modal_body %}
-            <twig:PartnerContact:PartnerContactCreate partner="{{ partner }}"/>
-        {% endblock %}
-    {% endcomponent %}
+        {{ component('PartnerContact:PartnerContactSearch', {partner: partner}) }}
+
+        {% component BootstrapModal with {id: 'partner-contact-create-modal', size: 'modal-xl'} %}
+            {% block modal_header %}
+                <h5>Création Partenaire Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            {% endblock %}
+            {% block modal_body %}
+                <twig:PartnerContact:PartnerContactCreate partner="{{ partner }}"/>
+            {% endblock %}
+        {% endcomponent %}
+    </main>
 {% endblock %}

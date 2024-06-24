@@ -1,0 +1,20 @@
+<div {{ attributes }}>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center">
+        {% for item in items %}
+            <li class="breadcrumb-item">
+                {% if item.url is defined %}
+                    <a
+                        href="{{ item.url }}"
+                        class="link-secondary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                    >
+                        {{ item.label }}
+                    </a>
+                {% else %}
+                    {{ item.text }}
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ol>
+    </nav>
+</div>

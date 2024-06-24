@@ -20,9 +20,12 @@ class PartnerRepository extends ServiceEntityRepository
     {
         $offset = $page * $itemPerPage;
 
-        $queryBuilder = $this->createQueryBuilder('p');
+        $queryBuilder = $this->createQueryBuilder('partner');
 
-        $queryBuilder->setMaxResults($offset);
+        $queryBuilder
+            ->leftJoin('partner.country', 'country')
+            ->addSelect('country')
+            ->setMaxResults($offset);
 
         return $queryBuilder->getQuery()->getResult();
     }

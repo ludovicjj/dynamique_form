@@ -29,15 +29,30 @@
             </div>
         </div>
 
-    {{ component('ClientCase:ClientCaseSearch') }}
+        <div class="container-fluid">
+            {{ component('Core:Breadcrumbs', {
+                items: [
+                    {
+                        'label': 'Dashboard',
+                        'url': path('app_home')
+                    },
+                    {
+                        'text': 'Affaires'
+                    }
+                ]
+            }) }}
+        </div>
 
-    {% component BootstrapModal with {id: 'client-case-create-modal', size: 'modal-xl'} %}
-        {% block modal_header %}
-            <h5>Création Affaire</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        {% endblock %}
-        {% block modal_body %}
-            <twig:ClientCase:ClientCaseCreate />
-        {% endblock %}
-    {% endcomponent %}
+        {{ component('ClientCase:ClientCaseSearch') }}
+
+        {% component BootstrapModal with {id: 'client-case-create-modal', size: 'modal-xl'} %}
+            {% block modal_header %}
+                <h5>Création Affaire</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            {% endblock %}
+            {% block modal_body %}
+                <twig:ClientCase:ClientCaseCreate />
+            {% endblock %}
+        {% endcomponent %}
+    </main>
 {% endblock %}
