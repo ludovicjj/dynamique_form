@@ -20,7 +20,7 @@
                             class="btn btn-secondary"
                             type="button"
                             data-bs-toggle="modal"
-                            data-bs-target="#partner-create-modal"
+                            data-bs-target="#partner-contact-create-modal"
                     >
                         <twig:Icon name="plus"/>
                     </a>
@@ -40,29 +40,22 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Companie</th>
-                    <th scope="col">Adresse</th>
-                    <th scope="col">Code Postal</th>
-                    <th scope="col">Vile</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
 
                 <tbody>
-                {% for partner in this.partners %}
+                {% for partnerContact in this.partnerContacts %}
                     <tr>
-                        <td>{{ partner.companyName }}</td>
-                        <td>{{ partner.address1 }}</td>
-                        <td>{{ partner.zipcode }}</td>
-                        <td>{{ partner.city }}</td>
+                        <td>{{ partnerContact.firstname }}</td>
+                        <td>{{ partnerContact.lastname }}</td>
+                        <td>{{ partnerContact.phone }}</td>
+                        <td>{{ partnerContact.email }}</td>
                         <td>
-                            <a
-                                type="button"
-                                class="btn btn-secondary"
-                                href="{{ path('app_partner_contact', {'id': partner.id}) }}"
-                            >
-                                <twig:Icon name="users"/>
-                            </a>
                             <button
                                     class="btn btn-secondary"
                                     type="button"
@@ -87,38 +80,4 @@
             </table>
         </div>
     </div>
-
-    {% component BootstrapModal with {id: 'partner-update-modal', size: 'modal-xl'} %}
-        {% block modal_ghost %}
-            <button type="button"
-                    class="ghost"
-                    data-action="live#emit"
-                    data-live-event-param="reset"
-            >
-            </button>
-        {% endblock %}
-        {% block modal_header %}
-            <h5>Modification Partenaire</h5>
-            <button
-                    type="button"
-                    class="btn btn-modal-close ms-auto"
-                    aria-label="Close"
-                    data-action="live#emit"
-                    data-live-event-param="reset"
-            >
-                <twig:Icon name="x"/>
-            </button>
-        {% endblock %}
-
-        {% block modal_body %}
-            {% if isLoading %}
-                {% include '_partial/tool/loader.html.twig' %}
-            {% else %}
-                <div class="d-none"></div>
-                {{ component('Partner:PartnerUpdate', {
-                    id: partnerUpdateId
-                }) }}
-            {% endif %}
-        {% endblock %}
-    {% endcomponent %}
 </div>

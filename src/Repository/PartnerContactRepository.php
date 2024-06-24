@@ -29,4 +29,19 @@ class PartnerContactRepository extends ServiceEntityRepository
 
         return $queryBuilder;
     }
+
+    public function searchPaginated(?Partner $partner): array
+    {
+        if (!$partner) {
+            return [];
+        }
+
+        $queryBuilder = $this->createQueryBuilder('partner_contact');
+
+        $queryBuilder
+            ->andWhere('partner_contact.partner = :partner')
+            ->setParameter('partner', $partner);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

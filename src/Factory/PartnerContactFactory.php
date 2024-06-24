@@ -24,7 +24,7 @@ final class PartnerContactFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'firstname' => self::faker()->name,
+            'firstname' => self::faker()->firstName,
             'lastname' => self::faker()->lastName,
             'phone' => self::faker()->phoneNumber,
             'email' => self::faker()->email,
