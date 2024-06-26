@@ -1,0 +1,36 @@
+<div {{ attributes }}>
+    <div class="col-12">
+        <div
+                class="d-flex justify-content-center align-items-center bg-danger text-white mb-4 m-auto rounded-circle fs-3"
+                style="width: 45px; height: 45px;"
+        >
+            <twig:Icon provider="mage" name="exclamation-triangle"/>
+        </div>
+
+        <h5 class="text-center mb-4">Attention !</h5>
+
+        <p class="text-center mb-4">
+            Vous êtes sur le point de supprimer le partenaire
+            <span class="fw-bold">{{ partner.companyName }}</span>.
+            Toutes les données et asociations avec ce partenaire seront perdu.
+        </p>
+
+        <div class="d-flex flex-column">
+            <button
+                    class="btn btn-danger mb-4"
+                    data-action="live#action"
+                    data-live-action-param="delete"
+            >
+                Supprimer
+            </button>
+            <button
+                    class="btn btn-secondary"
+                    data-action="live#emit"
+                    data-live-event-param="name(Partner:PartnerSearch)|reset"
+            >
+                Annuler
+            </button>
+        </div>
+
+    </div>
+</div>

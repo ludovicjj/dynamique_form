@@ -23,11 +23,17 @@ class PartnerSearch
     #[LiveProp(writable: true)]
     public ?string $filter = '';
 
-    #[LiveProp(writable: true, hydrateWith: 'hydrateCountry', dehydrateWith: 'dehydrateCountry')]
+    /**
+     * @var Country[]
+     */
+    #[LiveProp(writable: true)]
     public array $countries = [];
 
     #[LiveProp]
-    public ?int $partnerUpdateId = null;
+    public ?int $partnerId = null;
+
+    #[LiveProp(writable: true)]
+    public ?int $country = null;
 
     public bool $isSuccess = false;
 
@@ -46,34 +52,15 @@ class PartnerSearch
     {
         $page = max($this->page, 1);
 
-        return  $this->partnerRepository->searchPaginated($page, self::PER_PAGE);
-    }
-
-    public function dehydrateCountry(array $countries): array
-    {
-        return array_map(function($country) {
-            return [
-                'id' => $country->getId(),
-                'name' => $country->getName()
-            ];
-        }, $countries);
-    }
-
-    public function hydrateCountry($data)
-    {
-
-        $countries = [];
-        foreach ($data as $country) {
-            $countries[] = (new Country())
-                ->setId($country['id'])
-                ->setName($country['name']);
-        }
-
-        return $countries;
+        return $this->partnerRepository->searchPaginated(
+            $page,
+            self::PER_PAGE,
+            $this->country
+        );
     }
 
     #[LiveListener('partner:alert')]
-    public function onCategoryAlert(#[LiveArg] string $message = ''): void
+    public function onAlert(#[LiveArg] string $message = ''): void
     {
         $this->isSuccess = true;
         $this->message = $message;
@@ -83,13 +70,20 @@ class PartnerSearch
     public function onUpdateModal(#[LiveArg] int $id): void
     {
         $this->isLoading = false;
-        $this->partnerUpdateId = $id;
+        $this->partnerId = $id;
+    }
+
+    #[LiveListener('partner:delete:modal')]
+    public function onDeleteModal(#[LiveArg] int $id): void
+    {
+        $this->isLoading = false;
+        $this->partnerId = $id;
     }
 
     #[LiveListener('reset')]
     public function onReset(): void
     {
-        $this->partnerUpdateId = null;
+        $this->partnerId = null;
         $this->isLoading = true;
         $this->dispatchBrowserEvent('modal:close');
     }

@@ -7,7 +7,7 @@
                         <twig:Icon name="map-pin"/>
                     </label>
                     <select class="form-select" id="country" data-model="country">
-                        <option>Cherche par pays</option>
+                        <option>Recherche par pays</option>
                         {% for country in countries %}
                             <option value="{{ country.id }}">{{ country.name }}</option>
                         {% endfor %}
@@ -90,6 +90,11 @@
                             <button
                                     type="button"
                                     class="btn btn-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#partner-delete-modal"
+                                    data-action="live#emit"
+                                    data-live-event-param="partner:delete:modal"
+                                    data-live-id-param="{{ partner.id }}"
                             >
                                 <twig:Icon name="trash"/>
                             </button>
@@ -101,37 +106,8 @@
         </div>
     </div>
 
-    {% component BootstrapModal with {id: 'partner-update-modal', size: 'modal-xl'} %}
-        {% block modal_ghost %}
-            <button type="button"
-                    class="ghost"
-                    data-action="live#emit"
-                    data-live-event-param="reset"
-            >
-            </button>
-        {% endblock %}
-        {% block modal_header %}
-            <h5>Modification Partenaire</h5>
-            <button
-                    type="button"
-                    class="btn btn-modal-close ms-auto"
-                    aria-label="Close"
-                    data-action="live#emit"
-                    data-live-event-param="reset"
-            >
-                <twig:Icon name="x"/>
-            </button>
-        {% endblock %}
-
-        {% block modal_body %}
-            {% if isLoading %}
-                {% include '_partial/tool/loader.html.twig' %}
-            {% else %}
-                <div class="d-none"></div>
-                {{ component('Partner:PartnerUpdate', {
-                    id: partnerUpdateId
-                }) }}
-            {% endif %}
-        {% endblock %}
-    {% endcomponent %}
+    {# Modal partner update #}
+    {% include 'components/Partner/Modal/modal_update.html.twig' %}
+    {# Modal partner delete #}
+    {% include 'components/Partner/Modal/modal_delete.html.twig' %}
 </div>

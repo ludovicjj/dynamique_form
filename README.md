@@ -31,3 +31,6 @@ Veille sur le composant live component de symfony
 ## Debug var env
 
 ``symfony var:export --multiline ``
+
+## a lire
+[dispatch event from stimulus](https://symfony.com/bundles/ux-live-component/current/index.html#emitting-an-event)

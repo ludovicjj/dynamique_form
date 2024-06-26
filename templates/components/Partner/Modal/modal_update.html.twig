@@ -1,0 +1,33 @@
+{% component BootstrapModal with {id: 'partner-update-modal', size: 'modal-xl'} %}
+    {% block modal_ghost %}
+        <button type="button"
+                class="ghost"
+                data-action="live#emit"
+                data-live-event-param="reset"
+        >
+        </button>
+    {% endblock %}
+    {% block modal_header %}
+        <h5>Modification Partenaire</h5>
+        <button
+                type="button"
+                class="btn btn-modal-close ms-auto"
+                aria-label="Close"
+                data-action="live#emit"
+                data-live-event-param="reset"
+        >
+            <twig:Icon name="x"/>
+        </button>
+    {% endblock %}
+
+    {% block modal_body %}
+        {% if isLoading %}
+            {% include '_partial/tool/loader.html.twig' %}
+        {% else %}
+            <div class="d-none"></div>
+            {{ component('Partner:PartnerUpdate', {
+                id: partnerId
+            }) }}
+        {% endif %}
+    {% endblock %}
+{% endcomponent %}

@@ -45,14 +45,7 @@
 
         {{ component('Partner:PartnerSearch', {countries: countries}) }}
 
-        {% component BootstrapModal with {id: 'partner-create-modal', size: 'modal-xl'} %}
-            {% block modal_header %}
-                <h5>Création Partenaire</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            {% endblock %}
-            {% block modal_body %}
-                <twig:Partner:PartnerCreate />
-            {% endblock %}
-        {% endcomponent %}
+        {# Modal partner create #}
+        {% include 'components/Partner/Modal/modal_create.html.twig' %}
     </main>
 {% endblock %}

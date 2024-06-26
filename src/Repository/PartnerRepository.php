@@ -16,7 +16,7 @@ class PartnerRepository extends ServiceEntityRepository
         parent::__construct($registry, Partner::class);
     }
 
-    public function searchPaginated(int $page, int $itemPerPage): array
+    public function searchPaginated(int $page, int $itemPerPage, ?int $country = null): array
     {
         $offset = $page * $itemPerPage;
 
@@ -26,6 +26,12 @@ class PartnerRepository extends ServiceEntityRepository
             ->leftJoin('partner.country', 'country')
             ->addSelect('country')
             ->setMaxResults($offset);
+
+        if ($country) {
+            $queryBuilder
+                ->andWhere('country = :country')
+                ->setParameter('country', $country);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
