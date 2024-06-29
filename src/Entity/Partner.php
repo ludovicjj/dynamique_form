@@ -63,6 +63,7 @@ class Partner
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?PartnerJobTitle $jobTitle = null;
 
     public function __construct()

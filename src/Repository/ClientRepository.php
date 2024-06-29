@@ -16,28 +16,22 @@ class ClientRepository extends ServiceEntityRepository
         parent::__construct($registry, Client::class);
     }
 
-    //    /**
-    //     * @return Client[] Returns an array of Client objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function searchPaginated(int $page, int $itemPerPage, ?int $country = null): array
+    {
+        $offset = $page * $itemPerPage;
+        $queryBuilder = $this->createQueryBuilder('client');
 
-    //    public function findOneBySomeField($value): ?Client
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $queryBuilder
+            ->leftJoin('client.country', 'country')
+            ->addSelect('country')
+            ->setMaxResults($offset);
+
+        if ($country) {
+            $queryBuilder
+                ->andWhere('country = :country')
+                ->setParameter('country', $country);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

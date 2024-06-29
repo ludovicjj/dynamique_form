@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Twig\Components\Partner;
+namespace App\Twig\Components\Client;
 
-use App\Entity\Partner;
-use App\Form\Type\PartnerType;
+use App\Entity\Client;
+use App\Form\Type\ClientType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 
 #[AsLiveComponent]
-class PartnerCreate extends AbstractController
+class ClientCreate extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentToolsTrait;
@@ -25,7 +24,7 @@ class PartnerCreate extends AbstractController
 
     protected function instantiateForm(): FormInterface
     {
-        return $this->createForm(PartnerType::class);
+        return $this->createForm(ClientType::class);
     }
 
     public function hasValidationErrors(): bool
@@ -38,14 +37,14 @@ class PartnerCreate extends AbstractController
     {
         $this->submitForm();
 
-        /** @var Partner $partner */
-        $partner = $this->getForm()->getData();
+        /** @var Client $client */
+        $client = $this->getForm()->getData();
 
-        $entityManager->persist($partner);
+        $entityManager->persist($client);
         $entityManager->flush();
 
-        $this->emit('partner:alert', [
-            'message' => "Le partenaire a été créée avec succès"
+        $this->emit('client:alert', [
+            'message' => "Le client a été créée avec succès"
         ]);
 
         $this->dispatchBrowserEvent('modal:close');

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Partenaire{% endblock %}
+{% block title %}Client{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -18,7 +18,7 @@
                 <div class="text-center">
                     <p class="eyebrows">DEMOS / Live Component</p>
                     <h1 class="text-center">
-                        Partner
+                        Client
                     </h1>
                     <div class="intro mt-4">
                         <p>
@@ -37,12 +37,12 @@
                         'url': path('app_home')
                     },
                     {
-                        'text': 'Partenaire',
+                        'text': 'Client',
                     }
                 ]
             }) }}
         </div>
 
-        {{ component('Partner:PartnerSearch') }}
+        {{ component('Client:ClientSearch') }}
     </main>
 {% endblock %}

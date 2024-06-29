@@ -27,7 +27,7 @@ class Menu
         ],
         [
             'label' => 'Clients',
-            'route' => 'app_category',
+            'route' => 'app_client',
             'icon' => 'building-community'
         ],
         [

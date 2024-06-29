@@ -3,6 +3,7 @@
 namespace App\Twig\Components\Partner;
 
 use App\Entity\Country;
+use App\Repository\CountryRepository;
 use App\Repository\PartnerRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
@@ -23,12 +24,6 @@ class PartnerSearch
     #[LiveProp(writable: true)]
     public ?string $filter = '';
 
-    /**
-     * @var Country[]
-     */
-    #[LiveProp(writable: true)]
-    public array $countries = [];
-
     #[LiveProp(writable: true)]
     public ?int $partnerId = null;
 
@@ -44,7 +39,8 @@ class PartnerSearch
     private const PER_PAGE = 25;
 
     public function __construct(
-        private readonly PartnerRepository $partnerRepository
+        private readonly PartnerRepository $partnerRepository,
+        private readonly CountryRepository $countryRepository
     ) {
     }
 
@@ -57,6 +53,11 @@ class PartnerSearch
             self::PER_PAGE,
             $this->country
         );
+    }
+
+    public function getCountries(): array
+    {
+        return $this->countryRepository->findAll();
     }
 
     #[LiveListener('partner:alert')]
