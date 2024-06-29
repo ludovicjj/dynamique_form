@@ -29,14 +29,17 @@ class Partner
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private ?string $address1 = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private ?string $zipcode = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]

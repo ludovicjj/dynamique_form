@@ -76,7 +76,7 @@
                             <a
                                     type="button"
                                     class="btn btn-secondary"
-                                    href=""
+                                    href="{{ path('app_client_contact', {'id': client.id}) }}"
                             >
                                 <twig:Core:Icon name="users"/>
                             </a>
@@ -95,9 +95,9 @@
                                     type="button"
                                     class="btn btn-secondary"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#partner-delete-modal"
+                                    data-bs-target="#client-delete-modal"
                                     data-action="live#emitSelf"
-                                    data-live-event-param="partner:delete:modal"
+                                    data-live-event-param="client:delete:modal"
                                     data-live-id-param="{{ client.id }}"
                             >
                                 <twig:Core:Icon name="trash"/>
@@ -170,6 +170,40 @@
                 {% if clientId %}
                     <div class="d-none"></div>
                     {{ component('Client:ClientUpdate', {id: clientId}) }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Update #}
+    {% component "Core:BootstrapModal" with {id: 'client-delete-modal', size: 'modal'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Modification Client</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if clientId %}
+                    <div class="d-none"></div>
+                    {{ component('Client:ClientDelete', {id: clientId}) }}
                 {% endif %}
             {% endif %}
         {% endblock %}

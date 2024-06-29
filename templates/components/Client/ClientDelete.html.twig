@@ -10,9 +10,9 @@
         <h5 class="text-center mb-4">Attention !</h5>
 
         <p class="text-center mb-4">
-            Vous êtes sur le point de supprimer le contact
-            <span class="fw-bold">{{ partnerContact.fullName }}</span>.
-            Toutes les données et associations avec ce contact seront perdu.
+            Vous êtes sur le point de supprimer le client
+            <span class="fw-bold">{{ client.companyName }}</span>.
+            Toutes les données et associations avec ce client seront perdu.
         </p>
 
         <div class="d-flex flex-column">
@@ -28,7 +28,7 @@
             <button
                     class="btn btn-secondary"
                     data-action="live#emit"
-                    data-live-event-param="name(PartnerContact:PartnerContactSearch)|reset"
+                    data-live-event-param="name(Client:ClientSearch)|reset"
                     data-loading="addAttribute(disabled)"
                     {{ loading ? 'disabled' : '' }}
             >

@@ -69,6 +69,13 @@ class ClientSearch
         $this->clientId = $id;
     }
 
+    #[LiveListener('client:delete:modal')]
+    public function onDeleteModal(#[LiveArg] ?int $id = null): void
+    {
+        $this->isLoading = false;
+        $this->clientId = $id;
+    }
+
     #[LiveListener('client:alert')]
     public function onAlert(#[LiveArg] string $message = ''): void
     {

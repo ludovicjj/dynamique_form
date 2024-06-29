@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client Contact{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% block importmap %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="hero">
+            <div class="container-fluid pt-4 px-4 px-md-5 my-5">
+                <div class="text-center">
+                    <p class="eyebrows">DEMOS / Live Component</p>
+                    <h1 class="text-center">
+                        Client Contact
+                    </h1>
+                    <div class="intro mt-4">
+                        <p>
+                            Handle a classic CRUD with LiveComponent and EventListener
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            {{ component('Core:Breadcrumbs', {
+                items: [
+                    {
+                        'label': 'Dashboard',
+                        'url': path('app_home')
+                    },
+                    {
+                        'label': 'Client',
+                        'url': path('app_client')
+                    },
+                    {
+                        'text': 'Client Contact'
+                    }
+                ]
+            }) }}
+        </div>
+
+        {{ component('ClientContact:ClientContactSearch', {client: client}) }}
+    </main>
+{% endblock %}

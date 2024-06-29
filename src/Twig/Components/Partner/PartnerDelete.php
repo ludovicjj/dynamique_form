@@ -25,6 +25,9 @@ class PartnerDelete extends AbstractController
     #[LiveProp(writable: true)]
     public ?Partner $partner = null;
 
+    #[LiveProp(writable: true)]
+    public bool $loading = false;
+
     public function __construct(private readonly PartnerRepository $partnerRepository)
     {
     }
@@ -38,6 +41,7 @@ class PartnerDelete extends AbstractController
     #[LiveAction]
     public function delete(EntityManagerInterface $entityManager): void
     {
+        $this->loading = true;
         $entityManager->remove($this->partner);
         $entityManager->flush();
 

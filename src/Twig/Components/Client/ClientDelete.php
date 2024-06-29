@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Twig\Components\PartnerContact;
+namespace App\Twig\Components\Client;
 
-use App\Entity\PartnerContact;
-use App\Repository\PartnerContactRepository;
+use App\Entity\Client;
+use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -14,40 +13,40 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
-class PartnerContactDelete extends AbstractController
+class ClientDelete
 {
     use DefaultActionTrait;
     use ComponentToolsTrait;
-
-    public function __construct(
-        private readonly PartnerContactRepository $partnerContactRepository
-    ) {
-    }
 
     #[LiveProp(writable: true)]
     public ?int $id = null;
 
     #[LiveProp(writable: true)]
-    public ?PartnerContact $partnerContact = null;
+    public ?Client $client = null;
 
     #[LiveProp(writable: true)]
     public bool $loading = false;
 
+    public function __construct(
+        private readonly ClientRepository $clientRepository
+    ) {
+    }
+
     #[PostMount]
     public function PostMount(): void
     {
-        $this->partnerContact = $this->partnerContactRepository->find($this->id);
+        $this->client = $this->clientRepository->find($this->id);
     }
 
     #[LiveAction]
     public function delete(EntityManagerInterface $entityManager): void
     {
         $this->loading = true;
-        $entityManager->remove($this->partnerContact);
+        $entityManager->remove($this->client);
         $entityManager->flush();
 
-        $this->emit('partnerContact:alert', [
-            'message' => "Le contact a été supprimé avec succès"
+        $this->emit('client:alert', [
+            'message' => "Le client a été supprimé avec succès"
         ]);
 
         $this->emit('reset');

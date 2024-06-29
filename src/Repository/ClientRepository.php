@@ -24,6 +24,7 @@ class ClientRepository extends ServiceEntityRepository
         $queryBuilder
             ->leftJoin('client.country', 'country')
             ->addSelect('country')
+            ->addOrderBy('client.createdAt', 'DESC')
             ->setMaxResults($offset);
 
         if ($country) {

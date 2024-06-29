@@ -31,17 +31,20 @@ class PartnerType extends AbstractType
 
         $builder
             ->add('companyName', TextType::class, [
-                'label' => "Compagnie<span class='mandatory'>*</span>",
+                'label' => "Nom de la société<span class='mandatory'>*</span>",
                 'label_html' => true
             ])
             ->add('address1', TextType::class, [
-                'label' => "Adresse",
+                'label' => "Adresse<span class='mandatory'>*</span>",
+                'label_html' => true
             ])
             ->add('zipcode', TextType::class, [
-                'label' => "Code Postal",
+                'label' => "Code Postal<span class='mandatory'>*</span>",
+                'label_html' => true
             ])
             ->add('city', TextType::class, [
-                'label' => "Ville",
+                'label' => "Ville<span class='mandatory'>*</span>",
+                'label_html' => true
             ])
             ->add('jobTitle', EntityType::class, [
                 'class' => PartnerJobTitle::class,

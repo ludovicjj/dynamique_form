@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Client;
 use App\Entity\ClientContact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,28 +17,23 @@ class ClientContactRepository extends ServiceEntityRepository
         parent::__construct($registry, ClientContact::class);
     }
 
-    //    /**
-    //     * @return ClientContact[] Returns an array of ClientContact objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function searchPaginated(?Client $client, int $page, int $itemPerPage): array
+    {
+        if (!$client) {
+            return [];
+        }
 
-    //    public function findOneBySomeField($value): ?ClientContact
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $offset = $page * $itemPerPage;
+
+        $queryBuilder = $this->createQueryBuilder('client_contact');
+
+        $queryBuilder
+            ->leftJoin('client_contact.client', 'client')
+            ->andWhere('client = :client')
+            ->setParameter('client', $client)
+            ->addOrderBy('client_contact.createdAt', 'DESC')
+            ->setMaxResults($offset);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
