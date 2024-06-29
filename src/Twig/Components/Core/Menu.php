@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Twig\Components;
+namespace App\Twig\Components\Core;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;

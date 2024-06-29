@@ -61,6 +61,10 @@ class Partner
     #[ORM\OneToMany(targetEntity: PartnerContact::class, mappedBy: 'partner')]
     private Collection $partnerContacts;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?PartnerJobTitle $jobTitle = null;
+
     public function __construct()
     {
         $this->partnerContacts = new ArrayCollection();
@@ -206,6 +210,18 @@ class Partner
                 $partnerContact->setPartner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getJobTitle(): ?PartnerJobTitle
+    {
+        return $this->jobTitle;
+    }
+
+    public function setJobTitle(?PartnerJobTitle $jobTitle): static
+    {
+        $this->jobTitle = $jobTitle;
 
         return $this;
     }

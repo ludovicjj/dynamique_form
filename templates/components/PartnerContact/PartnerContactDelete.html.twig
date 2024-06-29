@@ -10,8 +10,8 @@
         <h5 class="text-center mb-4">Attention !</h5>
 
         <p class="text-center mb-4">
-            Vous êtes sur le point de supprimer le partenaire
-            <span class="fw-bold">{{ partner.companyName }}</span>.
+            Vous êtes sur le point de supprimer le contact
+            <span class="fw-bold">{{ partnerContact.fullName }}</span>.
             Toutes les données et asociations avec ce partenaire seront perdu.
         </p>
 
@@ -26,7 +26,7 @@
             <button
                     class="btn btn-secondary"
                     data-action="live#emit"
-                    data-live-event-param="name(Partner:PartnerSearch)|reset"
+                    data-live-event-param="name(PartnerContact:PartnerContactSearch)|reset"
             >
                 Annuler
             </button>

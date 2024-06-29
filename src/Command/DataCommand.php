@@ -6,6 +6,7 @@ use App\Factory\ClientCaseFactory;
 use App\Factory\CountryFactory;
 use App\Factory\PartnerContactFactory;
 use App\Factory\PartnerFactory;
+use App\Factory\PartnerJobTitleFactory;
 use App\Factory\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -31,6 +32,7 @@ class DataCommand extends Command
         $this->importCountry();
         $this->importUser();
         $this->importClientCase();
+        $this->importPartnerJobTitle();
         $this->importPartner();
         $this->importPartnerContact();
 
@@ -65,12 +67,26 @@ class DataCommand extends Command
         );
     }
 
+    public function importPartnerJobTitle(): void
+    {
+        PartnerJobTitleFactory::createSequence(
+            function () {
+                foreach (PartnerJobTitleFactory::JOBS as $job) {
+                    yield ['name' => $job];
+                }
+            }
+        );
+    }
+
     private function importPartner(): void
     {
         PartnerFactory::createSequence(
             function() {
                 foreach (range(1, 3) as $i) {
-                    yield ['country' => CountryFactory::random()];
+                    yield [
+                        'country' => CountryFactory::random(),
+                        'jobTitle' => PartnerJobTitleFactory::random()
+                    ];
                 }
             }
         );
@@ -94,7 +110,8 @@ class DataCommand extends Command
         $platform = $connection->getDatabasePlatform();
 
         $tables = [
-            'user', 'client_case', 'partner', 'partner_contact', 'country'
+            'user', 'client_case', 'partner', 'partner_contact', 'partner_job_title',
+            'country'
         ];
 
         //$connection->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');

@@ -29,17 +29,17 @@ class PartnerSearch
     #[LiveProp(writable: true)]
     public array $countries = [];
 
-    #[LiveProp]
+    #[LiveProp(writable: true)]
     public ?int $partnerId = null;
 
     #[LiveProp(writable: true)]
     public ?int $country = null;
 
+    public bool $isLoading = true;
+
     public bool $isSuccess = false;
 
     public string $message = '';
-
-    public bool $isLoading = true;
 
     private const PER_PAGE = 25;
 
@@ -78,6 +78,13 @@ class PartnerSearch
     {
         $this->isLoading = false;
         $this->partnerId = $id;
+    }
+
+    #[LiveListener('partner:create:modal')]
+    public function onCreateModal(): void
+    {
+        $this->isLoading = false;
+        $this->partnerId = null;
     }
 
     #[LiveListener('reset')]

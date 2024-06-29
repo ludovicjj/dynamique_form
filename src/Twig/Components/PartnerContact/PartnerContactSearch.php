@@ -22,7 +22,7 @@ class PartnerContactSearch extends AbstractController
     public ?Partner $partner = null;
 
     #[LiveProp]
-    public ?int $partnerContactUpdateId = null;
+    public ?int $partnerContactId = null;
 
     private const PER_PAGE = 25;
 
@@ -49,17 +49,30 @@ class PartnerContactSearch extends AbstractController
         $this->message = $message;
     }
 
+    #[LiveListener('partnerContact:create:modal')]
+    public function onCreateModal(): void
+    {
+        $this->isLoading = false;
+    }
+
     #[LiveListener('partnerContact:update:modal')]
     public function onUpdateModal(#[LiveArg] int $id): void
     {
         $this->isLoading = false;
-        $this->partnerContactUpdateId = $id;
+        $this->partnerContactId = $id;
+    }
+
+    #[LiveListener('partnerContact:delete:modal')]
+    public function onDeleteModal(#[LiveArg] int $id): void
+    {
+        $this->isLoading = false;
+        $this->partnerContactId = $id;
     }
 
     #[LiveListener('reset')]
     public function onReset(): void
     {
-        $this->partnerContactUpdateId = null;
+        $this->partnerContactId = null;
         $this->isLoading = true;
         $this->dispatchBrowserEvent('modal:close');
     }

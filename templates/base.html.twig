@@ -15,7 +15,7 @@
     <body>
         <div class="App">
             {% if is_granted('ROLE_USER') %}
-                <twig:Menu/>
+                <twig:Core:Menu/>
             {% endif %}
             {% block body %}{% endblock %}
         </div>

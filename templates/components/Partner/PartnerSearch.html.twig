@@ -1,10 +1,11 @@
 <div {{ attributes }}>
+    {# Search Bar #}
     <div class="container-fluid px-4 px-md-5 py-3">
         <div class="p-4 markdown-container background-glass mt-5" style="border-radius: .75rem">
             <fieldset class="d-flex gap-4 justify-content-end">
                 <div class="input-group" style="max-width: 30%;">
                     <label class="input-group-text" for="country">
-                        <twig:Icon name="map-pin"/>
+                        <twig:Core:Icon name="map-pin"/>
                     </label>
                     <select class="form-select" id="country" data-model="country">
                         <option>Recherche par pays</option>
@@ -15,7 +16,7 @@
                 </div>
                 <div class="input-group">
                     <label class="input-group-text" for="filter">
-                        <twig:Icon name="search"/>
+                        <twig:Core:Icon name="search"/>
                     </label>
                     <input
                             type="search"
@@ -32,8 +33,10 @@
                             type="button"
                             data-bs-toggle="modal"
                             data-bs-target="#partner-create-modal"
+                            data-action="live#emit"
+                            data-live-event-param="partner:create:modal"
                     >
-                        <twig:Icon name="plus"/>
+                        <twig:Core:Icon name="plus"/>
                     </a>
                 </div>
             </fieldset>
@@ -42,7 +45,7 @@
 
     {% if isSuccess %}
         <div class="container-fluid px-4 px-md-5 mt-4">
-            {{ component('Alert', {message: message}) }}
+            {{ component('Core:Alert', {message: message}) }}
         </div>
     {% endif %}
 
@@ -61,6 +64,7 @@
                 </thead>
 
                 <tbody>
+                {# Partner listing #}
                 {% for partner in this.partners %}
                     <tr>
                         <td>{{ partner.companyName }}</td>
@@ -74,7 +78,7 @@
                                 class="btn btn-secondary"
                                 href="{{ path('app_partner_contact', {'id': partner.id}) }}"
                             >
-                                <twig:Icon name="users"/>
+                                <twig:Core:Icon name="users"/>
                             </a>
                             <button
                                     class="btn btn-secondary"
@@ -85,7 +89,7 @@
                                     data-live-event-param="partner:update:modal"
                                     data-live-id-param="{{ partner.id }}"
                             >
-                                <twig:Icon name="edit"/>
+                                <twig:Core:Icon name="edit"/>
                             </button>
                             <button
                                     type="button"
@@ -96,7 +100,7 @@
                                     data-live-event-param="partner:delete:modal"
                                     data-live-id-param="{{ partner.id }}"
                             >
-                                <twig:Icon name="trash"/>
+                                <twig:Core:Icon name="trash"/>
                             </button>
                         </td>
                     </tr>
@@ -106,8 +110,108 @@
         </div>
     </div>
 
-    {# Modal partner update #}
-    {% include 'components/Partner/Modal/modal_update.html.twig' %}
-    {# Modal partner delete #}
-    {% include 'components/Partner/Modal/modal_delete.html.twig' %}
+    {# Modal Update #}
+    {% component "Core:BootstrapModal" with {id: 'partner-update-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Modification Partenaire</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if partnerId %}
+                    <div class="d-none"></div>
+                    {{ component('Partner:PartnerUpdate', {
+                        id: partnerId
+                    }) }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Delete #}
+    {% component "Core:BootstrapModal" with {id: 'partner-delete-modal'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Supprimer un partenaire</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if partnerId %}
+                    <div class="d-none"></div>
+                    {{ component('Partner:PartnerDelete', {
+                        id: partnerId
+                    }) }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Create #}
+    {% component "Core:BootstrapModal" with {id: 'partner-create-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Création Partenaire</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {{ component('Partner:PartnerCreate') }}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
 </div>

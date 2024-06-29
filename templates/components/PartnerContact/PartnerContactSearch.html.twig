@@ -4,14 +4,14 @@
             <fieldset class="d-flex gap-4 justify-content-end">
                 <div class="input-group" style="max-width: 30%">
                     <label class="input-group-text" for="filter">
-                        <twig:Icon name="search"/>
+                        <twig:Core:Icon name="search"/>
                     </label>
                     <input
                             type="search"
                             id="filter"
                             data-model="debounce(500)|filter"
                             class="form-control"
-                            data-action="live#emit"
+                            data-action="live#emitSelf"
                             data-live-event-param="clientCase:filter"
                     >
                 </div>
@@ -21,8 +21,10 @@
                             type="button"
                             data-bs-toggle="modal"
                             data-bs-target="#partner-contact-create-modal"
+                            data-action="live#emitSelf"
+                            data-live-event-param="partnerContact:create:modal"
                     >
-                        <twig:Icon name="plus"/>
+                        <twig:Core:Icon name="plus"/>
                     </a>
                 </div>
             </fieldset>
@@ -31,7 +33,7 @@
 
     {% if isSuccess %}
         <div class="container-fluid px-4 px-md-5 mt-4">
-            {{ component('Alert', {message: message}) }}
+            {{ component('Core:Alert', {message: message}) }}
         </div>
     {% endif %}
 
@@ -61,17 +63,22 @@
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#partner-contact-update-modal"
-                                    data-action="live#emit"
+                                    data-action="live#emitSelf"
                                     data-live-event-param="partnerContact:update:modal"
                                     data-live-id-param="{{ partnerContact.id }}"
                             >
-                                <twig:Icon name="edit"/>
+                                <twig:Core:Icon name="edit"/>
                             </button>
                             <button
                                     type="button"
                                     class="btn btn-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#partner-contact-delete-modal"
+                                    data-action="live#emitSelf"
+                                    data-live-event-param="partnerContact:delete:modal"
+                                    data-live-id-param="{{ partnerContact.id }}"
                             >
-                                <twig:Icon name="trash"/>
+                                <twig:Core:Icon name="trash"/>
                             </button>
                         </td>
                     </tr>
@@ -81,11 +88,12 @@
         </div>
     </div>
 
-    {% component BootstrapModal with {id: 'partner-contact-update-modal', size: 'modal-xl'} %}
+    {# Modal Update #}
+    {% component "Core:BootstrapModal" with {id: 'partner-contact-update-modal', size: 'modal-xl'} %}
         {% block modal_ghost %}
             <button type="button"
                     class="ghost"
-                    data-action="live#emit"
+                    data-action="live#emitSelf"
                     data-live-event-param="reset"
             >
             </button>
@@ -96,10 +104,10 @@
                     type="button"
                     class="btn btn-modal-close ms-auto"
                     aria-label="Close"
-                    data-action="live#emit"
+                    data-action="live#emitSelf"
                     data-live-event-param="reset"
             >
-                <twig:Icon name="x"/>
+                <twig:Core:Icon name="x"/>
             </button>
         {% endblock %}
 
@@ -107,10 +115,81 @@
             {% if isLoading %}
                 {% include '_partial/tool/loader.html.twig' %}
             {% else %}
-                <div class="d-none"></div>
-                {{ component('PartnerContact:PartnerContactUpdate', {
-                    id: partnerContactUpdateId
+                {% if partnerContactId %}
+                    <div class="d-none"></div>
+                    {{ component('PartnerContact:PartnerContactUpdate', {
+                        id: partnerContactId
+                    }) }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Create #}
+    {% component "Core:BootstrapModal" with {id: 'partner-contact-create-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Création d'un Contact</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {{ component('PartnerContact:PartnerContactCreate', {
+                    partner: partner
                 }) }}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Delete #}
+    {% component "Core:BootstrapModal" with {id: 'partner-contact-delete-modal', size: 'modal'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Supprimer un contact</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if partnerContactId %}
+                    <div class="d-none"></div>
+                    {{ component('PartnerContact:PartnerContactDelete', {
+                        id: partnerContactId
+                    }) }}
+                {% endif %}
             {% endif %}
         {% endblock %}
     {% endcomponent %}

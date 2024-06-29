@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
+use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
@@ -50,5 +51,13 @@ class PartnerCreate extends AbstractController
         $this->dispatchBrowserEvent('modal:close');
         $this->resetForm();
         $this->resetValidation();
+    }
+
+    #[LiveListener('reset')]
+    public function reset(): void
+    {
+        $this->resetForm();
+        $this->resetValidation();
+        $this->dispatchBrowserEvent('enable:modal:create');
     }
 }
