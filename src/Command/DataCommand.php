@@ -3,6 +3,9 @@
 namespace App\Command;
 
 use App\Factory\ClientCaseFactory;
+use App\Factory\ClientContactFactory;
+use App\Factory\ClientFactory;
+use App\Factory\ClientJobTitleFactory;
 use App\Factory\CountryFactory;
 use App\Factory\PartnerContactFactory;
 use App\Factory\PartnerFactory;
@@ -29,12 +32,21 @@ class DataCommand extends Command
         $io->title('Init import data...');
         $this->purgeTable();
 
-        $this->importCountry();
         $this->importUser();
+        $this->importCountry();
+
+        // ClientCase
         $this->importClientCase();
+
+        // Partner
         $this->importPartnerJobTitle();
         $this->importPartner();
         $this->importPartnerContact();
+
+        // Client
+        $this->importClientJobTitle();
+        $this->importClient();
+        $this->importClientContact();
 
         $io->success('Data imported with success');
         return Command::SUCCESS;
@@ -103,6 +115,42 @@ class DataCommand extends Command
         );
     }
 
+    private function importClientJobTitle(): void
+    {
+        ClientJobTitleFactory::createSequence(
+            function () {
+                foreach (ClientJobTitleFactory::JOBS as $job) {
+                    yield ['name' => $job];
+                }
+            }
+        );
+    }
+
+    private function importClient(): void
+    {
+        ClientFactory::createSequence(
+            function() {
+                foreach (range(1, 3) as $i) {
+                    yield ['country' => CountryFactory::random()];
+                }
+            }
+        );
+    }
+
+    private function importClientContact(): void
+    {
+        ClientContactFactory::createSequence(
+            function() {
+                foreach (range(1, 15) as $i) {
+                    yield [
+                        'client' => ClientFactory::random(),
+                        'jobTitle' => ClientJobTitleFactory::random()
+                    ];
+                }
+            }
+        );
+    }
+
     private function purgeTable()
     {
         $connection = $this->entityManager->getConnection();
@@ -110,8 +158,9 @@ class DataCommand extends Command
         $platform = $connection->getDatabasePlatform();
 
         $tables = [
-            'user', 'client_case', 'partner', 'partner_contact', 'partner_job_title',
-            'country'
+            'user', 'client_case', 'country',
+            'client', 'client_contact', 'client_job_title',
+            'partner', 'partner_contact', 'partner_job_title'
         ];
 
         //$connection->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');
