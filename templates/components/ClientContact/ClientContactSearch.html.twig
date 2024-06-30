@@ -62,9 +62,9 @@
                                     class="btn btn-secondary"
                                     type="button"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#partner-contact-update-modal"
+                                    data-bs-target="#client-contact-update-modal"
                                     data-action="live#emitSelf"
-                                    data-live-event-param="partnerContact:update:modal"
+                                    data-live-event-param="clientContact:update:modal"
                                     data-live-id-param="{{ clientContact.id }}"
                             >
                                 <twig:Core:Icon name="edit"/>
@@ -73,9 +73,9 @@
                                     type="button"
                                     class="btn btn-secondary"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#partner-contact-delete-modal"
+                                    data-bs-target="#client-contact-delete-modal"
                                     data-action="live#emitSelf"
-                                    data-live-event-param="partnerContact:delete:modal"
+                                    data-live-event-param="clientContact:delete:modal"
                                     data-live-id-param="{{ clientContact.id }}"
                             >
                                 <twig:Core:Icon name="trash"/>
@@ -114,9 +114,75 @@
             {% if isLoading %}
                 {% include '_partial/tool/loader.html.twig' %}
             {% else %}
-                {{ component('ClientContact:ClientContactCreate', {
-                    client: client
-                }) }}
+                {{ component('ClientContact:ClientContactCreate', {client: client}) }}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Update #}
+    {% component "Core:BootstrapModal" with {id: 'client-contact-update-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Création d'un Contact</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if clientContactId %}
+                    <div class="d-none"></div>
+                    {{ component('ClientContact:ClientContactUpdate', {id: clientContactId}) }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Delete #}
+    {% component "Core:BootstrapModal" with {id: 'client-contact-delete-modal', size: 'modal'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Création d'un Contact</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if clientContactId %}
+                    <div class="d-none"></div>
+                    {{ component('ClientContact:ClientContactDelete', {id: clientContactId}) }}
+                {% endif %}
             {% endif %}
         {% endblock %}
     {% endcomponent %}

@@ -62,6 +62,20 @@ class ClientContactSearch
         $this->isLoading = false;
     }
 
+    #[LiveListener('clientContact:update:modal')]
+    public function onUpdateModal(#[LiveArg] ?int $id = null): void
+    {
+        $this->isLoading = false;
+        $this->clientContactId = $id;
+    }
+
+    #[LiveListener('clientContact:delete:modal')]
+    public function onDeleteModal(#[LiveArg] ?int $id = null): void
+    {
+        $this->isLoading = false;
+        $this->clientContactId = $id;
+    }
+
     #[LiveListener('reset')]
     public function onReset(): void
     {
