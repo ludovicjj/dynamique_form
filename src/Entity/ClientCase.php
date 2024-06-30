@@ -55,7 +55,7 @@ class ClientCase
      * @var Collection<int, PartnerContact>
      */
     #[ORM\ManyToMany(targetEntity: PartnerContact::class, inversedBy: 'clientCases')]
-    private Collection $PartnerContacts;
+    private Collection $partnerContacts;
 
     #[ORM\ManyToOne(inversedBy: 'clientCases')]
     #[Assert\NotBlank]
@@ -63,7 +63,7 @@ class ClientCase
 
     public function __construct()
     {
-        $this->PartnerContacts = new ArrayCollection();
+        $this->partnerContacts = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
 
@@ -161,13 +161,13 @@ class ClientCase
      */
     public function getPartnerContacts(): Collection
     {
-        return $this->PartnerContacts;
+        return $this->partnerContacts;
     }
 
     public function addPartnerContact(PartnerContact $partnerContact): static
     {
-        if (!$this->PartnerContacts->contains($partnerContact)) {
-            $this->PartnerContacts->add($partnerContact);
+        if (!$this->partnerContacts->contains($partnerContact)) {
+            $this->partnerContacts->add($partnerContact);
         }
 
         return $this;
@@ -175,7 +175,7 @@ class ClientCase
 
     public function removePartnerContact(PartnerContact $partnerContact): static
     {
-        $this->PartnerContacts->removeElement($partnerContact);
+        $this->partnerContacts->removeElement($partnerContact);
 
         return $this;
     }

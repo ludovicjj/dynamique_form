@@ -4,7 +4,7 @@
             <fieldset class="d-flex gap-4">
                 <div class="input-group" style="max-width: 30%;">
                     <label class="input-group-text" for="search">
-                        <twig:Icon name="user"/>
+                        <twig:Core:Icon name="user"/>
                     </label>
                     <select class="form-select" id="search">
                         <option value="0">Tous les Collaborateurs</option>
@@ -13,7 +13,7 @@
                 </div>
                 <div class="input-group">
                     <label class="input-group-text" for="filter">
-                        <twig:Icon name="search"/>
+                        <twig:Core:Icon name="search"/>
                     </label>
                     <input
                             type="search"
@@ -31,7 +31,7 @@
                             data-bs-toggle="modal"
                             data-bs-target="#client-case-create-modal"
                     >
-                        <twig:Icon name="plus"/>
+                        <twig:Core:Icon name="plus"/>
                     </a>
                 </div>
             </fieldset>
@@ -40,7 +40,7 @@
 
     {% if isSuccess %}
     <div class="container-fluid px-4 px-md-5 mt-4">
-        {{ component('Alert', {message: message}) }}
+        {{ component('Core:Alert', {message: message}) }}
     </div>
     {% endif %}
 
@@ -75,7 +75,7 @@
                                         data-live-event-param="clientCase:update:modal"
                                         data-live-id-param="{{ clientCase.id }}"
                                 >
-                                    <twig:Icon name="edit"/>
+                                    <twig:Core:Icon name="edit"/>
                                 </button>
                             </td>
                         </tr>
@@ -96,7 +96,8 @@
         {% endif %}
     </div>
 
-    {% component BootstrapModal with {id: 'client-case-update-modal', size: 'modal-xl'} %}
+    {# Modal Update #}
+    {% component "Core:BootstrapModal" with {id: 'client-case-update-modal', size: 'modal-xl'} %}
         {% block modal_ghost %}
             <button type="button"
                     class="ghost"
@@ -114,7 +115,7 @@
                     data-action="live#emit"
                     data-live-event-param="reset"
             >
-                <twig:Icon name="x"/>
+                <twig:Core:Icon name="x"/>
             </button>
         {% endblock %}
 
@@ -127,6 +128,17 @@
                     id: clientCaseUpdateId
                 }) }}
             {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {#  Modal Create #}
+    {% component "Core:BootstrapModal" with {id: 'client-case-create-modal', size: 'modal-xl'} %}
+        {% block modal_header %}
+            <h5>Création Affaire</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        {% endblock %}
+        {% block modal_body %}
+            <twig:ClientCase:ClientCaseCreate />
         {% endblock %}
     {% endcomponent %}
 </div>

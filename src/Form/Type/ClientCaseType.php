@@ -44,25 +44,47 @@ class ClientCaseType extends AbstractType
                 },
                 'label' => 'Partenaires',
                 'choice_label' => 'companyName',
+                'placeholder' => "Séléctionnez un partenaire",
+                'attr' => [
+                    'data-client-case-target' => 'partner',
+                    'data-action' => 'change->client-case#onChangePartner'
+                ],
+            ])
+            ->add('partnerContacts', EntityType::class, [
+                'class' => PartnerContact::class,
+                'multiple' => true,
+                'expanded' => true,
+                'choice_label' => function($partnerContact) {
+                    return $partnerContact->getFullName();
+                },
+                'choice_attr' => function($partnerContact) {
+                    return [
+                        'data-id' => $partnerContact->getPartner()->getId()
+                    ];
+                },
+                'attr' => [
+                    'data-client-case-target' => 'partnerContact',
+                    'class' => 'd-none'
+                ],
             ])
 
-            ->addDependent('partnerContacts', 'partner', function (DependentField $field, ?Partner $partner) {
-                if ($partner) {
-                    $field->add(EntityType::class, [
-                        'class' => PartnerContact::class,
-                        'mapped' => true,
-                        'multiple' => true,
-                        'expanded' => true,
-                        'choice_label' => function($partnerContact) {
-                            return $partnerContact->getLastname() . ' ' . $partnerContact->getFirstname();
-                        },
-                        'query_builder' => function(PartnerContactRepository $er) use ($partner): QueryBuilder {
-                            return $er->findByPartnerQueryBuilder($partner);
-                        },
-                        'label' => 'Partenaire Contact'
-                    ]);
-                }
-            })
+//            ->addDependent('partnerContacts', 'partner', function (DependentField $field, ?Partner $partner) {
+//                if ($partner) {
+//                    $field->add(EntityType::class, [
+//                        'class' => PartnerContact::class,
+//                        'mapped' => true,
+//                        'multiple' => true,
+//                        'expanded' => true,
+//                        'choice_label' => function($partnerContact) {
+//                            return $partnerContact->getLastname() . ' ' . $partnerContact->getFirstname();
+//                        },
+//                        'query_builder' => function(PartnerContactRepository $er) use ($partner): QueryBuilder {
+//                            return $er->findByPartnerQueryBuilder($partner);
+//                        },
+//                        'label' => 'Partenaire Contact'
+//                    ]);
+//                }
+//            })
 
             ->add('address1', TextType::class, [
                 'label' => 'Adresse<span class="mandatory">*</span>',

@@ -47,7 +47,7 @@ class PartnerContact
     #[ORM\JoinColumn(nullable: false)]
     private ?Partner $partner = null;
 
-    #[ORM\ManyToMany(targetEntity: ClientCase::class, mappedBy: 'PartnerContacts')]
+    #[ORM\ManyToMany(targetEntity: ClientCase::class, mappedBy: 'partnerContacts')]
     private Collection $clientCases;
 
     public function __construct()
