@@ -36,7 +36,7 @@ class DataCommand extends Command
         $this->importCountry();
 
         // ClientCase
-        $this->importClientCase();
+        //$this->importClientCase();
 
         // Partner
         $this->importPartnerJobTitle();
@@ -163,7 +163,7 @@ class DataCommand extends Command
             'partner', 'partner_contact', 'partner_job_title'
         ];
 
-        //$connection->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');
 
         foreach ($tables as $table) {
             $connection->executeQuery($platform->getTruncateTableSQL($table, true));

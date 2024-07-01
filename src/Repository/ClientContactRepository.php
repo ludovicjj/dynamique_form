@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Client;
 use App\Entity\ClientContact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -33,6 +34,36 @@ class ClientContactRepository extends ServiceEntityRepository
             ->setParameter('client', $client)
             ->addOrderBy('client_contact.createdAt', 'DESC')
             ->setMaxResults($offset);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findByClientQueryBuilder(Client $client): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('client_contact');
+        $queryBuilder
+            ->andWhere('client_contact.client = :client')
+            ->setParameter('client', $client);
+
+        return $queryBuilder;
+    }
+
+    public function findByClientIdQueryBuilder(int $clientId): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('client_contact');
+        $queryBuilder
+            ->andWhere('client_contact.client = :client')
+            ->setParameter('client', $clientId);
+
+        return $queryBuilder;
+    }
+
+    public function findByClientId(int $clientId): array
+    {
+        $queryBuilder = $this->createQueryBuilder('client_contact');
+        $queryBuilder
+            ->andWhere('client_contact.client = :client')
+            ->setParameter('client', $clientId);
 
         return $queryBuilder->getQuery()->getResult();
     }

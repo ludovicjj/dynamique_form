@@ -34,7 +34,24 @@
                 {{ form_errors(form.signedAt) }}
             </div>
         </div>
-        <div class="col-6"></div>
+        <div class="col-6">
+        </div>
+        <div class="col-6">
+            {{ form_row(form.client) }}
+        </div>
+        <div class="col-6">
+            {% if form.clientContacts is defined %}
+                {% if form.clientContacts.vars.choices|length == 0 %}
+                    <span class="form-label">Client contacts</span>
+                    <div class="alert alert-info mt-2" style="padding-top:7px; padding-bottom:7px;">Aucun contact associé à ce client n'est disponible.</div>
+                {% else %}
+                    {{ form_row(form.clientContacts) }}
+                {% endif %}
+            {% else %}
+                <span class="form-label">Client contacts</span>
+                <div class="alert alert-info mt-2" style="padding-top:7px; padding-bottom:7px;">Vous devez selectionner un client</div>
+            {% endif %}
+        </div>
 
         <div class="col-6">
             {{ form_row(form.partner) }}

@@ -68,10 +68,17 @@ class Client
     #[ORM\OneToMany(targetEntity: ClientContact::class, mappedBy: 'client')]
     private Collection $clientContacts;
 
+    /**
+     * @var Collection<int, ClientCase>
+     */
+    #[ORM\OneToMany(targetEntity: ClientCase::class, mappedBy: 'client')]
+    private Collection $clientCases;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->clientContacts = new ArrayCollection();
+        $this->clientCases = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +218,36 @@ class Client
             // set the owning side to null (unless already changed)
             if ($clientContact->getClient() === $this) {
                 $clientContact->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClientCase>
+     */
+    public function getClientCases(): Collection
+    {
+        return $this->clientCases;
+    }
+
+    public function addClientCase(ClientCase $clientCase): static
+    {
+        if (!$this->clientCases->contains($clientCase)) {
+            $this->clientCases->add($clientCase);
+            $clientCase->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientCase(ClientCase $clientCase): static
+    {
+        if ($this->clientCases->removeElement($clientCase)) {
+            // set the owning side to null (unless already changed)
+            if ($clientCase->getClient() === $this) {
+                $clientCase->setClient(null);
             }
         }
 

@@ -225,3 +225,11 @@ h1, .h1 {
 .mandatory {
     color: var(--bs-danger)
 }
+
+.pc-wrapper {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.25rem;
+    max-height: 79px;
+    padding-left: 0.25rem;
+    overflow-y: auto;
+}

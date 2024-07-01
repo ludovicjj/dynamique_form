@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClientContactRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
@@ -50,9 +52,16 @@ class ClientContact
     #[Assert\NotBlank]
     private ?ClientJobTitle $jobTitle = null;
 
+    /**
+     * @var Collection<int, ClientCase>
+     */
+    #[ORM\ManyToMany(targetEntity: ClientCase::class, mappedBy: 'clientContacts')]
+    private Collection $clientCases;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->clientCases = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,5 +156,37 @@ class ClientContact
     public function getFullName(): ?string
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * @return Collection<int, ClientCase>
+     */
+    public function getClientCases(): Collection
+    {
+        return $this->clientCases;
+    }
+
+    public function addClientCase(ClientCase $clientCase): static
+    {
+        if (!$this->clientCases->contains($clientCase)) {
+            $this->clientCases->add($clientCase);
+            $clientCase->addClientContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientCase(ClientCase $clientCase): static
+    {
+        if ($this->clientCases->removeElement($clientCase)) {
+            $clientCase->removeClientContact($this);
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getFullName();
     }
 }

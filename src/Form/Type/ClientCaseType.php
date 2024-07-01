@@ -2,10 +2,14 @@
 
 namespace App\Form\Type;
 
+use App\Entity\Client;
 use App\Entity\ClientCase;
+use App\Entity\ClientContact;
 use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\PartnerContact;
+use App\Repository\ClientContactRepository;
+use App\Repository\ClientRepository;
 use App\Repository\CountryRepository;
 use App\Repository\PartnerContactRepository;
 use Doctrine\ORM\EntityRepository;
@@ -15,12 +19,20 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class ClientCaseType extends AbstractType
 {
+    public function __construct(
+        private readonly ClientRepository $clientRepository
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder = new DynamicFormBuilder($builder);
@@ -34,6 +46,30 @@ class ClientCaseType extends AbstractType
                 'label' => 'Référence<span class="mandatory">*</span>',
                 'label_html' => true
             ])
+            ->add('client', EntityType::class, [
+                'class' => Client::class,
+                'multiple' => false,
+                'placeholder' => "Séléctionnez un client",
+                'choice_label' => 'companyName',
+                'label' => 'Client<span class="mandatory">*</span>',
+                'label_html' => true
+            ])
+//            ->addDependent('clientContacts', 'client', function (DependentField $field, ?Client $client) {
+//                if ($client) {
+//                    $field->add(EntityType::class, [
+//                        'class' => ClientContact::class,
+//                        'multiple' => true,
+//                        'expanded' => true,
+//                        'choice_label' => function($clientContact) {
+//                            return $clientContact->getFullName();
+//                        },
+//
+//                        'query_builder' => function(ClientContactRepository $er) use ($client): QueryBuilder {
+//                            return $er->findByClientQueryBuilder($client);
+//                        }
+//                    ]);
+//                }
+//            })
             ->add('partner', EntityType::class, [
                 'class' => Partner::class,
                 'mapped' => false,
@@ -64,28 +100,9 @@ class ClientCaseType extends AbstractType
                 },
                 'attr' => [
                     'data-client-case-target' => 'partnerContact',
-                    'class' => 'd-none'
+                    'class' => 'd-none pc-wrapper'
                 ],
             ])
-
-//            ->addDependent('partnerContacts', 'partner', function (DependentField $field, ?Partner $partner) {
-//                if ($partner) {
-//                    $field->add(EntityType::class, [
-//                        'class' => PartnerContact::class,
-//                        'mapped' => true,
-//                        'multiple' => true,
-//                        'expanded' => true,
-//                        'choice_label' => function($partnerContact) {
-//                            return $partnerContact->getLastname() . ' ' . $partnerContact->getFirstname();
-//                        },
-//                        'query_builder' => function(PartnerContactRepository $er) use ($partner): QueryBuilder {
-//                            return $er->findByPartnerQueryBuilder($partner);
-//                        },
-//                        'label' => 'Partenaire Contact'
-//                    ]);
-//                }
-//            })
-
             ->add('address1', TextType::class, [
                 'label' => 'Adresse<span class="mandatory">*</span>',
                 'label_html' => true
@@ -120,15 +137,61 @@ class ClientCaseType extends AbstractType
                     'autocomplete'=> 'off',
                     'data-datepicker-target' => 'input',
                 ],
-            ])
-        ;
+            ]);
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+           $this->addClientContact($event->getData(), $event->getForm(), $event);
+        });
+    }
+
+    private function addClientContact(
+        ?array $clientCase,
+        FormInterface $form,
+        FormEvent $event
+    ): void {
+        if (!$clientCase) {
+            return;
+        }
+
+        if (isset($clientCase['client']) && $clientCase['client']) {
+            $client = $this->clientRepository->find($clientCase['client']);
+
+            if (isset($clientCase['clientContacts'])) {
+                $allowedIds = $client->getClientContacts()->map(function ($contact) {
+                    return $contact->getId();
+                })->toArray();
+
+                $filteredContacts = array_filter($clientCase['clientContacts'], function($contact) use ($allowedIds) {
+                    return in_array($contact, $allowedIds);
+                });
+
+                $clientCase['clientContacts'] = $filteredContacts;
+                $event->setData($clientCase);
+            }
+
+            $form->add('clientContacts', EntityType::class, [
+                'class' => ClientContact::class,
+                'multiple' => true,
+                'expanded' => true,
+                'choice_label' => function($clientContact) {
+                    return $clientContact->getFullName();
+                },
+                'attr' => [
+                    'class' => 'pc-wrapper'
+                ],
+                "choices" => $client->getClientContacts()
+            ]);
+        } else {
+            unset($clientCase['clientContacts']);
+            $event->setData($clientCase);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => ClientCase::class,
-            'csrf_protection' => false,
+            'csrf_protection' => false
         ]);
     }
 }

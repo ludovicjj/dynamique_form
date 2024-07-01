@@ -28,9 +28,12 @@ Veille sur le composant live component de symfony
 - [Embeded stimulus controller in a live form not working on re-render](https://github.com/symfony/ux/issues/489)
 - [Better control over re-rendering behavior](https://github.com/symfony/ux/issues/490)
 
-## Debug var env
+## Usefull command
 
-``symfony var:export --multiline ``
+```
+symfony console make:docker:database
+symfony var:export --multiline 
+```
 
 ## a lire
 [dispatch event from stimulus](https://symfony.com/bundles/ux-live-component/current/index.html#emitting-an-event)

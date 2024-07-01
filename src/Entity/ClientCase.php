@@ -12,8 +12,6 @@ use DateTime;
 #[ORM\Entity(repositoryClass: ClientCaseRepository::class)]
 class ClientCase
 {
-    public const ITEMS_PER_PAGE = 25;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -61,10 +59,21 @@ class ClientCase
     #[Assert\NotBlank]
     private ?Country $country = null;
 
+    #[ORM\ManyToOne(inversedBy: 'clientCases')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
+    /**
+     * @var Collection<int, ClientContact>
+     */
+    #[ORM\ManyToMany(targetEntity: ClientContact::class, inversedBy: 'clientCases')]
+    private Collection $clientContacts;
+
     public function __construct()
     {
         $this->partnerContacts = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->clientContacts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,6 +197,42 @@ class ClientCase
     public function setCountry(?Country $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClientContact>
+     */
+    public function getClientContacts(): Collection
+    {
+        return $this->clientContacts;
+    }
+
+    public function addClientContact(ClientContact $clientContact): static
+    {
+        if (!$this->clientContacts->contains($clientContact)) {
+            $this->clientContacts->add($clientContact);
+        }
+
+        return $this;
+    }
+
+    public function removeClientContact(ClientContact $clientContact): static
+    {
+        $this->clientContacts->removeElement($clientContact);
 
         return $this;
     }

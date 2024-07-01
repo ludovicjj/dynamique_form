@@ -23,12 +23,10 @@ class ClientCaseCreate extends AbstractController
     use ComponentWithFormTrait;
     use ValidatableComponentTrait;
 
-    #[LiveProp]
-    public string $partnerAlert = "Vous devez selectionner un partenaire.";
-
     protected function instantiateForm(): FormInterface
     {
-        return $this->createForm(ClientCaseType::class);
+        $clientCase = new ClientCase();
+        return $this->createForm(ClientCaseType::class, $clientCase);
     }
 
     public function hasValidationErrors(): bool
