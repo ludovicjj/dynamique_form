@@ -4,14 +4,12 @@ namespace App\Form\Type;
 
 use App\Entity\Client;
 use App\Entity\ClientCase;
-use App\Entity\ClientContact;
 use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\PartnerContact;
-use App\Repository\ClientContactRepository;
+use App\Form\EventListener\AddClientContactsFieldListener;
 use App\Repository\ClientRepository;
 use App\Repository\CountryRepository;
-use App\Repository\PartnerContactRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,11 +17,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class ClientCaseType extends AbstractType
@@ -54,22 +48,6 @@ class ClientCaseType extends AbstractType
                 'label' => 'Client<span class="mandatory">*</span>',
                 'label_html' => true
             ])
-//            ->addDependent('clientContacts', 'client', function (DependentField $field, ?Client $client) {
-//                if ($client) {
-//                    $field->add(EntityType::class, [
-//                        'class' => ClientContact::class,
-//                        'multiple' => true,
-//                        'expanded' => true,
-//                        'choice_label' => function($clientContact) {
-//                            return $clientContact->getFullName();
-//                        },
-//
-//                        'query_builder' => function(ClientContactRepository $er) use ($client): QueryBuilder {
-//                            return $er->findByClientQueryBuilder($client);
-//                        }
-//                    ]);
-//                }
-//            })
             ->add('partner', EntityType::class, [
                 'class' => Partner::class,
                 'mapped' => false,
@@ -139,52 +117,8 @@ class ClientCaseType extends AbstractType
                 ],
             ]);
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
-           $this->addClientContact($event->getData(), $event->getForm(), $event);
-        });
-    }
-
-    private function addClientContact(
-        ?array $clientCase,
-        FormInterface $form,
-        FormEvent $event
-    ): void {
-        if (!$clientCase) {
-            return;
-        }
-
-        if (isset($clientCase['client']) && $clientCase['client']) {
-            $client = $this->clientRepository->find($clientCase['client']);
-
-            if (isset($clientCase['clientContacts'])) {
-                $allowedIds = $client->getClientContacts()->map(function ($contact) {
-                    return $contact->getId();
-                })->toArray();
-
-                $filteredContacts = array_filter($clientCase['clientContacts'], function($contact) use ($allowedIds) {
-                    return in_array($contact, $allowedIds);
-                });
-
-                $clientCase['clientContacts'] = $filteredContacts;
-                $event->setData($clientCase);
-            }
-
-            $form->add('clientContacts', EntityType::class, [
-                'class' => ClientContact::class,
-                'multiple' => true,
-                'expanded' => true,
-                'choice_label' => function($clientContact) {
-                    return $clientContact->getFullName();
-                },
-                'attr' => [
-                    'class' => 'pc-wrapper'
-                ],
-                "choices" => $client->getClientContacts()
-            ]);
-        } else {
-            unset($clientCase['clientContacts']);
-            $event->setData($clientCase);
-        }
+        // Event
+        $builder->addEventSubscriber(new AddClientContactsFieldListener($this->clientRepository));
     }
 
     public function configureOptions(OptionsResolver $resolver): void
