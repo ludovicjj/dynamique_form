@@ -1,20 +1,38 @@
 # LiveComponent
 
-Veille sur le composant live component de symfony
-### Point étudié :
-
-- [x] Creation d'un composent avec un formulaire symfony
-- [] Creation d'un composent avec un formulaire sans le form builder de symfony
-- [x] Réinitialisation du formulaire
-- [x] Création de composant réutilisable (Alert, Icon: twig component)
+Veille sur les composants: AssetMapper, Symfony UX(Live Components, Twig Components, ux-icons, Stimulus) de symfony a travers un projet test de gestion de porte feuille d'affaire et de création de document administratif.
 
 
 ## Config
 - symfony 7.1.*
-- postgreSQL(docker)
+- mysql(docker)
 - doctrine 3.2
 
-## usefull link
+
+## How to use
+ Requirement
+- docker
+- php 8.3
+- symfony cli
+
+
+### 1 - clone repository
+```
+git clone git@github.com:ludovicjj/dynamique_form.git
+```
+### 2 - install dependencies
+```
+composer install
+symfony console importmap:install
+```
+### 3 - Load migrations/data
+```
+docker compose up -d (start docker)
+symfony console d:m:m (run migrations)
+symfony console app:import-data (load fixtures)
+```
+
+## usefully link
 
 - [SymfonyCasts/dynamic-forms](https://github.com/SymfonyCasts/dynamic-forms)
 - [Auto-Validating Form](https://ux.symfony.com/demos/live-component/auto-validating-form)
@@ -28,7 +46,7 @@ Veille sur le composant live component de symfony
 - [Embeded stimulus controller in a live form not working on re-render](https://github.com/symfony/ux/issues/489)
 - [Better control over re-rendering behavior](https://github.com/symfony/ux/issues/490)
 
-## Usefull command
+## Usefully command
 
 ```
 symfony console make:docker:database

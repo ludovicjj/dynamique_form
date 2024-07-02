@@ -24,10 +24,10 @@ class ClientCaseSearch extends AbstractController
     #[LiveProp(writable: true)]
     public int $page = 1;
 
-    private const PER_PAGE = 25;
-
     #[LiveProp]
     public ?int $clientCaseId = null;
+
+    private const PER_PAGE = 25;
 
     public bool $isSuccess = false;
 
