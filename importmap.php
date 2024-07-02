@@ -18,7 +18,6 @@ return [
     ],
     'duck' => [
         'path' => './assets/js/duck.js',
-        'entrypoint' => false,
     ],
     'bootstrap' => [
         'version' => '5.3.3',
@@ -50,6 +49,12 @@ return [
         'version' => '1.2.1',
     ],
     '@easepick/datetime' => [
+        'version' => '1.2.1',
+    ],
+    '@easepick/lock-plugin' => [
+        'version' => '1.2.1',
+    ],
+    '@easepick/base-plugin' => [
         'version' => '1.2.1',
     ],
 ];

@@ -1,0 +1,29 @@
+<div {{ attributes }} data-controller="datepicker"
+>
+    {# LABEL #}
+    {{ form_label(field) }}
+
+    <div class="d-flex flex-row">
+        {# FIELD #}
+        {% set hasError = form_errors(field) is not same as('') %}
+        <div class="flex-grow-1 position-relative {{ hasError ? 'error' : '' }}">
+            {{ form_widget(field, {
+                'attr': {
+                    'data-datepicker-target': 'input',
+                    'autocomplete': 'off'
+                }
+            }) }}
+            <div class="calendar-icon" data-datepicker-target="calendar">
+                <twig:Core:Icon name="calendar-month"/>
+            </div>
+        </div>
+
+        {# RESET #}
+        <button type="button" class="btn btn-secondary" data-datepicker-target="reset">
+            <twig:Core:Icon name="x"/>
+        </button>
+    </div>
+
+    {# ERRORS #}
+    {{ form_errors(field) }}
+</div>

@@ -13,29 +13,27 @@
         <div class="col-6">
            {{ form_row(form.projectName) }}
         </div>
+
         <div class="col-6">
             {{ form_row(form.reference) }}
         </div>
+
         <div class="col-6 mb-3 datepicker-wrapper">
-            <div data-controller="datepicker" data-live-rerender="always">
-                {{ form_label(form.signedAt) }}
-                <div class="d-flex flex-row">
-                    {% set hasError = form_errors(form.signedAt) is not same as('') %}
-                    <div class="flex-grow-1 position-relative {{ hasError ? 'error' : '' }}">
-                        {{ form_widget(form.signedAt) }}
-                        <div class="calendar-icon" data-datepicker-target="calendar">
-                            <twig:Core:Icon name="calendar-month"/>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-secondary" data-datepicker-target="reset">
-                        <twig:Core:Icon name="x"/>
-                    </button>
-                </div>
-                {{ form_errors(form.signedAt) }}
-            </div>
+            {{ component("Core:Datepicker", {field: form.signedAt}) }}
+        </div>
+
+        <div class="col-6">
+            {{ form_row(form.directoryName) }}
         </div>
         <div class="col-6">
+            {{ form_row(form.buildingCategory) }}
         </div>
+        <div class="col-6">
+            {{ form_row(form.manager) }}
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-6">
             {{ form_row(form.client) }}
         </div>
@@ -43,30 +41,75 @@
             {% if form.clientContacts is defined %}
                 {% if form.clientContacts.vars.choices|length == 0 %}
                     <span class="form-label">Client contacts</span>
-                    <div class="alert alert-info mt-2" style="padding-top:7px; padding-bottom:7px;">Aucun contact associé à ce client n'est disponible.</div>
+                    <div class="alert alert-light mt-2" style="padding-top:7px; padding-bottom:7px;">
+                        Aucun contact associé à ce client n'est disponible.
+                    </div>
                 {% else %}
                     {{ form_row(form.clientContacts) }}
                 {% endif %}
             {% else %}
                 <span class="form-label">Client contacts</span>
-                <div class="alert alert-info mt-2" style="padding-top:7px; padding-bottom:7px;">Vous devez selectionner un client</div>
+                <div class="alert alert-light mt-2" style="padding-top:7px; padding-bottom:7px;">
+                    Vous devez selectionner un client.
+                </div>
             {% endif %}
         </div>
-
+    </div>
+    <div class="row">
         <div class="col-6">
             {{ form_row(form.partner) }}
         </div>
-
         <div class="col-6 d-flex flex-column">
             {{ form_label(form.partnerContacts, '', {'label_attr': {'class': 'pt-0'}}) }}
             {{ form_widget(form.partnerContacts) }}
             <div
-                    class="alert alert-info"
+                    class="alert alert-light"
                     data-client-case-target="partnerContactAlert"
                     style="padding-top:7px; padding-bottom:7px"
             >
                 Vous devez selectionner un partenaire.
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(form.isChild) }}
+        </div>
+        <div class="col-6">
+            {% if form.parent is defined and form.parent is not null %}
+                {% if form.parent.vars.choices|length == 0 %}
+                    <span class="form-label">Affaire parente</span>
+                    <div class="alert alert-light mt-2" style="padding-top:7px; padding-bottom:7px;">
+                        Aucune affaire parente n'est disponible.
+                    </div>
+                {% else %}
+                    {{ form_row(form.parent) }}
+                {% endif %}
+            {% else %}
+                <span class="form-label">Affaire parente</span>
+                <div class="alert alert-light mt-2" style="padding-top:7px; padding-bottom:7px;">
+                    Vous devez sélectionner l'affaire en tant que sous-affaire.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(form.missions, {'attr': {
+                'class': 'choice-wrapper choice-wrapper-7'
+            }}) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.collaborators, {'attr': {
+                'class': 'choice-wrapper choice-wrapper-7'
+            }}) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.projectFeatures, {'attr': {
+                'class': 'choice-wrapper choice-wrapper-7'
+            }}) }}
         </div>
     </div>
 
@@ -84,6 +127,36 @@
         </div>
         <div class="col-6">
             {{ form_row(form.country) }}
+        </div>
+    </div>
+
+    <h5 class="mt-4 mb-3">Information complémentaire</h5>
+
+    <div class="row">
+        <div class="col-6 mb-3 datepicker-wrapper">
+            {{ component("Core:Datepicker", {field: form.buildStartedAt}) }}
+        </div>
+
+        <div class="col-6 mb-3 datepicker-wrapper">
+            {{ component("Core:Datepicker", {field: form.buildFinishedAt}) }}
+        </div>
+
+        <div class="col-6">
+            {{ form_label(form.agreementAmount) }}
+            <div class="input-group mb-3">
+                {{ form_widget(form.agreementAmount) }}
+                <span class="input-group-text">€</span>
+            </div>
+        </div>
+        <div class="col-6">
+            {{ form_label(form.lastKnowCost) }}
+            <div class="input-group mb-3">
+                {{ form_widget(form.lastKnowCost) }}
+                <span class="input-group-text">€</span>
+            </div>
+        </div>
+        <div class="col-12">
+            {{ form_row(form.description, {'attr': {'rows': 5}}) }}
         </div>
     </div>
 

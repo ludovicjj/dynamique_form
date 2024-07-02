@@ -27,7 +27,7 @@ class ClientCaseSearch extends AbstractController
     private const PER_PAGE = 25;
 
     #[LiveProp]
-    public ?int $clientCaseUpdateId = null;
+    public ?int $clientCaseId = null;
 
     public bool $isSuccess = false;
 
@@ -75,13 +75,19 @@ class ClientCaseSearch extends AbstractController
     public function onUpdateModal(#[LiveArg] int $id): void
     {
         $this->isLoading = false;
-        $this->clientCaseUpdateId = $id;
+        $this->clientCaseId = $id;
+    }
+
+    #[LiveListener('clientCase:create:modal')]
+    public function onCreateModal(): void
+    {
+        $this->isLoading = false;
     }
 
     #[LiveListener('reset')]
     public function onReset(): void
     {
-        $this->clientCaseUpdateId = null;
+        $this->clientCaseId = null;
         $this->isLoading = true;
         $this->dispatchBrowserEvent('modal:close');
     }

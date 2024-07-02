@@ -51,7 +51,7 @@ class AddClientContactsFieldListener implements EventSubscriberInterface
                     return $clientContact->getFullName();
                 },
                 'attr' => [
-                    'class' => 'pc-wrapper'
+                    'class' => 'choice-wrapper choice-wrapper-3'
                 ],
                 "choices" => $client->getClientContacts()
             ]);

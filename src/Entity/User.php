@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,11 +28,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column]
+    private ?string $firstname = null;
+
+    #[ORM\Column]
+    private ?string $lastname = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?UserJobTitle $jobTitle = null;
+
+    /**
+     * @var Collection<int, ClientCase>
+     */
+    #[ORM\ManyToMany(targetEntity: ClientCase::class, mappedBy: 'collaborators')]
+    private Collection $clientCases;
+
+    public function __construct()
+    {
+        $this->clientCases = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,5 +125,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getJobTitle(): ?UserJobTitle
+    {
+        return $this->jobTitle;
+    }
+
+    public function setJobTitle(?UserJobTitle $jobTitle): static
+    {
+        $this->jobTitle = $jobTitle;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): static
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(?string $lastname): static
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return ucfirst($this->lastname) . ' ' . ucfirst($this->firstname);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getFullName();
+    }
+
+    /**
+     * @return Collection<int, ClientCase>
+     */
+    public function getClientCases(): Collection
+    {
+        return $this->clientCases;
+    }
+
+    public function addClientCase(ClientCase $clientCase): static
+    {
+        if (!$this->clientCases->contains($clientCase)) {
+            $this->clientCases->add($clientCase);
+            $clientCase->addCollaborator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientCase(ClientCase $clientCase): static
+    {
+        if ($this->clientCases->removeElement($clientCase)) {
+            $clientCase->removeCollaborator($this);
+        }
+
+        return $this;
     }
 }

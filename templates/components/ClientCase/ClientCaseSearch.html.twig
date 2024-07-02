@@ -20,7 +20,7 @@
                             id="filter"
                             data-model="debounce(500)|filter"
                             class="form-control"
-                            data-action="live#emit"
+                            data-action="live#emitSelf"
                             data-live-event-param="clientCase:filter"
                     >
                 </div>
@@ -30,6 +30,8 @@
                             type="button"
                             data-bs-toggle="modal"
                             data-bs-target="#client-case-create-modal"
+                            data-action="live#emitSelf"
+                            data-live-event-param="clientCase:create:modal"
                     >
                         <twig:Core:Icon name="plus"/>
                     </a>
@@ -63,7 +65,7 @@
                         <tr>
                             <td>{{ clientCase.reference }}</td>
                             <td>{{ clientCase.projectName }}</td>
-                            <td>{{ clientCase.signedAt | date('d/m/Y') }}</td>
+                            <td>{{ clientCase.createdAt | date('d/m/Y') }}</td>
                             <td>{{ clientCase.city }}</td>
                             <td>
                                 <button
@@ -112,7 +114,7 @@
                     type="button"
                     class="btn btn-modal-close ms-auto"
                     aria-label="Close"
-                    data-action="live#emit"
+                    data-action="live#emitSelf"
                     data-live-event-param="reset"
             >
                 <twig:Core:Icon name="x"/>
@@ -123,22 +125,44 @@
             {% if isLoading %}
                 {% include '_partial/tool/loader.html.twig' %}
             {% else %}
-                <div class="d-none"></div>
-                {{ component('ClientCase:ClientCaseUpdate', {
-                    id: clientCaseUpdateId
-                }) }}
+                {% if clientCaseId %}
+                    <div class="d-none"></div>
+                    {{ component('ClientCase:ClientCaseUpdate', {
+                        id: clientCaseUpdateId
+                    }) }}
+                {% endif %}
             {% endif %}
         {% endblock %}
     {% endcomponent %}
 
     {#  Modal Create #}
     {% component "Core:BootstrapModal" with {id: 'client-case-create-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
         {% block modal_header %}
             <h5>Création Affaire</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
         {% endblock %}
         {% block modal_body %}
-            <twig:ClientCase:ClientCaseCreate />
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                <twig:ClientCase:ClientCaseCreate />
+            {% endif %}
         {% endblock %}
     {% endcomponent %}
 </div>

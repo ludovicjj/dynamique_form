@@ -37,7 +37,7 @@ body {
 .datepicker-wrapper .error div.calendar-icon {
     right: 2rem;
 }
-.datepicker-wrapper input.js-datepicker {
+.datepicker-wrapper input {
     border-right-width: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -140,12 +140,6 @@ body {
 }
 
 
-/*.menu li:hover {*/
-/*    background-color: #161719;*/
-/*    border: 1px solid #41464b;*/
-/*}*/
-
-
 
 main {
     flex-shrink: 0;
@@ -226,10 +220,16 @@ h1, .h1 {
     color: var(--bs-danger)
 }
 
-.pc-wrapper {
+.choice-wrapper {
     border: 1px solid var(--bs-border-color);
     border-radius: 0.25rem;
-    max-height: 79px;
     padding-left: 0.25rem;
     overflow-y: auto;
+}
+
+.choice-wrapper-3 {
+    max-height: 80px;
+}
+.choice-wrapper-7 {
+    max-height: 184px;
 }

@@ -2,22 +2,30 @@
 
 namespace App\Form\Type;
 
+use App\Entity\BuildingCategory;
 use App\Entity\Client;
 use App\Entity\ClientCase;
 use App\Entity\Country;
+use App\Entity\Mission;
 use App\Entity\Partner;
 use App\Entity\PartnerContact;
+use App\Entity\ProjectFeature;
+use App\Entity\User;
 use App\Form\EventListener\AddClientContactsFieldListener;
+use App\Form\EventListener\AddParentFieldListener;
 use App\Repository\ClientRepository;
 use App\Repository\CountryRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class ClientCaseType extends AbstractType
@@ -78,7 +86,7 @@ class ClientCaseType extends AbstractType
                 },
                 'attr' => [
                     'data-client-case-target' => 'partnerContact',
-                    'class' => 'd-none pc-wrapper'
+                    'class' => 'd-none choice-wrapper choice-wrapper-3'
                 ],
             ])
             ->add('address1', TextType::class, [
@@ -105,20 +113,83 @@ class ClientCaseType extends AbstractType
                 'placeholder' => 'Choisissez un pays'
             ])
             ->add('signedAt', DateType::class, [
-                'label' => 'Date de signature',
+                'label' => 'Convention/Commande du',
                 'widget' => 'single_text',
                 'html5' => false,
                 'format' => 'dd-MM-yyyy',
                 'input'  => 'datetime',
-                'attr' => [
-                    'class' => 'js-datepicker',
-                    'autocomplete'=> 'off',
-                    'data-datepicker-target' => 'input',
+            ])
+            ->add('directoryName', TextType::class, [
+                'label' => 'Dossier Assurance D.O.'
+            ])
+            ->add('missions', EntityType::class, [
+                'class' => Mission::class,
+                'multiple' => true,
+                'expanded' => true,
+                'choice_label' => 'name'
+            ])
+            ->add('buildingCategory', EntityType::class, [
+                'class' => BuildingCategory::class,
+                'multiple' => false,
+                'label' => 'Type de bâtiment<span class="mandatory">*</span>',
+                'label_html' => true,
+                'placeholder' => 'Sélectionnez un un type de bâtiment'
+            ])
+            ->add('description', TextareaType::class)
+            ->add('manager', EntityType::class, [
+                'class' => User::class,
+                'multiple' => false,
+                'label' => "Responsable d'affaire",
+                'placeholder' => 'Sélectionnez un responsable'
+            ])
+            ->add('buildStartedAt', DateType::class, [
+                'label' => "Début des travaux",
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'dd-MM-yyyy',
+                'input'  => 'datetime'
+            ])
+            ->add('buildFinishedAt', DateType::class, [
+                'label' => "Fin des travaux",
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'dd-MM-yyyy',
+                'input'  => 'datetime'
+            ])
+            ->add('agreementAmount', TextType::class, [
+                'label' => 'Montant travaux figurant dans la convention'
+            ])
+            ->add('lastKnowCost', TextType::class, [
+                'label' => 'Dernier montant travaux connu'
+            ])
+            ->add('collaborators', EntityType::class, [
+                'class' => User::class,
+                'multiple' => true,
+                'expanded' => true,
+                'label' => "Collaborateur"
+            ])
+            ->add('isChild', ChoiceType::class, [
+                'choices' => [
+                    'Non' => false,
+                    'Oui' => true
                 ],
-            ]);
+                'mapped' => false,
+                'label' => 'Sous-affaire'
+            ])
+            ->add('projectFeatures', EntityType::class, [
+                'class' => ProjectFeature::class,
+                'multiple' => true,
+                'expanded' => true,
+                'choice_label' => 'name',
+                'label' => 'Caractéristiques'
+            ])
+        ;
 
         // Event
-        $builder->addEventSubscriber(new AddClientContactsFieldListener($this->clientRepository));
+        $builder
+            ->addEventSubscriber(new AddClientContactsFieldListener($this->clientRepository))
+            ->addEventSubscriber(new AddParentFieldListener())
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

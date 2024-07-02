@@ -3,13 +3,15 @@
 namespace App\Twig\Components\ClientCase;
 
 use App\Entity\ClientCase;
+use App\Entity\User;
 use App\Form\Type\ClientCaseType;
+use App\Repository\ClientCaseStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
@@ -35,12 +37,20 @@ class ClientCaseCreate extends AbstractController
     }
 
     #[LiveAction]
-    public function save(EntityManagerInterface $entityManager): void
-    {
+    public function save(
+        EntityManagerInterface $entityManager,
+        ClientCaseStatusRepository $clientCaseStatusRepository,
+        #[CurrentUser] User $user
+    ): void {
         $this->submitForm();
 
         /** @var ClientCase $clientCase */
         $clientCase = $this->getForm()->getData();
+        $status = $clientCaseStatusRepository->find(1);
+
+        $clientCase
+            ->setClientCaseStatus($status)
+            ->setCreatedBy($user);
 
         $entityManager->persist($clientCase);
         $entityManager->flush();

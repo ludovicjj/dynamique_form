@@ -5,13 +5,18 @@ namespace App\Entity;
 use App\Repository\ClientCaseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use DateTime;
 
 #[ORM\Entity(repositoryClass: ClientCaseRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class ClientCase
 {
+    use SoftDeleteableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -45,15 +50,13 @@ class ClientCase
     #[ORM\Column]
     private DateTime $createdAt;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $createdBy = null;
+
     #[ORM\Column(nullable: true)]
     #[Assert\LessThanOrEqual('today')]
     private ?DateTime $signedAt = null;
-
-    /**
-     * @var Collection<int, PartnerContact>
-     */
-    #[ORM\ManyToMany(targetEntity: PartnerContact::class, inversedBy: 'clientCases')]
-    private Collection $partnerContacts;
 
     #[ORM\ManyToOne(inversedBy: 'clientCases')]
     #[Assert\NotBlank]
@@ -61,7 +64,60 @@ class ClientCase
 
     #[ORM\ManyToOne(inversedBy: 'clientCases')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?Client $client = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Assert\Length(max: 255)]
+    private ?string $directoryName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTime $buildStartedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTime $buildFinishedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $agreementAmount = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $lastKnowCost = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column]
+    private bool $isDraft;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
+    private ?BuildingCategory $BuildingCategory = null;
+
+    #[ORM\ManyToOne]
+    private ?User $manager = null;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'clientCases')]
+    private ?self $parent = null;
+
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    private Collection $clientCases;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ClientCaseStatus $clientCaseStatus = null;
+
+    /**
+     * @var Collection<int, PartnerContact>
+     */
+    #[ORM\ManyToMany(targetEntity: PartnerContact::class, inversedBy: 'clientCases')]
+    private Collection $partnerContacts;
+
+    /**
+     * @var Collection<int, Mission>
+     */
+    #[ORM\ManyToMany(targetEntity: Mission::class, inversedBy: 'clientCases')]
+    private Collection $missions;
 
     /**
      * @var Collection<int, ClientContact>
@@ -69,11 +125,28 @@ class ClientCase
     #[ORM\ManyToMany(targetEntity: ClientContact::class, inversedBy: 'clientCases')]
     private Collection $clientContacts;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'clientCases')]
+    private Collection $collaborators;
+
+    /**
+     * @var Collection<int, ProjectFeature>
+     */
+    #[ORM\ManyToMany(targetEntity: ProjectFeature::class)]
+    private Collection $projectFeatures;
+
     public function __construct()
     {
         $this->partnerContacts = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->clientContacts = new ArrayCollection();
+        $this->missions = new ArrayCollection();
+        $this->collaborators = new ArrayCollection();
+        $this->clientCases = new ArrayCollection();
+        $this->projectFeatures = new ArrayCollection();
+        $this->isDraft = true;
     }
 
     public function getId(): ?int
@@ -236,4 +309,256 @@ class ClientCase
 
         return $this;
     }
+
+
+    public function getDirectoryName(): ?string
+    {
+        return $this->directoryName;
+    }
+
+
+    public function setDirectoryName(?string $directoryName): static
+    {
+        $this->directoryName = $directoryName;
+
+        return $this;
+    }
+
+    public function getBuildStartedAt(): ?DateTime
+    {
+        return $this->buildStartedAt;
+    }
+
+    public function setBuildStartedAt(?DateTime $buildStartedAt): static
+    {
+        $this->buildStartedAt = $buildStartedAt;
+
+        return $this;
+    }
+
+    public function getBuildFinishedAt(): ?DateTime
+    {
+        return $this->buildFinishedAt;
+    }
+
+    public function setBuildFinishedAt(?DateTime $buildFinishedAt): static
+    {
+        $this->buildFinishedAt = $buildFinishedAt;
+
+        return $this;
+    }
+
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAgreementAmount(): ?string
+    {
+        return $this->agreementAmount;
+    }
+
+
+    public function setAgreementAmount(?string $agreementAmount): static
+    {
+        $this->agreementAmount = $agreementAmount;
+
+        return $this;
+    }
+
+    public function getLastKnowCost(): ?string
+    {
+        return $this->lastKnowCost;
+    }
+
+    public function setLastKnowCost(?string $lastKnowCost): static
+    {
+        $this->lastKnowCost = $lastKnowCost;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mission>
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(Mission $mission): static
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions->add($mission);
+        }
+
+        return $this;
+    }
+
+    public function removeMission(Mission $mission): static
+    {
+        $this->missions->removeElement($mission);
+
+        return $this;
+    }
+
+    public function getBuildingCategory(): ?BuildingCategory
+    {
+        return $this->BuildingCategory;
+    }
+
+    public function setBuildingCategory(?BuildingCategory $BuildingCategory): static
+    {
+        $this->BuildingCategory = $BuildingCategory;
+
+        return $this;
+    }
+
+    public function getManager(): ?User
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?User $manager): static
+    {
+        $this->manager = $manager;
+
+        return $this;
+    }
+
+    public function isDraft(): ?bool
+    {
+        return $this->isDraft;
+    }
+
+    public function setDraft(bool $isDraft): static
+    {
+        $this->isDraft = $isDraft;
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): static
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getCollaborators(): Collection
+    {
+        return $this->collaborators;
+    }
+
+    public function addCollaborator(User $collaborator): static
+    {
+        if (!$this->collaborators->contains($collaborator)) {
+            $this->collaborators->add($collaborator);
+        }
+
+        return $this;
+    }
+
+    public function removeCollaborator(User $collaborator): static
+    {
+        $this->collaborators->removeElement($collaborator);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getClientCases(): Collection
+    {
+        return $this->clientCases;
+    }
+
+    public function addClientCase(self $clientCase): static
+    {
+        if (!$this->clientCases->contains($clientCase)) {
+            $this->clientCases->add($clientCase);
+            $clientCase->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientCase(self $clientCase): static
+    {
+        if ($this->clientCases->removeElement($clientCase)) {
+            // set the owning side to null (unless already changed)
+            if ($clientCase->getParent() === $this) {
+                $clientCase->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getClientCaseStatus(): ?ClientCaseStatus
+    {
+        return $this->clientCaseStatus;
+    }
+
+    public function setClientCaseStatus(?ClientCaseStatus $clientCaseStatus): static
+    {
+        $this->clientCaseStatus = $clientCaseStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProjectFeature>
+     */
+    public function getProjectFeatures(): Collection
+    {
+        return $this->projectFeatures;
+    }
+
+    public function addProjectFeature(ProjectFeature $projectFeature): static
+    {
+        if (!$this->projectFeatures->contains($projectFeature)) {
+            $this->projectFeatures->add($projectFeature);
+        }
+
+        return $this;
+    }
+
+    public function removeProjectFeature(ProjectFeature $projectFeature): static
+    {
+        $this->projectFeatures->removeElement($projectFeature);
+
+        return $this;
+    }
+
 }
