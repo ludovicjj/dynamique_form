@@ -98,9 +98,9 @@ class ClientCase
     private ?User $manager = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'clientCases')]
-    private ?self $parent = null;
+    private ?self $parentCase = null;
 
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentCase')]
     private Collection $clientCases;
 
     #[ORM\ManyToOne]
@@ -439,21 +439,21 @@ class ClientCase
         return $this->isDraft;
     }
 
-    public function setDraft(bool $isDraft): static
+    public function setIsDraft(bool $isDraft): static
     {
         $this->isDraft = $isDraft;
 
         return $this;
     }
 
-    public function getParent(): ?self
+    public function getParentCase(): ?self
     {
-        return $this->parent;
+        return $this->parentCase;
     }
 
-    public function setParent(?self $parent): static
+    public function setParentCase(?self $parentCase): static
     {
-        $this->parent = $parent;
+        $this->parentCase = $parentCase;
 
         return $this;
     }
@@ -507,7 +507,7 @@ class ClientCase
     {
         if (!$this->clientCases->contains($clientCase)) {
             $this->clientCases->add($clientCase);
-            $clientCase->setParent($this);
+            $clientCase->setParentCase($this);
         }
 
         return $this;
@@ -517,8 +517,8 @@ class ClientCase
     {
         if ($this->clientCases->removeElement($clientCase)) {
             // set the owning side to null (unless already changed)
-            if ($clientCase->getParent() === $this) {
-                $clientCase->setParent(null);
+            if ($clientCase->getParentCase() === $this) {
+                $clientCase->setParentCase(null);
             }
         }
 

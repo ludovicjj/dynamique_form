@@ -77,14 +77,14 @@
             {{ form_row(form.isChild) }}
         </div>
         <div class="col-6">
-            {% if form.parent is defined and form.parent is not null %}
-                {% if form.parent.vars.choices|length == 0 %}
+            {% if form.parentCase is defined %}
+                {% if form.parentCase.vars.choices|length == 0 %}
                     <span class="form-label">Affaire parente</span>
                     <div class="alert alert-light mt-2" style="padding-top:7px; padding-bottom:7px;">
                         Aucune affaire parente n'est disponible.
                     </div>
                 {% else %}
-                    {{ form_row(form.parent) }}
+                    {{ form_row(form.parentCase) }}
                 {% endif %}
             {% else %}
                 <span class="form-label">Affaire parente</span>

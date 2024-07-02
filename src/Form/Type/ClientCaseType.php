@@ -25,7 +25,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class ClientCaseType extends AbstractType
@@ -37,6 +36,8 @@ class ClientCaseType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var ?ClientCase $clientCase */
+        $clientCase = $options['data'] ?? null;
         $builder = new DynamicFormBuilder($builder);
 
         $builder
@@ -174,7 +175,8 @@ class ClientCaseType extends AbstractType
                     'Oui' => true
                 ],
                 'mapped' => false,
-                'label' => 'Sous-affaire'
+                'label' => 'Sous-affaire',
+                'data' => $clientCase && $clientCase->getParentCase() !== null
             ])
             ->add('projectFeatures', EntityType::class, [
                 'class' => ProjectFeature::class,

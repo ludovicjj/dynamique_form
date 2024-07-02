@@ -3,10 +3,12 @@
 namespace App\Form\EventListener;
 
 use App\Entity\Client;
+use App\Entity\ClientCase;
 use App\Entity\ClientContact;
 use App\Repository\ClientRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 
@@ -21,8 +23,34 @@ class AddClientContactsFieldListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
+            FormEvents::PRE_SET_DATA => 'onPreSetData',
             FormEvents::PRE_SUBMIT => 'onPreSubmit',
         ];
+    }
+
+    public function onPreSetData(PreSetDataEvent $event): void
+    {
+        /** @var ClientCase $clientCase */
+        $clientCase = $event->getData();
+        $form = $event->getForm();
+
+
+        if ($clientCase->getClient()) {
+            $client = $clientCase->getClient();
+
+            $form->add('clientContacts', EntityType::class, [
+                'class' => ClientContact::class,
+                'multiple' => true,
+                'expanded' => true,
+                'choice_label' => function($clientContact) {
+                    return $clientContact->getFullName();
+                },
+                'attr' => [
+                    'class' => 'choice-wrapper choice-wrapper-3'
+                ],
+                "choices" => $client->getClientContacts()
+            ]);
+        }
     }
 
     public function onPreSubmit(PreSubmitEvent $event): void

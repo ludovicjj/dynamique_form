@@ -18,7 +18,7 @@ class ClientCaseSearch extends AbstractController
     use DefaultActionTrait;
     use ComponentToolsTrait;
 
-    #[LiveProp(writable: true, url: true)]
+    #[LiveProp(writable: true)]
     public string $filter = '';
 
     #[LiveProp(writable: true)]

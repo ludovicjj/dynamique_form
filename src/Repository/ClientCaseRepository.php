@@ -20,29 +20,29 @@ class ClientCaseRepository extends ServiceEntityRepository
     {
         $offset = $page * $itemPerPage;
 
-        $queryBuilder = $this->createQueryBuilder('cc');
+        $queryBuilder = $this->createQueryBuilder('client_case');
 
         if ($query) {
             $queryBuilder
-                ->andWhere($queryBuilder->expr()->like('cc.projectName', ':project_name'))
+                ->andWhere($queryBuilder->expr()->like('client_case.projectName', ':project_name'))
                 ->setParameter('project_name', "%".$query."%");
         }
 
         $queryBuilder
             ->setMaxResults($offset)
-            ->addOrderBy('cc.signedAt', 'DESC');
+            ->addOrderBy('client_case.id', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }
 
     public function clientCaseCount(string $query): int
     {
-        $queryBuilder = $this->createQueryBuilder('cc');
-        $queryBuilder->select('COUNT(cc)');
+        $queryBuilder = $this->createQueryBuilder('client_case');
+        $queryBuilder->select('COUNT(client_case)');
 
         if ($query) {
             $queryBuilder
-                ->andWhere($queryBuilder->expr()->like('cc.projectName', ':project_name'))
+                ->andWhere($queryBuilder->expr()->like('client_case.projectName', ':project_name'))
                 ->setParameter('project_name', "%".$query."%");
         }
 

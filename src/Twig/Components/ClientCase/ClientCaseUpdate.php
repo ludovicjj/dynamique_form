@@ -3,6 +3,7 @@
 namespace App\Twig\Components\ClientCase;
 
 use App\Form\Type\ClientCaseType;
+use App\Form\Type\ClientCaseUpdateType;
 use App\Repository\ClientCaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,7 +38,7 @@ class ClientCaseUpdate extends AbstractController
     protected function instantiateForm(): FormInterface
     {
         $data = $this->clientCaseRepository->find($this->id);
-        return $this->createForm(ClientCaseType::class, $data);
+        return $this->createForm(ClientCaseUpdateType::class, $data);
     }
 
     public function hasValidationErrors(): bool
@@ -56,7 +57,7 @@ class ClientCaseUpdate extends AbstractController
             'message' => "L'affaire a été modifié avec succès"
         ]);
 
-        $this->emit('reset');
+        $this->dispatchBrowserEvent('modal:close');
 
         $this->resetForm();
         $this->resetValidation();
