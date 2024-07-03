@@ -31,6 +31,6 @@ class ClientCaseUpdateType extends AbstractType
 
     public function getParent(): string
     {
-        return ClientCaseType::class;
+        return ClientCaseCreateType::class;
     }
 }

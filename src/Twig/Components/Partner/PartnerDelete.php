@@ -49,6 +49,6 @@ class PartnerDelete extends AbstractController
             'message' => "Le partenaire a été supprimé avec succès"
         ]);
 
-        $this->emit('reset');
+        $this->dispatchBrowserEvent('modal:close');
     }
 }

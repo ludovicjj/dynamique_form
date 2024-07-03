@@ -2,7 +2,7 @@
 
 namespace App\Twig\Components\ClientCase;
 
-use App\Form\Type\ClientCaseType;
+use App\Form\Type\ClientCaseCreateType;
 use App\Form\Type\ClientCaseUpdateType;
 use App\Repository\ClientCaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,7 +58,6 @@ class ClientCaseUpdate extends AbstractController
         ]);
 
         $this->dispatchBrowserEvent('modal:close');
-
         $this->resetForm();
         $this->resetValidation();
     }

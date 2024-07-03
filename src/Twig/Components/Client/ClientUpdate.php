@@ -53,7 +53,7 @@ class ClientUpdate extends AbstractController
             'message' => "Le client a été modifié avec succès"
         ]);
 
-        $this->emit('reset');
+        $this->dispatchBrowserEvent('modal:close');
 
         $this->resetForm();
         $this->resetValidation();

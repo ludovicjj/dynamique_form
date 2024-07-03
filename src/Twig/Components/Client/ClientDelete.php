@@ -49,6 +49,6 @@ class ClientDelete
             'message' => "Le client a été supprimé avec succès"
         ]);
 
-        $this->emit('reset');
+        $this->dispatchBrowserEvent('modal:close');
     }
 }

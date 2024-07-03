@@ -4,7 +4,7 @@ namespace App\Twig\Components\ClientCase;
 
 use App\Entity\ClientCase;
 use App\Entity\User;
-use App\Form\Type\ClientCaseType;
+use App\Form\Type\ClientCaseCreateType;
 use App\Repository\ClientCaseStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +28,7 @@ class ClientCaseCreate extends AbstractController
     protected function instantiateForm(): FormInterface
     {
         $clientCase = new ClientCase();
-        return $this->createForm(ClientCaseType::class, $clientCase);
+        return $this->createForm(ClientCaseCreateType::class, $clientCase);
     }
 
     public function hasValidationErrors(): bool

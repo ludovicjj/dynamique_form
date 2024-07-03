@@ -2,7 +2,6 @@
 
 namespace App\Twig\Components\PartnerContact;
 
-use App\Entity\PartnerContact;
 use App\Form\Type\PartnerContactType;
 use App\Repository\PartnerContactRepository;
 use Doctrine\ORM\EntityManagerInterface;

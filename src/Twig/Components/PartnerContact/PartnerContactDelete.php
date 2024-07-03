@@ -50,6 +50,6 @@ class PartnerContactDelete extends AbstractController
             'message' => "Le contact a été supprimé avec succès"
         ]);
 
-        $this->emit('reset');
+        $this->dispatchBrowserEvent('modal:close');
     }
 }

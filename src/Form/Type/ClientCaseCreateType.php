@@ -27,7 +27,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
-class ClientCaseType extends AbstractType
+class ClientCaseCreateType extends AbstractType
 {
     public function __construct(
         private readonly ClientRepository $clientRepository
@@ -119,6 +119,9 @@ class ClientCaseType extends AbstractType
                 'html5' => false,
                 'format' => 'dd-MM-yyyy',
                 'input'  => 'datetime',
+                'attr' => [
+                    'class' => 'max-today'
+                ]
             ])
             ->add('directoryName', TextType::class, [
                 'label' => 'Dossier Assurance D.O.'
