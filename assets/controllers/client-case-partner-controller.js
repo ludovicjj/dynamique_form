@@ -18,9 +18,34 @@ export default class extends Controller {
      */
     message = '';
 
+    /**
+     * @type {number}
+     */
     count = 0;
 
+    /**
+     * @typedef {Object} Contact
+     * @property {string} label - Le label du contact en minuscules.
+     * @property {string} id - L'ID du contact.
+     */
+
+    /**
+     * @type {Map<Contact, HTMLDivElement>}
+     */
+    contactMap = new Map()
+
     connect() {
+        // Build map
+        this.partnerContactTarget.querySelectorAll([`input[data-id]`]).forEach(input => {
+            const formCheck = input.closest('.form-check');
+            const label = formCheck.querySelector('label')
+            const contact = {
+                label: label.textContent.toLowerCase(),
+                id: input.getAttribute('data-id')
+            }
+
+            this.contactMap.set(contact, formCheck)
+        })
         useDebounce(this)
     }
 
@@ -50,8 +75,7 @@ export default class extends Controller {
         this.filter()
     }
 
-    async onSearchPartner(e) {
-        console.log('hey')
+    async onSearchPartner() {
         const searchValue = this.searchTarget.value
         const selectedPartner = this.partnerTarget.value || null
 
@@ -92,26 +116,18 @@ export default class extends Controller {
         const selectedPartner = this.partnerTarget.value || null
         const searchValue = this.searchTarget.value || null
 
-        let count = 0
-        this.partnerContactTarget.querySelectorAll([`input[data-id]`]).forEach(input => {
-            const partnerId = input.getAttribute('data-id');
-            const formCheck = input.closest('.form-check');
-            const label = formCheck.querySelector('label')
 
-            if (!searchValue && selectedPartner) {
-                this.filterByPartner(selectedPartner, partnerId, formCheck)
+        if (!searchValue && selectedPartner) {
+            this.filterByPartner(selectedPartner)
+        }
 
-            }
+        if (searchValue && !selectedPartner) {
+            this.filterBySearchValue(searchValue)
+        }
 
-            if (searchValue && !selectedPartner) {
-                this.filterBySearchValue(searchValue, label, formCheck)
-            }
-
-            if (searchValue && selectedPartner) {
-                this.filterByPartnerAndSearchValue(selectedPartner, searchValue, partnerId, label, formCheck)
-            }
-        })
-
+        if (searchValue && selectedPartner) {
+            this.filterByPartnerAndSearchValue(selectedPartner, searchValue)
+        }
 
         if (this.count === 0) {
             if (searchValue) {
@@ -130,38 +146,34 @@ export default class extends Controller {
     /**
      * Search contacts bind to this partner
      * @param {string} selectedPartner
-     * @param {string} partnerId
-     * @param {HTMLElement} formCheck
      */
     filterByPartner(
-        selectedPartner,
-        partnerId,
-        formCheck
+        selectedPartner
     ) {
-        if (selectedPartner === partnerId) {
-            this.count++
-            formCheck.classList.remove('d-none');
-        } else {
-            formCheck.classList.add('d-none');
+        for (let [key, formCheck] of this.contactMap.entries()) {
+            if (key.id === selectedPartner) {
+                this.count++
+                formCheck.classList.remove('d-none')
+            } else {
+                formCheck.classList.add('d-none');
+            }
         }
     }
 
     /**
      * Search contacts bind to this partner
      * @param {string} searchValue
-     * @param {HTMLElement} label
-     * @param {HTMLElement} formCheck
      */
     filterBySearchValue(
-        searchValue,
-        label,
-        formCheck
+        searchValue
     ) {
-        if (label.textContent.toLowerCase().includes(searchValue)) {
-            formCheck.classList.remove('d-none');
-            this.count++
-        } else {
-            formCheck.classList.add('d-none');
+        for (let [key, formCheck] of this.contactMap.entries()) {
+            if (key.label.includes(searchValue)) {
+                this.count++
+                formCheck.classList.remove('d-none')
+            } else {
+                formCheck.classList.add('d-none');
+            }
         }
     }
 
@@ -169,22 +181,18 @@ export default class extends Controller {
      * Search contact include search value AND bind to this partner
      * @param {string} selectedPartner
      * @param {string} searchValue
-     * @param {string} partnerId
-     * @param {HTMLElement} label
-     * @param {HTMLElement} formCheck
      */
     filterByPartnerAndSearchValue(
         selectedPartner,
-        searchValue,
-        partnerId,
-        label,
-        formCheck
+        searchValue
     ) {
-        if (label.textContent.toLowerCase().includes(searchValue) && selectedPartner === partnerId) {
-            formCheck.classList.remove('d-none');
-            this.count++
-        } else {
-            formCheck.classList.add('d-none');
+        for (let [key, formCheck] of this.contactMap.entries()) {
+            if (key.label.includes(searchValue) && key.id === selectedPartner) {
+                this.count++
+                formCheck.classList.remove('d-none')
+            } else {
+                formCheck.classList.add('d-none');
+            }
         }
     }
 }
