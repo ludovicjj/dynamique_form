@@ -1,0 +1,182 @@
+<div {{ attributes }}>
+    <div class="container-fluid px-4 px-md-5 py-3">
+        <div class="card client-case-card bg-transparent border-secondary-subtle card-bg text-white mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-6 pb-2 mb-1 pb-md-0 mb-md-0 custom-border">
+                        <div class="row h-100">
+                            <div class="col-12 col-md-6 d-flex flex-md-column justify-content-between">
+                                <div class="h4 name">
+                                    {{ clientCase.projectName }}
+                                </div>
+                                <div class="mb-3 mb-md-0">
+                                    <button
+                                            class="btn btn-secondary"
+                                            type="button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#client-case-create-modal"
+                                            data-action="live#emitSelf"
+                                            data-live-event-param="clientCase:create:modal"
+                                    >
+                                        <twig:Core:Icon name="list"/> Récapitulatif
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 text-end">
+                                <div class="d-flex flex-row flex-md-column">
+                                    <ul class="items list-unstyled">
+                                        {% for mission in clientCase.missions %}
+                                            <li class="d-inline-block item item-sm text-center">{{ mission.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <div>{{ clientCase.projectName }}</div>
+                                <div>REF : #{{ clientCase.reference }}</div>
+                                <div>Client : <span class="fw-bold">{{ clientCase.client.companyName }}</span></div>
+                                <div>Client Contact(s) :</div>
+                                <div>
+                                    <ul class="items list-unstyled">
+                                        {% for clientContact in clientCase.clientContacts %}
+                                            <li class="d-inline-block item">{{ clientContact.firstname ~ ' ' ~ clientContact.lastname }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="fw-bold">Adresse du chantier :</div>
+                                <div>{{ clientCase.address1 }}</div>
+                                <div>{{ clientCase.zipcode ~ ' ' ~  clientCase.city}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {# Document #}
+            <section class="col-6 document">
+                <div class="card bg-transparent card-bg h-100">
+                    <div class="card-body">
+                        <div class="d-flex flex-row justify-content-between mb-3">
+                            <span class="fw-bold">Documents</span>
+                            <div>
+                                <button class="btn btn-secondary btn-sm">
+                                    <twig:Core:Icon name="plus"/>
+                                    Gérer les documents
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {# Partner #}
+            <section class="col-6 partner">
+                <div class="card bg-transparent card-bg">
+                    <div class="card-body">
+                        <div class="d-flex flex-row justify-content-between mb-3">
+                            <span class="fw-bold">Partenaires</span>
+                            <div>
+                                <button
+                                        class="btn btn-secondary btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#partner-modal"
+                                        data-action="live#emitSelf"
+                                        data-live-event-param="partner:modal"
+                                >
+                                    <twig:Core:Icon name="plus"/>
+                                    Gérer les partenaires
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row partner-list">
+                            <div class="col-4">
+                                <div class="nav flex-column nav-pills bg-body-secondary rounded" id="partner-tab" role="tablist" aria-orientation="vertical">
+                                    {% for partnerId, data in this.partners %}
+                                        <button
+                                                class="nav-link {% if loop.first %} active{% endif %}"
+                                                data-bs-toggle="pill"
+                                                data-bs-target="#partner-tab-{{ partnerId }}"
+                                                type="button"
+                                                role="tab"
+                                                aria-selected="{{ loop.first ? 'true' : 'false'}}"
+                                        >
+                                            {{ data['companyName'] }}
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-8" id="partner-tabContent">
+                                <div class="tab-content">
+                                    {% for partnerId, data in this.partners %}
+                                        {% set last = loop.last %}
+                                        <div
+                                                class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                                                id="partner-tab-{{ partnerId }}"
+                                                role="tabpanel"
+                                        >
+                                            {% for partnerContact in data['partnerContacts'] %}
+                                                <div class="bg-body-secondary {{ last ? '' : 'mb-3'}} rounded d-flex flex-row align-items-center">
+                                                    <div class="p-2">
+                                                        <twig:Core:Icon name="user"/>
+                                                    </div>
+                                                    <div class="p-2">
+                                                        <span class="d-block fw-bold">{{ partnerContact.firstname }} {{ partnerContact.lastname }}</span>
+                                                        <span class="d-block">{{ partnerContact.email }}</span>
+                                                        <span class="d-block">{{ partnerContact.phone }}</span>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    {#  Modal Partner #}
+    {% component "Core:BootstrapModal" with {id: 'partner-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Gérer les partenaires</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                <div class="d-none"></div>
+                {{ component('ClientCase:ClientCasePartner', {
+                    clientCase: clientCase
+                }) }}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+</div>

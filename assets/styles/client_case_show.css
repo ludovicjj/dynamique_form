@@ -1,0 +1,60 @@
+.card-bg {
+    box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+    overflow: hidden;
+}
+.card-bg:before {
+    content: '';
+    inset: 0;
+    z-index: -1;
+    position: absolute;
+    --glass-color: 0 0 0;
+    --glass-opacity: .45;
+    background-color: #1f2428;
+}
+
+.client-case-card .custom-border {
+    border-right: 1px solid var(--bs-card-border-color);
+}
+.client-case-card .item {
+    background: var(--bs-secondary);
+    border-radius: 3px;
+    padding: 2.5px 10px;
+    margin: 0 5px 5px 0;
+    cursor: default;
+    user-select: none;
+}
+
+.client-case-card .item-sm {
+    min-width: 30px;
+    text-align: center;
+}
+
+/*Partner*/
+.partner-list #partner-tab,  .partner-list #partner-tabContent{
+    height: 160px;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.partner-list #partner-tab {
+    flex-wrap: nowrap;
+}
+.partner-list #partner-tab .nav-link {
+    text-align: start;
+    color: var(--bs-white);
+    padding: 0.15rem .25rem;
+    font-size: 14px;
+}
+.partner-list #partner-tab .nav-link.active {
+    background-color: #6C757D;
+}
+
+@media (max-width: 768px) {
+    .client-case-card .custom-border {
+        border-right: none;
+        border-bottom: 1px solid var(--bs-card-border-color);
+    }
+    .client-case-card .name {
+        text-align: center;
+    }
+}

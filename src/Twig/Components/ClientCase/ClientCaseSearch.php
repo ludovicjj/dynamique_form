@@ -72,6 +72,7 @@ class ClientCaseSearch extends AbstractController
     }
 
     #[LiveListener('clientCase:update:modal')]
+    #[LiveListener('clientCase:delete:modal')]
     public function onUpdateModal(#[LiveArg] int $id): void
     {
         $this->isLoading = false;

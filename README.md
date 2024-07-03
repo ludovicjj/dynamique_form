@@ -45,6 +45,7 @@ symfony console app:import-data (load fixtures)
 ## fil d'actualité (GITHUB)
 - [Embeded stimulus controller in a live form not working on re-render](https://github.com/symfony/ux/issues/489)
 - [Better control over re-rendering behavior](https://github.com/symfony/ux/issues/490)
+- [AssetMapper - load of specific CSS files](https://github.com/symfony/symfony/issues/51329)
 
 ## Usefully command
 

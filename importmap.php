@@ -19,6 +19,9 @@ return [
     'duck' => [
         'path' => './assets/js/duck.js',
     ],
+    'client_case_show' => [
+        'path' => './assets/styles/client_case_show.css',
+    ],
     'bootstrap' => [
         'version' => '5.3.3',
     ],
@@ -56,5 +59,8 @@ return [
     ],
     '@easepick/base-plugin' => [
         'version' => '1.2.1',
+    ],
+    'stimulus-use' => [
+        'version' => '0.52.2',
     ],
 ];

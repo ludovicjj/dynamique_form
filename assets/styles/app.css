@@ -1,5 +1,6 @@
 body {
     min-height: 100svh;
+    background-color: #24292e;
 }
 
 .App {
@@ -88,8 +89,8 @@ body {
 }
 
 .menu {
-    --glass-color: 0 0 0;
-    --glass-opacity: .75;
+    --glass-color: 0 0 5;
+    --glass-opacity: .70;
     background: rgba(var(--glass-color) / var(--glass-opacity));
     border-right: 1px solid var(--bs-secondary-bg-subtle);
 }
@@ -99,6 +100,7 @@ body {
 }
 .menu.close {
     width: 55px;
+    min-width: 55px;
 }
 .menu.open {
     width: 200px;
@@ -142,7 +144,7 @@ body {
 
 
 main {
-    flex-shrink: 0;
+    flex-shrink: 1;
     flex-grow: 1;
 }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Twig\Components\ClientContact;
+namespace App\Twig\Components\ClientCase;
 
-use App\Entity\ClientContact;
-use App\Repository\ClientContactRepository;
+use App\Entity\ClientCase;
+use App\Repository\ClientCaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -13,7 +13,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
-class ClientContactDelete
+class ClientCaseDelete
 {
     use DefaultActionTrait;
     use ComponentToolsTrait;
@@ -22,31 +22,31 @@ class ClientContactDelete
     public ?int $id = null;
 
     #[LiveProp(writable: true)]
-    public ?ClientContact $clientContact = null;
-
-    #[LiveProp(writable: true)]
     public bool $loading = false;
 
+    #[LiveProp(writable: true)]
+    public ?ClientCase $clientCase = null;
+
     public function __construct(
-        private readonly ClientContactRepository $clientContactRepository
+        private readonly ClientCaseRepository $clientCaseRepository
     ) {
     }
 
     #[PostMount]
     public function PostMount(): void
     {
-        $this->clientContact = $this->clientContactRepository->find($this->id);
+        $this->clientCase = $this->clientCaseRepository->find($this->id);
     }
 
     #[LiveAction]
     public function delete(EntityManagerInterface $entityManager): void
     {
         $this->loading = true;
-        $entityManager->remove($this->clientContact);
+        $entityManager->remove($this->clientCase);
         $entityManager->flush();
 
-        $this->emit('clientContact:alert', [
-            'message' => "Le contact a été supprimé avec succès"
+        $this->emit('clientCase:alert', [
+            'message' => "L'affaire' a été supprimé avec succès"
         ]);
 
         $this->dispatchBrowserEvent('modal:close');

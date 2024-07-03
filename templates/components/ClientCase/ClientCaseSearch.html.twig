@@ -68,16 +68,34 @@
                             <td>{{ clientCase.createdAt | date('d/m/Y') }}</td>
                             <td>{{ clientCase.city }}</td>
                             <td>
+                                <a
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        href="{{ path('app_client_case_show', {'id': clientCase.id}) }}"
+                                >
+                                    <twig:Core:Icon name="eye"/>
+                                </a>
                                 <button
                                         class="btn btn-secondary"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#client-case-update-modal"
-                                        data-action="live#emit"
+                                        data-action="live#emitSelf"
                                         data-live-event-param="clientCase:update:modal"
                                         data-live-id-param="{{ clientCase.id }}"
                                 >
                                     <twig:Core:Icon name="edit"/>
+                                </button>
+                                <button
+                                        class="btn btn-secondary"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#client-case-delete-modal"
+                                        data-action="live#emitSelf"
+                                        data-live-event-param="clientCase:delete:modal"
+                                        data-live-id-param="{{ clientCase.id }}"
+                                >
+                                    <twig:Core:Icon name="trash"/>
                                 </button>
                             </td>
                         </tr>
@@ -103,7 +121,7 @@
         {% block modal_ghost %}
             <button type="button"
                     class="ghost"
-                    data-action="live#emit"
+                    data-action="live#emitSelf"
                     data-live-event-param="reset"
             >
             </button>
@@ -128,6 +146,42 @@
                 {% if clientCaseId %}
                     <div class="d-none"></div>
                     {{ component('ClientCase:ClientCaseUpdate', {
+                        id: clientCaseId
+                    }) }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {# Modal Delete #}
+    {% component "Core:BootstrapModal" with {id: 'client-case-delete-modal'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Supprimer une Affaire</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if clientCaseId %}
+                    {{ component('ClientCase:ClientCaseDelete', {
                         id: clientCaseId
                     }) }}
                 {% endif %}

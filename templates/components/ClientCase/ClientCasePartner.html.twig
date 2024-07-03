@@ -1,0 +1,58 @@
+<div {{ attributes.defaults(stimulus_controller('client-case-partner')) }}>
+    {{ form_start(form, {
+        attr: {
+            'novalidate': 'novalidate',
+            'data-action': 'live#action:prevent',
+            'data-live-action-param': 'save'
+        }
+    }) }}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <twig:Core:Icon name="user"/>
+                </span>
+                <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Recherche un contact"
+                        aria-label="Contact"
+                        data-action="input->client-case-partner#onSearchPartner"
+                        data-client-case-partner-target="search"
+                >
+            </div>
+        </div>
+
+        <div class="col-12">
+            {{ form_row(form.partner, {
+                'attr': {
+                    'data-client-case-partner-target': 'partner',
+                    'data-action': 'change->client-case-partner#onChangePartner'
+                }
+            }) }}
+        </div>
+        <div class="col-12 d-flex flex-column">
+            {{ form_label(form.partnerContacts, '', {'label_attr': {'class': 'pt-0'}}) }}
+            {{ form_widget(form.partnerContacts, {
+                'attr': {
+                    'data-client-case-partner-target': 'partnerContact',
+                    'class': 'd-none choice-wrapper choice-wrapper-7 mb-3'
+                }
+            }) }}
+            <div
+                    class="alert alert-light"
+                    data-client-case-partner-target="partnerContactAlert"
+                    style="padding-top:7px; padding-bottom:7px"
+            >
+                Vous devez selectionner un partenaire.
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 text-center">
+        <button type="submit" class="btn btn-secondary {{ this.hasValidationErrors ? 'disabled' : '' }}">Valider</button>
+    </div>
+
+    {{ form_end(form, {render_rest: false}) }}
+</div>
