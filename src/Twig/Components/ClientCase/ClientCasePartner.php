@@ -4,9 +4,11 @@ namespace App\Twig\Components\ClientCase;
 
 use App\Entity\ClientCase;
 use App\Form\Type\ClientCaseUpdateType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
+use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
@@ -34,4 +36,18 @@ class ClientCasePartner extends AbstractController
         return $this->getForm()->isSubmitted() && !$this->getForm()->isValid();
     }
 
+    #[LiveAction]
+    public function save(EntityManagerInterface $entityManager): void
+    {
+        $this->submitForm();
+        $entityManager->flush();
+
+        $this->emitUp('alert:show', [
+            'message' => "Les partenaires ont été modifiés avec succès"
+        ]);
+
+        $this->dispatchBrowserEvent('modal:close');
+        $this->resetForm();
+        $this->resetValidation();
+    }
 }

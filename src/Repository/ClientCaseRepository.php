@@ -48,4 +48,33 @@ class ClientCaseRepository extends ServiceEntityRepository
 
         return $queryBuilder->getQuery()->getSingleScalarResult() ?? 0;
     }
+
+    public function findClientCaseShow(int $id): ?ClientCase
+    {
+        $queryBuilder = $this->createQueryBuilder('client_case');
+
+        $queryBuilder
+            ->leftJoin('client_case.partnerContacts', 'partner_contact')
+            ->addSelect('partner_contact')
+
+            ->leftJoin('client_case.documents', 'document')
+            ->addSelect('document')
+
+            ->leftJoin('partner_contact.partner', 'partner')
+            ->addSelect('partner')
+
+            ->leftJoin('client_case.client', 'client')
+            ->addSelect('client')
+
+            ->leftJoin('client_case.clientContacts', 'client_contact')
+            ->addSelect('client_contact')
+
+            ->leftJoin('client_case.missions', 'mission')
+            ->addSelect('mission')
+
+            ->andWhere('client_case.id = :id')
+            ->setParameter('id', $id);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

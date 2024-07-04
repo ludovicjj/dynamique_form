@@ -30,22 +30,24 @@
 }
 
 /*Partner*/
-.partner-list #partner-tab,  .partner-list #partner-tabContent{
+.tabs .tab-nav .nav,
+.tabs .tab-content
+{
     height: 160px;
     max-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
 }
-.partner-list #partner-tab {
+.tabs .tab-nav .nav {
     flex-wrap: nowrap;
 }
-.partner-list #partner-tab .nav-link {
+.tabs .tab-nav .nav .nav-link {
     text-align: start;
     color: var(--bs-white);
     padding: 0.15rem .25rem;
     font-size: 14px;
 }
-.partner-list #partner-tab .nav-link.active {
+.tabs .tab-nav .nav .nav-link.active {
     background-color: #6C757D;
 }
 

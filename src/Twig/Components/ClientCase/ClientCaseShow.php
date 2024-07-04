@@ -4,6 +4,7 @@ namespace App\Twig\Components\ClientCase;
 
 use App\Entity\ClientCase;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
+use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
@@ -19,6 +20,12 @@ class ClientCaseShow
     public ?ClientCase $clientCase = null;
 
     public bool $isLoading = true;
+
+    public bool $isSuccess = false;
+
+    public string $message = '';
+
+    public string $modalType = '';
 
     public function getPartners(): array
     {
@@ -41,9 +48,18 @@ class ClientCaseShow
     }
 
     #[LiveListener('partner:modal')]
-    public function onCreateModal(): void
+    #[LiveListener('document:modal')]
+    public function onShowModal(#[LiveArg] string $type = ''): void
     {
+        $this->modalType = $type;
         $this->isLoading = false;
+    }
+
+    #[LiveListener('alert:show')]
+    public function onShowAlert(#[LiveArg] string $message = ''): void
+    {
+        $this->isSuccess = true;
+        $this->message = $message;
     }
 
     #[LiveListener('reset')]

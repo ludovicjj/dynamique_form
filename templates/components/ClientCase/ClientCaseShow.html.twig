@@ -1,4 +1,10 @@
 <div {{ attributes }}>
+    {% if isSuccess %}
+        <div class="container-fluid px-4 px-md-5 mt-4">
+            {{ component('Core:Alert', {message: message}) }}
+        </div>
+    {% endif %}
+
     <div class="container-fluid px-4 px-md-5 py-3">
         <div class="card client-case-card bg-transparent border-secondary-subtle card-bg text-white mb-3">
             <div class="card-body">
@@ -13,10 +19,6 @@
                                     <button
                                             class="btn btn-secondary"
                                             type="button"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#client-case-create-modal"
-                                            data-action="live#emitSelf"
-                                            data-live-event-param="clientCase:create:modal"
                                     >
                                         <twig:Core:Icon name="list"/> Récapitulatif
                                     </button>
@@ -68,10 +70,68 @@
                         <div class="d-flex flex-row justify-content-between mb-3">
                             <span class="fw-bold">Documents</span>
                             <div>
-                                <button class="btn btn-secondary btn-sm">
+                                <button
+                                        class="btn btn-secondary btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#document-modal"
+                                        data-action="live#emitSelf"
+                                        data-live-event-param="document:modal"
+                                        data-live-type-param="document"
+                                >
                                     <twig:Core:Icon name="plus"/>
                                     Gérer les documents
                                 </button>
+                            </div>
+                        </div>
+                        <div class="row tabs">
+                            <div class="col-4 tab-nav">
+                                <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
+                                    {% for document in clientCase.documents %}
+                                        <button
+                                                class="nav-link {% if loop.first %} active{% endif %}"
+                                                data-bs-toggle="pill"
+                                                data-bs-target="#document-tab-{{ document.id }}"
+                                                type="button"
+                                                role="tab"
+                                                aria-selected="{{ loop.first ? 'true' : 'false'}}"
+                                        >
+                                            {{ document.name }}
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="tab-content">
+                                    {% if clientCase.documents.count == 0 %}
+                                        <div class="tab-pane fade show active" role="tabpanel">
+                                            <div class="bg-body-secondary rounded d-flex flex-row align-items-center">
+                                                <div class="p-2">
+                                                    Cette affaire ne comporte aucun document.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for document in clientCase.documents %}
+                                            <div
+                                                    class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                                                    id="document-tab-{{ document.id }}"
+                                                    role="tabpanel"
+                                            >
+                                                <div class="bg-body-secondary {{ loop.last ? '' : 'mb-3'}} rounded d-flex flex-row align-items-center">
+                                                    <div class="p-2">
+                                                        <twig:Core:Icon name="file"/>
+                                                    </div>
+                                                    <div class="p-2">
+                                                        <span class="d-block fw-bold">{{ document.name }}</span>
+                                                        reference : {{ document.reference }}<br>
+                                                        indice : {{ document.indice }}<br>
+                                                        tag: {{ document.tag }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -91,15 +151,16 @@
                                         data-bs-target="#partner-modal"
                                         data-action="live#emitSelf"
                                         data-live-event-param="partner:modal"
+                                        data-live-type-param="partner"
                                 >
                                     <twig:Core:Icon name="plus"/>
                                     Gérer les partenaires
                                 </button>
                             </div>
                         </div>
-                        <div class="row partner-list">
-                            <div class="col-4">
-                                <div class="nav flex-column nav-pills bg-body-secondary rounded" id="partner-tab" role="tablist" aria-orientation="vertical">
+                        <div class="row tabs">
+                            <div class="col-4 tab-nav">
+                                <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
                                     {% for partnerId, data in this.partners %}
                                         <button
                                                 class="nav-link {% if loop.first %} active{% endif %}"
@@ -114,17 +175,16 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                            <div class="col-8" id="partner-tabContent">
+                            <div class="col-8">
                                 <div class="tab-content">
                                     {% for partnerId, data in this.partners %}
-                                        {% set last = loop.last %}
                                         <div
                                                 class="tab-pane fade {% if loop.first %}show active{% endif %}"
                                                 id="partner-tab-{{ partnerId }}"
                                                 role="tabpanel"
                                         >
                                             {% for partnerContact in data['partnerContacts'] %}
-                                                <div class="bg-body-secondary {{ last ? '' : 'mb-3'}} rounded d-flex flex-row align-items-center">
+                                                <div class="bg-body-secondary {{ loop.last ? '' : 'mb-3'}} rounded d-flex flex-row align-items-center">
                                                     <div class="p-2">
                                                         <twig:Core:Icon name="user"/>
                                                     </div>
@@ -172,10 +232,47 @@
             {% if isLoading %}
                 {% include '_partial/tool/loader.html.twig' %}
             {% else %}
-                <div class="d-none"></div>
-                {{ component('ClientCase:ClientCasePartner', {
-                    clientCase: clientCase
-                }) }}
+                {% if modalType == 'partner' %}
+                    <div class="d-none"></div>
+                    {{ component('ClientCase:ClientCasePartner', {
+                        clientCase: clientCase
+                    }) }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    {% endcomponent %}
+
+    {% component "Core:BootstrapModal" with {id: 'document-modal', size: 'modal-xl'} %}
+        {% block modal_ghost %}
+            <button type="button"
+                    class="ghost"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+            </button>
+        {% endblock %}
+        {% block modal_header %}
+            <h5>Gérer les documents</h5>
+            <button
+                    type="button"
+                    class="btn btn-modal-close ms-auto"
+                    aria-label="Close"
+                    data-action="live#emitSelf"
+                    data-live-event-param="reset"
+            >
+                <twig:Core:Icon name="x"/>
+            </button>
+        {% endblock %}
+        {% block modal_body %}
+            {% if isLoading %}
+                {% include '_partial/tool/loader.html.twig' %}
+            {% else %}
+                {% if modalType == 'document' %}
+                    <div class="d-none"></div>
+                    {{ component('ClientCase:ClientCaseDocument', {
+                        clientCase: clientCase
+                    }) }}
+                {% endif %}
             {% endif %}
         {% endblock %}
     {% endcomponent %}

@@ -1,0 +1,53 @@
+<div {{ attributes }}>
+    <h5 class="mb-3">Information des documents</h5>
+    {% set indices = [0, 1, 2, 3, 'A', 'B', 'C'] %}
+    <form
+            data-action="live#action:prevent"
+            data-live-action-param="save"
+    >
+        <div class="row">
+            <div class="col-4">
+
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control" data-model="documentDto.name" placeholder="Désignation du document" aria-label="document-name">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <input type="date" class="form-control" data-model="documentDto.addedAt" aria-label="document-date">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <select class="form-select" data-model="documentDto.addedBy" aria-label="document-author">
+                            <option value="">Emetteur</option>
+                            {% for partner in partners %}
+                                <option value="{{ partner.id }}">{{ partner.companyName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <input type="text" class="form-control" placeholder="Ref. du document" data-model="documentDto.reference" aria-label="document-reference">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <select class="form-select" data-model="documentDto.indice" aria-label="document-indice">
+                            <option value="">Indice</option>
+                            {% for indice in indices %}
+                                <option value="{{ indice }}">{{ indice }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <input type="text" class="form-control" placeholder="#TAG" data-model="documentDto.tag" aria-label="document-tag">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-secondary">
+                        Valider
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

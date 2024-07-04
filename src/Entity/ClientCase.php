@@ -137,6 +137,12 @@ class ClientCase
     #[ORM\ManyToMany(targetEntity: ProjectFeature::class)]
     private Collection $projectFeatures;
 
+    /**
+     * @var Collection<int, Document>
+     */
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'clientCase')]
+    private Collection $documents;
+
     public function __construct()
     {
         $this->partnerContacts = new ArrayCollection();
@@ -147,6 +153,7 @@ class ClientCase
         $this->clientCases = new ArrayCollection();
         $this->projectFeatures = new ArrayCollection();
         $this->isDraft = true;
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -557,6 +564,36 @@ class ClientCase
     public function removeProjectFeature(ProjectFeature $projectFeature): static
     {
         $this->projectFeatures->removeElement($projectFeature);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setClientCase($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getClientCase() === $this) {
+                $document->setClientCase(null);
+            }
+        }
 
         return $this;
     }
