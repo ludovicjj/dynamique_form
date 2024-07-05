@@ -2,12 +2,13 @@
 
 namespace App\Twig\Components\Document;
 
+use Symfony\Component\Form\FormView;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 class DocumentCollectionForm
 {
-    public mixed $form = null;
+    public ?FormView $form = null;
 
     public ?string $id = null;
 

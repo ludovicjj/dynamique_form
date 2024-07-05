@@ -4,6 +4,9 @@
     id: id
 }) }}>
     <div class="row">
+        <div class="col-12 mb-3">
+            <input type="file" name="files[]" autocomplete="off" multiple="" id="multiple-files" class="form-control">
+        </div>
         <div class="col-12">
             {{ form_row(form.name) }}
         </div>

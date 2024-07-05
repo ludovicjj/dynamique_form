@@ -6,13 +6,13 @@ use App\Entity\ClientCase;
 use App\Entity\Document;
 use App\Entity\User;
 use App\Form\Type\ClientCaseDocumentType;
+use App\Service\DocumentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -21,7 +21,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
-use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
+use Exception;
 
 #[AsLiveComponent]
 class ClientCaseDocument extends AbstractController
@@ -42,30 +42,38 @@ class ClientCaseDocument extends AbstractController
         return $this->createForm(ClientCaseDocumentType::class, $this->clientCase);
     }
 
-    public function mount($clientCase): void
+    public function mount(ClientCase $clientCase): void
     {
         $this->clientCase = $clientCase;
 
-        foreach ($clientCase->getDocuments() as $document) {
-            $this->documentData[] = [
-                'id' => $document->getId(),
-                'name' => $document->getName(),
-            ];
-        }
+        $this->documentData = $clientCase->getDocuments()
+            ->map(function(Document $document) {
+                return [
+                    'id' => $document->getId(),
+                    'name' => $document->getName(),
+                ];
+            })->toArray();
     }
 
     #[LiveAction]
     public function save(
         EntityManagerInterface $entityManager,
-        #[CurrentUser] User $user
+        #[CurrentUser] User $user,
+        Request $request,
+        DocumentService $documentService
     ): void {
         $this->submitForm();
 
         try {
-            throw new UnprocessableEntityHttpException();
+            $documentService->build($this->getForm(), $this->clientCase, $request->files->all('files'));
+            $entityManager->flush();
+            $this->emitUp('alert:show', [
+                'message' => "Les documents ont été modifiés avec succès"
+            ]);
+            $this->dispatchBrowserEvent('modal:close');
         } catch (UnprocessableEntityHttpException) {
-            $this->getForm()->addError(new FormError('General error'));
-            $this->getForm()->get('name')->addError(new FormError('Field error'));
+            $this->getForm()->addError(new FormError("La désignation du document est obligatoire lors d'une creation sans fichier."));
+            $this->getForm()->get('name')->addError(new FormError('Cette valeur ne doit pas être vide.'));
             $this->formView = null;
         }
 

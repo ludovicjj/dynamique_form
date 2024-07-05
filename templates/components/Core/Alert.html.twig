@@ -1,4 +1,19 @@
 <div class="alert alert-{{ type }}" role="alert">
-    <twig:Core:Icon name="{{ this.icon }}" class="me-2" />
-    {{ message }}
+
+    {% if messages is not empty %}
+        <div class="d-flex flex-row align-items-center">
+            <div class="p-2">
+                <twig:Core:Icon name="{{ this.icon }}" />
+            </div>
+            <ul class="list-unstyled mb-0">
+                {% for error_message in messages %}
+                    <li>{{ error_message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <twig:Core:Icon name="{{ this.icon }}" class="me-2" />
+        {{ message }}
+    {% endif %}
+
 </div>

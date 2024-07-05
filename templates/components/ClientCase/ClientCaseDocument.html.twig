@@ -6,66 +6,71 @@
         attr: {
             'novalidate': 'novalidate',
             'data-action': 'live#action:prevent',
-            'data-live-action-param': 'save'
+            'data-live-action-param': 'files|save'
         }
     }) }}
 
-    {% set formErrors = form.vars.errors.form.getErrors(true) %}
-    {% if formErrors|length %}
-        <ul>
-            {% for error in formErrors %}
-                <li>{{ error.message }}</li>
-            {% endfor %}
-        </ul>
+    {% if form.vars.errors|length > 0 %}
+        {% set errorMessages = [] %}
+        {% for error in form.vars.errors %}
+            {% set errorMessages = errorMessages | merge([error.messageTemplate]) %}
+        {% endfor %}
+        <twig:Core:Alert type="danger" messages="{{ errorMessages }}" />
     {% endif %}
-        <div class="row document-modal-tabs">
-            <div class="col-4 tab-nav">
-                <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
+
+{#    <div class="mb-3">#}
+{#        <label for="multiple-files" class="form-label">Multiple files:</label>#}
+{#        <input type="file" name="files[]" autocomplete="off" multiple="" id="multiple-files" class="form-control-file">#}
+{#        <button type="button" data-action="live#action" data-live-action-param="files|uploadFiles" class="btn btn-primary">Upload files!</button>#}
+{#    </div>#}
+    <div class="row document-modal-tabs">
+        <div class="col-4 tab-nav">
+            <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
+                <button
+                        class="nav-link active"
+                        data-bs-toggle="pill"
+                        data-bs-target="#tab-modal-document-default"
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+                >
+                    Ajouter un document
+                </button>
+                {% for document in documentData %}
                     <button
-                            class="nav-link active"
+                            class="nav-link"
                             data-bs-toggle="pill"
-                            data-bs-target="#tab-modal-document-default"
+                            data-bs-target="#tab-modal-document-{{ document.id }}"
                             type="button"
                             role="tab"
-                            aria-selected="true"
+                            aria-selected="false"
                     >
-                        Ajouter un document
+                        {{ document.name }}
                     </button>
-                    {% for document in documentData %}
-                        <button
-                                class="nav-link"
-                                data-bs-toggle="pill"
-                                data-bs-target="#tab-modal-document-{{ document.id }}"
-                                type="button"
-                                role="tab"
-                                aria-selected="false"
-                        >
-                            {{ document.name }}
-                        </button>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="tab-content">
-                    <twig:Document:DocumentForm
-                            form="{{ form }}"
-                            class="tab-pane fade show active"
-                            id="tab-modal-document-default"
-                    />
-                    {% for key, documentForm in form.documents %}
-                        <twig:Document:DocumentCollectionForm
-                                form="{{ documentForm }}"
-                                class="tab-pane fade"
-                                id="tab-modal-document-{{ documentForm.vars.value.id }}"
-                        />
-                    {% endfor %}
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-secondary">
-                        Valider
-                    </button>
-                </div>
+                {% endfor %}
             </div>
         </div>
+        <div class="col-8">
+            <div class="tab-content">
+                <twig:Document:DocumentForm
+                        form="{{ form }}"
+                        class="tab-pane fade show active"
+                        id="tab-modal-document-default"
+                />
+                {% for key, documentForm in form.documents %}
+                    <twig:Document:DocumentCollectionForm
+                            form="{{ documentForm }}"
+                            class="tab-pane fade"
+                            id="tab-modal-document-{{ documentForm.vars.value.id }}"
+                    />
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-secondary">
+                    Valider
+                </button>
+            </div>
+        </div>
+    </div>
     {{ form_end(form) }}
 </div>

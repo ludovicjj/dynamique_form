@@ -8,7 +8,8 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 class Alert
 {
     public string $type = 'success';
-    public string $message;
+    public ?string $message = null;
+    public array $messages = [];
 
     public function getIcon(): string
     {
