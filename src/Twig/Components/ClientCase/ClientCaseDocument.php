@@ -5,46 +5,53 @@ namespace App\Twig\Components\ClientCase;
 use App\Entity\ClientCase;
 use App\Entity\Document;
 use App\Entity\User;
-use App\Form\DTO\DocumentDTO;
-use App\Repository\PartnerRepository;
+use App\Form\Type\ClientCaseDocumentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
+use Symfony\UX\LiveComponent\ComponentWithFormTrait;
+use Symfony\Component\Form\FormInterface;
+use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
-use DateTime;
 
 #[AsLiveComponent]
 class ClientCaseDocument extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentToolsTrait;
-
-    #[LiveProp(writable: ['name', 'addedAt', 'addedBy', 'reference', 'indice', 'tag'])]
-    public DocumentDTO $documentDto;
+    use ComponentWithFormTrait;
+    use ValidatableComponentTrait;
 
     #[LiveProp(writable: true)]
     public ?ClientCase $clientCase = null;
 
-    public function __construct(
-        private readonly PartnerRepository $partnerRepository
-    ) {
+    #[LiveProp]
+    public array $documentData = [];
 
+    protected function instantiateForm(): FormInterface
+    {
+        return $this->createForm(ClientCaseDocumentType::class, $this->clientCase);
     }
 
-    public function mount(): void
+    public function mount($clientCase): void
     {
-        $this->documentDto = new DocumentDTO();
-    }
+        $this->clientCase = $clientCase;
 
-    #[ExposeInTemplate]
-    public function getPartners(): array
-    {
-        return $this->partnerRepository->findAll();
+        foreach ($clientCase->getDocuments() as $document) {
+            $this->documentData[] = [
+                'id' => $document->getId(),
+                'name' => $document->getName(),
+            ];
+        }
     }
 
     #[LiveAction]
@@ -52,37 +59,49 @@ class ClientCaseDocument extends AbstractController
         EntityManagerInterface $entityManager,
         #[CurrentUser] User $user
     ): void {
-        $document = $this->buildDocument($this->documentDto, $user);
-        $entityManager->persist($document);
-        $entityManager->flush();
+        $this->submitForm();
 
-        $this->emitUp('alert:show', [
-            'message' => "Les documents ont été modifiés avec succès"
-        ]);
+        try {
+            throw new UnprocessableEntityHttpException();
+        } catch (UnprocessableEntityHttpException) {
+            $this->getForm()->addError(new FormError('General error'));
+            $this->getForm()->get('name')->addError(new FormError('Field error'));
+            $this->formView = null;
+        }
 
-        $this->dispatchBrowserEvent('modal:close');
+//        if ($this->getForm()->isSubmitted() && $this->isValid()) {
+//            dd('valid');
+//            $this->submitForm();
+//            $this->getForm()->getData();
+//
+//
+//            $this->submitForm();
+//            $document = $this->buildDocument($user);
+//
+//            $entityManager->persist($document);
+//            $entityManager->flush();
+//
+//            $this->emitUp('alert:show', [
+//                'message' => "Les documents ont été modifiés avec succès"
+//            ]);
+//
+//            $this->dispatchBrowserEvent('modal:close');
+//        }
     }
 
-    private function buildDocument(DocumentDTO $documentDTO, User $user): Document
+    private function buildDocument(User $user): Document
     {
+        $form = $this->getForm();
         $document = new Document();
         $document
-            ->setName($documentDTO->name)
+            ->setName($form->get('name')->getData())
             ->setAddedBy($user)
-            ->setTag($documentDTO->tag)
-            ->setIndice($documentDTO->indice)
-            ->setReference($documentDTO->reference)
-            ->setClientCase($this->clientCase);
-
-        if ($documentDTO->addedBy) {
-            $partner = $this->partnerRepository->find($documentDTO->addedBy);
-            $document->setCreatedBy($partner);
-        }
-
-        if ($documentDTO->addedAt) {
-            $addedAt = DateTime::createFromFormat('Y-m-d', $documentDTO->addedAt);
-            $document->setAddedAt($addedAt);
-        }
+            ->setTag($form->get('tag')->getData())
+            ->setIndice($form->get('indice')->getData())
+            ->setReference($form->get('reference')->getData())
+            ->setClientCase($this->clientCase)
+            ->setCreatedBy($form->get('createdBy')->getData())
+            ->setAddedAt($form->get('addedAt')->getData());
 
         return $document;
     }

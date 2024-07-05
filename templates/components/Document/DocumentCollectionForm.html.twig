@@ -1,0 +1,26 @@
+<div {{ attributes.defaults({
+    class: class,
+    role: "tabpanel",
+    id: id
+}) }}>
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.addedAt) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.reference) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.createdBy) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.indice) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.tag) }}
+        </div>
+    </div>
+</div>

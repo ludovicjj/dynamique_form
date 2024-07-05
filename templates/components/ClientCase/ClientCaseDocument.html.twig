@@ -1,46 +1,65 @@
 <div {{ attributes }}>
-    <h5 class="mb-3">Information des documents</h5>
-    {% set indices = [0, 1, 2, 3, 'A', 'B', 'C'] %}
-    <form
-            data-action="live#action:prevent"
-            data-live-action-param="save"
-    >
-        <div class="row">
-            <div class="col-4">
 
+    <h5 class="mb-3">Information des documents</h5>
+
+    {{ form_start(form, {
+        attr: {
+            'novalidate': 'novalidate',
+            'data-action': 'live#action:prevent',
+            'data-live-action-param': 'save'
+        }
+    }) }}
+
+    {% set formErrors = form.vars.errors.form.getErrors(true) %}
+    {% if formErrors|length %}
+        <ul>
+            {% for error in formErrors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+        <div class="row document-modal-tabs">
+            <div class="col-4 tab-nav">
+                <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
+                    <button
+                            class="nav-link active"
+                            data-bs-toggle="pill"
+                            data-bs-target="#tab-modal-document-default"
+                            type="button"
+                            role="tab"
+                            aria-selected="true"
+                    >
+                        Ajouter un document
+                    </button>
+                    {% for document in documentData %}
+                        <button
+                                class="nav-link"
+                                data-bs-toggle="pill"
+                                data-bs-target="#tab-modal-document-{{ document.id }}"
+                                type="button"
+                                role="tab"
+                                aria-selected="false"
+                        >
+                            {{ document.name }}
+                        </button>
+                    {% endfor %}
+                </div>
             </div>
             <div class="col-8">
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <input type="text" class="form-control" data-model="documentDto.name" placeholder="Désignation du document" aria-label="document-name">
-                    </div>
-                    <div class="col-6 mb-3">
-                        <input type="date" class="form-control" data-model="documentDto.addedAt" aria-label="document-date">
-                    </div>
-                    <div class="col-6 mb-3">
-                        <select class="form-select" data-model="documentDto.addedBy" aria-label="document-author">
-                            <option value="">Emetteur</option>
-                            {% for partner in partners %}
-                                <option value="{{ partner.id }}">{{ partner.companyName }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <input type="text" class="form-control" placeholder="Ref. du document" data-model="documentDto.reference" aria-label="document-reference">
-                    </div>
-                    <div class="col-6 mb-3">
-                        <select class="form-select" data-model="documentDto.indice" aria-label="document-indice">
-                            <option value="">Indice</option>
-                            {% for indice in indices %}
-                                <option value="{{ indice }}">{{ indice }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <input type="text" class="form-control" placeholder="#TAG" data-model="documentDto.tag" aria-label="document-tag">
-                    </div>
+                <div class="tab-content">
+                    <twig:Document:DocumentForm
+                            form="{{ form }}"
+                            class="tab-pane fade show active"
+                            id="tab-modal-document-default"
+                    />
+                    {% for key, documentForm in form.documents %}
+                        <twig:Document:DocumentCollectionForm
+                                form="{{ documentForm }}"
+                                class="tab-pane fade"
+                                id="tab-modal-document-{{ documentForm.vars.value.id }}"
+                        />
+                    {% endfor %}
                 </div>
-
                 <div class="mb-3">
                     <button type="submit" class="btn btn-secondary">
                         Valider
@@ -48,6 +67,5 @@
                 </div>
             </div>
         </div>
-    </form>
-
+    {{ form_end(form) }}
 </div>

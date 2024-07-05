@@ -141,6 +141,7 @@ class ClientCase
      * @var Collection<int, Document>
      */
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'clientCase')]
+    #[Assert\Valid]
     private Collection $documents;
 
     public function __construct()

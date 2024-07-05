@@ -29,25 +29,32 @@
     text-align: center;
 }
 
-/*Partner*/
+/*Tabs*/
 .tabs .tab-nav .nav,
-.tabs .tab-content
+.tabs .tab-content,
+.document-modal-tabs .tab-nav .nav
 {
     height: 160px;
     max-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
 }
-.tabs .tab-nav .nav {
+.document-modal-tabs .tab-nav .nav {
+    height: 255px;
+}
+.tabs .tab-nav .nav,
+.document-modal-tabs .tab-nav .nav {
     flex-wrap: nowrap;
 }
-.tabs .tab-nav .nav .nav-link {
+.tabs .tab-nav .nav .nav-link,
+.document-modal-tabs .tab-nav .nav .nav-link {
     text-align: start;
     color: var(--bs-white);
     padding: 0.15rem .25rem;
     font-size: 14px;
 }
-.tabs .tab-nav .nav .nav-link.active {
+.tabs .tab-nav .nav .nav-link.active,
+.document-modal-tabs .tab-nav .nav .nav-link.active {
     background-color: #6C757D;
 }
 
