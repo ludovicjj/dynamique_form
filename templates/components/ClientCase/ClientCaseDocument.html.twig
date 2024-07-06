@@ -6,7 +6,7 @@
         attr: {
             'novalidate': 'novalidate',
             'data-action': 'live#action:prevent',
-            'data-live-action-param': 'files|save'
+            'data-live-action-param': 'files(multiple[])|save'
         }
     }) }}
 
@@ -17,12 +17,6 @@
         {% endfor %}
         <twig:Core:Alert type="danger" messages="{{ errorMessages }}" />
     {% endif %}
-
-{#    <div class="mb-3">#}
-{#        <label for="multiple-files" class="form-label">Multiple files:</label>#}
-{#        <input type="file" name="files[]" autocomplete="off" multiple="" id="multiple-files" class="form-control-file">#}
-{#        <button type="button" data-action="live#action" data-live-action-param="files|uploadFiles" class="btn btn-primary">Upload files!</button>#}
-{#    </div>#}
     <div class="row document-modal-tabs">
         <div class="col-4 tab-nav">
             <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">

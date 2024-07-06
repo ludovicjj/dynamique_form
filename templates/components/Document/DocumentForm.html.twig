@@ -2,13 +2,33 @@
     class: class,
     role: "tabpanel",
     id: id
-}) }}>
+}) }} data-controller="document">
     <div class="row">
         <div class="col-12 mb-3">
-            <input type="file" name="files[]" autocomplete="off" multiple="" id="multiple-files" class="form-control">
+            <div class="drag-area" data-document-target="dropArea">
+                <div class="drag-area-icon">
+                    <twig:Core:Icon name="cloud-upload"/>
+                </div>
+                <div class="drag-area-info" data-document-target="dropAreaInfo">Glisser et déposer vos fichiers ici</div>
+                <input
+                        type="file"
+                        name="multiple[]"
+                        autocomplete="off"
+                        multiple=""
+                        id="multiple-files"
+                        class="form-control"
+                        data-action="change->document#onUpload"
+                        data-document-target="inputFile"
+                        hidden
+                >
+            </div>
         </div>
         <div class="col-12">
-            {{ form_row(form.name) }}
+            {{ form_row(form.name, {
+                'attr': {
+                    'data-document-target': 'inputName'
+                }
+            }) }}
         </div>
         <div class="col-6">
             {{ form_row(form.addedAt) }}
