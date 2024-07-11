@@ -1,0 +1,88 @@
+.dialog[open]::backdrop {
+    animation: backdrop-fadeIn .5s ease forwards;
+}
+
+.dialog[open].close::backdrop {
+    animation: backdrop-fadeOut .5s ease forwards;
+}
+
+.dialog[open] {
+    animation: fadeIn .5s ease-out forwards;
+}
+.dialog[open].close {
+    animation: fadeOut .5s ease-out forwards;
+}
+
+.dialog .dialog-content {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.dialog .dialog-header button {
+    filter:invert(1) grayscale(100%) brightness(200%);
+    color: #000000;
+    opacity: .5;
+    width: 1em;
+    height: 1em;
+    box-sizing: content-box;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.dialog .dialog-header button:hover {
+    opacity: .7;
+}
+
+/* animation to dialog (fadeIn/fadeOut) and backdrop(backdrop-fadeIn/backdrop-fadeOut)  */
+@keyframes fadeIn {
+    0% {
+        top: -40%;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        top: 0;
+    }
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        top: 0;
+    }
+    20% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        top: -40%;
+    }
+}
+
+@keyframes backdrop-fadeIn {
+    from {
+        background: transparent;
+    }
+    to{
+        background: rgba(0, 0, 0, 0.5);
+    }
+}
+@keyframes backdrop-fadeOut {
+    from {
+        background: rgba(0, 0, 0, 0.5);
+    }
+    to{
+        background: transparent;
+    }
+}
+
+
+/*.fade-in {*/
+/*    animation: fadeIn 3s ease-out forwards;*/
+/*}*/
+/*.fade-out {*/
+/*    animation: fadeOut 3s ease-out forwards;*/
+/*}*/

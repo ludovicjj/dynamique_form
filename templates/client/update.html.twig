@@ -15,3 +15,17 @@
         </turbo-stream>
     {% endif %}
 {% endblock %}
+
+{% block stream_response %}
+    <turbo-stream action="update" target="modal">
+        <template></template>
+    </turbo-stream>
+
+    <turbo-stream action="append" target="flash-container">
+        <template>{{ include('partial/_flashes.html.twig') }}</template>
+    </turbo-stream>
+
+    <turbo-stream action="replace" target="client-list-item-{{ client.id }}">
+        <template>{{ include('client/_row.html.twig') }}</template>
+    </turbo-stream>
+{% endblock %}

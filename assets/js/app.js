@@ -13,3 +13,4 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/app.css';
 import '../styles/toast.css';
 import '../styles/menu.css';
+import '../styles/dialog.css';

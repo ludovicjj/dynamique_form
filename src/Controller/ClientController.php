@@ -33,7 +33,7 @@ class ClientController extends AbstractController
         PaginatorInterface $paginator,
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] string $sort = 'createdAt',
-        #[MapQueryParameter] string $sortDirection = 'ASC',
+        #[MapQueryParameter] string $sortDirection = 'DESC',
         #[MapQueryParameter('query')] string $query = null,
         #[MapQueryParameter('country')] string $country = null
     ): Response {
@@ -109,6 +109,14 @@ class ClientController extends AbstractController
 
             $this->addFlash('success', 'Client modifié');
 
+            if ($request->headers->has('turbo-frame')) {
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+                return $this->renderBlock('client/update.html.twig', 'stream_response', [
+                    'client' => $client
+                ]);
+            }
+
             return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -116,6 +124,12 @@ class ClientController extends AbstractController
             'client' => $client,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/client/{id}/delete', name: 'app_client_delete', methods: ['GET', 'POST'])]
+    public function delete(Request $request, Client $client)
+    {
+
     }
 
     private function createClientForm(Client $client = null): FormInterface

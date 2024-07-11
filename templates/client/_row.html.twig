@@ -1,4 +1,4 @@
-<tr>
+<tr id="client-list-item-{{ client.id }}">
     <td>{{ client.companyName }}</td>
     <td>{{ client.address1 }}</td>
     <td>{{ client.zipcode }}</td>
@@ -14,6 +14,7 @@
         >
             <twig:Icon name="users"/>
         </a>
+
         <a
                 class="btn btn-secondary"
                 href="{{ path('app_client_update', {'id': client.id}) }}"
@@ -21,6 +22,7 @@
         >
             <twig:Icon name="edit"/>
         </a>
+
         <a
                 type="button"
                 class="btn btn-secondary"

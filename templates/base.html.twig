@@ -20,7 +20,7 @@
 
             {% block body %}{% endblock %}
 
-            <twig:BootstrapModal size="modal-lg">
+            <twig:Modal size="modal-lg">
                 <turbo-frame
                         id="modal"
                         data-modal-target="dynamicContent"
@@ -31,7 +31,7 @@
                         <div class="spinner"></div>
                     </div>
                 </twig:block>
-            </twig:BootstrapModal>
+            </twig:Modal>
 
             <div id="flash-container" data-turbo-temporary class="position-fixed top-0 end-0 mt-4 me-4">
                 {{ include('partial/_flashes.html.twig') }}
