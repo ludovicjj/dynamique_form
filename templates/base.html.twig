@@ -15,9 +15,27 @@
     <body>
         <div class="App">
             {% if is_granted('ROLE_USER') %}
-                <twig:Core:Menu/>
+                <twig:Menu />
             {% endif %}
+
             {% block body %}{% endblock %}
+
+            <twig:BootstrapModal size="modal-lg">
+                <turbo-frame
+                        id="modal"
+                        data-modal-target="dynamicContent"
+                        data-action="turbo:before-fetch-request->modal#showLoading"
+                ></turbo-frame>
+                <twig:block name="loading_content">
+                    <div class="d-flex justify-content-center m-3">
+                        <div class="spinner"></div>
+                    </div>
+                </twig:block>
+            </twig:BootstrapModal>
+
+            <div id="flash-container" data-turbo-temporary class="position-fixed top-0 end-0 mt-4 me-4">
+                {{ include('partial/_flashes.html.twig') }}
+            </div>
         </div>
     </body>
 </html>

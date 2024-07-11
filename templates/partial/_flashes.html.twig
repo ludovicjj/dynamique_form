@@ -1,0 +1,34 @@
+{% for key, messages in app.flashes %}
+    {% for message in messages %}
+        <div
+                id="toast"
+                class="d-flex flex-nowrap align-items-center bg-white rounded p-3 position-relative text-secondary"
+                data-controller="toast"
+                data-toast-auto-close-value="5000"
+        >
+            {# Icon #}
+            <div class="toast-icon rounded d-flex align-items-center justify-content-center fs-4">
+                <twig:Icon name="circle-check-filled"/>
+            </div>
+
+            {# Message #}
+            <div class="ms-3 toast-message fs-6">
+                {{ message }}
+            </div>
+
+            {# Close #}
+            <button
+                    class="ms-auto toast-close border-0 d-flex align-items-center justify-content-center fs-5 rounded p-2"
+                    data-action="toast#close"
+            >
+                <twig:Icon name="x"/>
+            </button>
+
+            {# Timerbar #}
+            <div
+                    class="timer position-absolute bottom-0 start-0 rounded"
+                    data-toast-target="timerbar"
+            ></div>
+        </div>
+    {% endfor %}
+{% endfor %}

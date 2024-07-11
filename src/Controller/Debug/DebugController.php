@@ -23,4 +23,10 @@ class DebugController extends AbstractController
             'url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Shadow_2752.jpg/250px-Shadow_2752.jpg'
         ]);
     }
+
+    #[Route('/debug/test' , name: 'app_debug_test')]
+    public function test()
+    {
+        return $this->render('debug/index.html.twig');
+    }
 }

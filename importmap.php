@@ -63,4 +63,10 @@ return [
     'stimulus-use' => [
         'version' => '0.52.2',
     ],
+    '@hotwired/turbo' => [
+        'version' => '7.3.0',
+    ],
+    'debounce' => [
+        'version' => '2.1.0',
+    ],
 ];

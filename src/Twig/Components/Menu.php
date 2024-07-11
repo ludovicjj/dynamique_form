@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Twig\Components\Core;
+namespace App\Twig\Components;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
@@ -27,7 +27,7 @@ class Menu
         ],
         [
             'label' => 'Clients',
-            'route' => 'app_client',
+            'route' => 'app_client_index',
             'icon' => 'building-community'
         ],
         [

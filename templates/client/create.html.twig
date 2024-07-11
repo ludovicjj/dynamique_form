@@ -1,0 +1,43 @@
+{% extends 'modalFrame.html.twig' %}
+
+{% block title %}Client{% endblock %}
+
+{% block body %}
+    <div>
+        {{ include('client/_form.html.twig') }}
+    </div>
+
+    {% if app.request.headers.get('turbo-frame') == 'modal' %}
+        <turbo-stream action="replace" target="modal-title">
+            <template>
+                <h1 class="modal-title fs-5" id="modal-title" data-modal-target="title">Création client</h1>
+            </template>
+        </turbo-stream>
+    {% endif %}
+{% endblock %}
+
+{% block stream_response %}
+    <turbo-stream action="update" target="modal">
+        <template></template>
+    </turbo-stream>
+
+    <turbo-stream action="append" target="flash-container">
+        <template>{{ include('partial/_flashes.html.twig') }}</template>
+    </turbo-stream>
+
+{#    <turbo-stream action="prepend" targets="#client-list tbody">#}
+{#        <template>#}
+{#            {{ include('client/_row.html.twig') }}#}
+{#        </template>#}
+{#    </turbo-stream>#}
+
+    <turbo-stream action="update" targets="#client-list">
+        <template>
+            <div class="d-flex flex-column align-items-center justify-content-center m-3 loader">
+                <p class="mb-3 fs-6 fw-semibold">Chargement...</p>
+                <div class="spinner"></div>
+            </div>
+        </template>
+    </turbo-stream>
+{% endblock %}
+

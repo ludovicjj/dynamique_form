@@ -51,31 +51,17 @@ body {
 
 
 /* Loader */
-.modal .loader-wrapper {
-    width: 100%;
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.modal .loader-wrapper .spinner {
+.modal .spinner, .loader .spinner {
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: conic-gradient(#0000 10%,#474bff);
+    background: radial-gradient(farthest-side,#474bff 94%,#0000) top/9px 9px no-repeat,
+    conic-gradient(#0000 30%,#474bff);
     -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 0);
     animation: spinner 1s infinite linear;
 }
 
-.modal .ghost {
-    position: absolute;
-    border-width: 0;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    cursor: default !important;
-    background-color: transparent;
-}
+
 .modal .btn-modal-close {
     font-size: 1.5rem;
     display: flex;
@@ -87,61 +73,6 @@ body {
         transform: rotate(1turn);
     }
 }
-
-.menu {
-    --glass-color: 0 0 5;
-    --glass-opacity: .70;
-    background: rgba(var(--glass-color) / var(--glass-opacity));
-    border-right: 1px solid var(--bs-secondary-bg-subtle);
-}
-.menu .sticky-wrapper {
-    position: sticky;
-    top: 0;
-}
-.menu.close {
-    width: 55px;
-    min-width: 55px;
-}
-.menu.open {
-    width: 200px;
-}
-.menu .menu-brand {
-    border-bottom: 1px solid var(--bs-secondary-bg-subtle);
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.menu li {
-    border: 1px solid transparent;
-}
-
-.menu li a{
-    flex-wrap: nowrap;
-}
-.menu li a {
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    border: 1px solid var(--bs-secondary-bg-subtle);
-    border-radius: .25rem;
-    margin: 2px 5px;
-}
-.menu li a:hover {
-    background-color: #161719;
-    border-color: #41464b;
-}
-.menu.close li a {
-    justify-content: center;
-}
-.menu.open li a {
-    padding-left: 1.5rem;
-}
-.menu.close li a .label-link {
-    display: none;
-}
-
-
 
 main {
     flex-shrink: 1;
@@ -167,6 +98,17 @@ main {
 
 .alert-success {
     --bs-success-bg-subtle: #0e7446;
+}
+
+/*Transition stimulus*/
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 500ms;
+}
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+.fade-enter-to, .fade-leave-from {
+    opacity: 1;
 }
 
 .eyebrows {

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,23 +17,30 @@ class ClientRepository extends ServiceEntityRepository
         parent::__construct($registry, Client::class);
     }
 
-    public function searchPaginated(int $page, int $itemPerPage, ?int $country = null): array
-    {
-        $offset = $page * $itemPerPage;
-        $queryBuilder = $this->createQueryBuilder('client');
+    public function findBySearchQueryBuilder(
+        ?string $query,
+        ?int $country,
+        ?string $sort,
+        string $direction = 'DESC'
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('c');
 
-        $queryBuilder
-            ->leftJoin('client.country', 'country')
-            ->addSelect('country')
-            ->addOrderBy('client.createdAt', 'DESC')
-            ->setMaxResults($offset);
+        if ($query) {
+            $qb
+                ->andWhere('c.companyName LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        }
 
         if ($country) {
-            $queryBuilder
-                ->andWhere('country = :country')
+            $qb
+                ->andWhere('c.country = :country')
                 ->setParameter('country', $country);
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        if ($sort) {
+            $qb->orderBy('c.' . $sort, $direction);
+        }
+
+        return $qb;
     }
 }

@@ -20,8 +20,8 @@ class ClientType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var ?Client $entity */
-        $entity = $options['data'] ?? null;
+        /** @var Client $entity */
+        $entity = $options['data'];
         $france = $this->countryRepository->findOneBy(['name' => 'France']);
 
         $builder
@@ -54,7 +54,7 @@ class ClientType extends AbstractType
                 'query_builder' => function(CountryRepository $er) {
                     return $er->findAllOrderByNameQueryBuilder();
                 },
-                'data' => $entity ? $entity->getCountry() : $france
+                'data' => $entity->getId() ? $entity->getCountry() : $france
             ]);
     }
 

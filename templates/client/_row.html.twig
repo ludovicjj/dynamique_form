@@ -1,0 +1,31 @@
+<tr>
+    <td>{{ client.companyName }}</td>
+    <td>{{ client.address1 }}</td>
+    <td>{{ client.zipcode }}</td>
+    <td>{{ client.city }}</td>
+    <td>{{ client.country.name }}</td>
+    <td>{{ client.createdAt | date('Y-m-d') }}</td>
+    <td>
+        <a
+                type="button"
+                class="btn btn-secondary"
+                href="{{ path('app_client_contact', {'id': client.id}) }}"
+                target="_top"
+        >
+            <twig:Icon name="users"/>
+        </a>
+        <a
+                class="btn btn-secondary"
+                href="{{ path('app_client_update', {'id': client.id}) }}"
+                data-turbo-frame="modal"
+        >
+            <twig:Icon name="edit"/>
+        </a>
+        <a
+                type="button"
+                class="btn btn-secondary"
+        >
+            <twig:Icon name="trash"/>
+        </a>
+    </td>
+</tr>

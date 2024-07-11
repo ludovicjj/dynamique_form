@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Twig\Components\Core;
+namespace App\Twig\Components;
 
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 

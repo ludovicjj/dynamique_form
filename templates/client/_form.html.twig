@@ -1,0 +1,43 @@
+{{ form_start(form) }}
+
+<h5 class="mb-3 fs-6 fw-semibold">Informations du client</h5>
+
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.companyName) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.phone) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.siret) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.email) }}
+    </div>
+</div>
+
+<h5 class="mt-4 mb-3 fs-6 fw-semibold">Localisation du client</h5>
+
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.address1) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.city) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.zipcode) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.country) }}
+    </div>
+</div>
+
+<div class="mb-3 text-end">
+    <button formnovalidate type="submit" class="btn btn-secondary">
+        {{ form.vars.value.id ? 'Modifier' : 'Ajouter' }}
+    </button>
+</div>
+
+{{ form_end(form) }}

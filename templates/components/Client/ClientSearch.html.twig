@@ -49,6 +49,15 @@
         </div>
     {% endif %}
 
+    {% if isLoading == false %}
+    <div class="container-fluid px-4 px-md-5 my-4">
+        <div class="alert alert-info">
+            {{ clientId }}
+        </div>
+        {{ component('Client:ClientUpdate', {id: clientId}) }}
+    </div>
+    {% endif %}
+
     <div class="container-fluid px-4 px-md-5 my-4">
         <div class="p-4 markdown-container bg-body shadow-blur--rainbow">
             <table class="table">
@@ -142,38 +151,38 @@
     {% endcomponent %}
 
     {# Modal Update #}
-    {% component "Core:BootstrapModal" with {id: 'client-update-modal', size: 'modal-xl'} %}
-        {% block modal_ghost %}
-            <button type="button"
-                    class="ghost"
-                    data-action="live#emitSelf"
-                    data-live-event-param="reset"
-            >
-            </button>
-        {% endblock %}
-        {% block modal_header %}
-            <h5>Modification Client</h5>
-            <button
-                    type="button"
-                    class="btn btn-modal-close ms-auto"
-                    aria-label="Close"
-                    data-action="live#emitSelf"
-                    data-live-event-param="reset"
-            >
-                <twig:Core:Icon name="x"/>
-            </button>
-        {% endblock %}
-        {% block modal_body %}
-            {% if isLoading %}
-                {% include '_partial/tool/loader.html.twig' %}
-            {% else %}
-                {% if clientId %}
-                    <div class="d-none"></div>
-                    {{ component('Client:ClientUpdate', {id: clientId}) }}
-                {% endif %}
-            {% endif %}
-        {% endblock %}
-    {% endcomponent %}
+{#    {% component "Core:BootstrapModal" with {id: 'client-update-modal', size: 'modal-xl'} %}#}
+{#        {% block modal_ghost %}#}
+{#            <button type="button"#}
+{#                    class="ghost"#}
+{#                    data-action="live#emitSelf"#}
+{#                    data-live-event-param="reset"#}
+{#            >#}
+{#            </button>#}
+{#        {% endblock %}#}
+{#        {% block modal_header %}#}
+{#            <h5>Modification Client</h5>#}
+{#            <button#}
+{#                    type="button"#}
+{#                    class="btn btn-modal-close ms-auto"#}
+{#                    aria-label="Close"#}
+{#                    data-action="live#emitSelf"#}
+{#                    data-live-event-param="reset"#}
+{#            >#}
+{#                <twig:Core:Icon name="x"/>#}
+{#            </button>#}
+{#        {% endblock %}#}
+{#        {% block modal_body %}#}
+{#            {% if isLoading %}#}
+{#                {% include '_partial/tool/loader.html.twig' %}#}
+{#            {% else %}#}
+{#                {% if client %}#}
+{#                    <div class="d-none"></div>#}
+{#                    {{ component('Client:ClientUpdate', {initialFormData: client, key: client.id}) }}#}
+{#                {% endif %}#}
+{#            {% endif %}#}
+{#        {% endblock %}#}
+{#    {% endcomponent %}#}
 
     {# Modal Update #}
     {% component "Core:BootstrapModal" with {id: 'client-delete-modal', size: 'modal'} %}

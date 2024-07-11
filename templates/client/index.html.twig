@@ -2,15 +2,6 @@
 
 {% block title %}Client{% endblock %}
 
-{% block stylesheets %}
-{% endblock %}
-
-{% block javascripts %}
-    {% block importmap %}
-        {{ parent() }}
-    {% endblock %}
-{% endblock %}
-
 {% block body %}
     <main>
         <div class="hero">
@@ -43,6 +34,27 @@
             }) }}
         </div>
 
-        {{ component('Client:ClientSearch') }}
+        <div class="container-fluid px-4 px-md-5 py-3">
+            <section class="background-glass p-4 rounded">
+                {{ include('client/_search_form.html.twig') }}
+            </section>
+        </div>
+
+        <div class="container-fluid px-4 px-md-5 my-4">
+            <div class="p-4 markdown-container bg-body shadow-blur--rainbow">
+                <turbo-frame
+                        id="client-list"
+                        data-turbo-action="advance"
+                        src="{{ path('app_client_list', {...app.request.query.all()}) }}"
+                        data-controller="listing"
+                        data-action="turbo:before-fetch-request->listing#fetchLoading turbo:before-fetch-response->listing#fetchRender turbo:frame-load->listing#onRender"
+                >
+                    <div class="d-flex flex-column align-items-center justify-content-center m-3 loader">
+                        <p class="mb-3 fs-6 fw-semibold">Chargement...</p>
+                        <div class="spinner"></div>
+                    </div>
+                </turbo-frame>
+            </div>
+        </div>
     </main>
 {% endblock %}

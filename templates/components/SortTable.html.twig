@@ -1,0 +1,15 @@
+<div {{ attributes }}>
+    <a href="{{ path(routeName, {
+        ...app.request.query.all(),
+        sort: sortName,
+        sortDirection: property == sortName and direction == 'asc' ? 'desc' : 'asc',
+    }) }}"
+       class="link-underline link-underline-opacity-0 link-light"
+    >
+        {% block content %}{% endblock %}
+        <span class="ps-2">
+            <twig:Icon name="{{ this.icon }}" provider="mdi" />
+        </span>
+    </a>
+
+</div>

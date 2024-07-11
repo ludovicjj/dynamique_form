@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components\Client;
 
+use App\Entity\Client;
 use App\Repository\ClientRepository;
 use App\Repository\CountryRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;

@@ -1,0 +1,50 @@
+<form
+        method="get"
+        action="{{ path('app_client_list') }}"
+        data-controller="autosubmit"
+        data-turbo-frame="client-list"
+>
+    <fieldset class="d-flex gap-4 justify-content-end">
+        <div class="input-group" style="max-width: 30%;">
+            <label class="input-group-text">
+                <twig:Icon name="map-pin"/>
+            </label>
+            <select
+                    class="form-select"
+                    name="country"
+                    aria-label="Search voyages"
+                    data-action="autosubmit#debouncedSubmit"
+            >
+                <option value>Recherche par pays</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}">{{ country.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label class="input-group-text">
+                <twig:Icon name="search"/>
+            </label>
+            <input
+                    type="search"
+                    aria-label="Search voyages"
+                    name="query"
+                    class="form-control"
+                    value="{{ app.request.query.get('query') }}"
+                    placeholder="Recherche par companie"
+                    data-action="autosubmit#debouncedSubmit"
+            >
+        </div>
+
+        <div class="input-group" style="max-width: 50px">
+            <a
+                    class="btn btn-secondary"
+                    href="{{ path('app_client_create') }}"
+                    data-turbo-frame="modal"
+            >
+                <twig:Icon name="plus"/>
+            </a>
+        </div>
+    </fieldset>
+</form>
