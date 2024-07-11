@@ -50,7 +50,7 @@ class ClientController extends AbstractController
         $clientPaginated = $paginator->paginate(
             $clientRepository->findBySearchQueryBuilder($query, $country, $sort, $sortDirection),
             $page,
-            5
+            15
         );
 
         return $this->render('client/_list.html.twig', [
@@ -127,9 +127,25 @@ class ClientController extends AbstractController
     }
 
     #[Route('/client/{id}/delete', name: 'app_client_delete', methods: ['GET', 'POST'])]
-    public function delete(Request $request, Client $client)
+    public function delete(Request $request, Client $client, EntityManagerInterface $entityManager): Response
     {
+        $id = $client->getId();
+        if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($client);
+            $entityManager->flush();
 
+            $this->addFlash('success', 'Client supprimé');
+
+            if ($request->headers->has('turbo-frame')) {
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+                return $this->renderBlock('client/delete.html.twig', 'success_stream', [
+                    'id' => $id,
+                ]);
+            }
+        }
+
+        return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
     }
 
     private function createClientForm(Client $client = null): FormInterface

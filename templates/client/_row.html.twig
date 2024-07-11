@@ -5,7 +5,7 @@
     <td>{{ client.city }}</td>
     <td>{{ client.country.name }}</td>
     <td>{{ client.createdAt | date('Y-m-d') }}</td>
-    <td>
+    <td class="d-flex gap-2">
         <a
                 type="button"
                 class="btn btn-secondary"
@@ -22,12 +22,26 @@
         >
             <twig:Icon name="edit"/>
         </a>
-
-        <a
-                type="button"
-                class="btn btn-secondary"
-        >
-            <twig:Icon name="trash"/>
-        </a>
+        <twig:Dialog size="w-25">
+            <twig:block name="trigger">
+                <button class="btn btn-secondary" data-action="dialog#open">
+                    <twig:Icon name="trash"/>
+                </button>
+            </twig:block>
+            <twig:block name="dialog_title">
+                <h1 class="modal-title fs-5">Supprimer un client</h1>
+            </twig:block>
+            <p class="mb-4">
+                Vous êtes sur le point de supprimer le client
+                <span class="fw-bold">{{ client.companyName }}</span>.
+                Toutes les données et associations avec ce client seront perdu.
+            </p>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-secondary" data-action="dialog#close">
+                    Annuler
+                </button>
+                {{ include('client/_delete_form.html.twig') }}
+            </div>
+        </twig:Dialog>
     </td>
 </tr>
