@@ -19,16 +19,8 @@ use Symfony\UX\Turbo\TurboBundle;
 class ClientController extends AbstractController
 {
     #[Route('/client', name: 'app_client_index')]
-    public function index(CountryRepository $countryRepository): Response
-    {
-        return $this->render('client/index.html.twig', [
-            'countries' => $countryRepository->findAll()
-        ]);
-    }
-
-    #[Route('/client/listing', name: 'app_client_list', methods: ['GET', 'POST'])]
-    public function listing(
-        Request $request,
+    public function index(
+        CountryRepository $countryRepository,
         ClientRepository $clientRepository,
         PaginatorInterface $paginator,
         #[MapQueryParameter] int $page = 1,
@@ -37,11 +29,6 @@ class ClientController extends AbstractController
         #[MapQueryParameter('query')] string $query = null,
         #[MapQueryParameter('country')] string $country = null
     ): Response {
-        // prevent user redirect to this url if refresh page after begin search data
-        if (!$request->headers->has('turbo-frame')) {
-            return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
-        }
-
         $validSorts = ['companyName', 'createdAt'];
         $sort = in_array($sort, $validSorts) ? $sort : 'createdAt';
 
@@ -50,13 +37,14 @@ class ClientController extends AbstractController
         $clientPaginated = $paginator->paginate(
             $clientRepository->findBySearchQueryBuilder($query, $country, $sort, $sortDirection),
             $page,
-            15
+            6
         );
 
-        return $this->render('client/_list.html.twig', [
+        return $this->render('client/index.html.twig', [
             'clients' => $clientPaginated,
             'sort' => $sort,
-            'sortDirection' => $sortDirection
+            'sortDirection' => $sortDirection,
+            'countries' => $countryRepository->findAll()
         ]);
     }
 

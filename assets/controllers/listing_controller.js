@@ -4,6 +4,25 @@ export default class extends Controller {
     static targets = ['table', 'tableBody'];
     observer = null;
 
+    connect() {
+        if (this.observer) {
+            return
+        }
+
+        console.log(this.urlValue)
+        this.observer = new MutationObserver(() => {
+            const shouldReload = !this.hasTableBodyTarget;
+
+            if (shouldReload) {
+                this.element.src = this.getCurrentURL()
+            }
+        });
+        this.observer.observe(this.element, {
+            childList: true,
+            characterData: true,
+            subtree: true
+        });
+    }
     disconnect() {
         if (this.observer) {
             this.observer.disconnect();
@@ -12,34 +31,33 @@ export default class extends Controller {
 
     fetchLoading() {
         if (this.hasTableTarget) {
-            console.log('frame-loading')
             this.tableTarget.classList.add('opacity-50')
         }
     }
 
     fetchRender() {
         if (this.hasTableTarget) {
-            console.log('frame-render')
             this.tableTarget.classList.remove('opacity-50')
         }
     }
 
     onRender(e) {
-        if (this.observer) {
-            console.log('observer already initialized...')
-            return
+        //this.element.removeAttribute('src');
+        console.log('CLEAR ATTR SRC FROM ELEMENT')
+    }
+
+
+    getCurrentURL () {
+        return window.location.href
+    }
+
+    _getUrl() {
+        let url = new URL(this.urlValue, window.location.origin);
+        let currentPage = parseInt(url.searchParams.get('page'), 10);
+        if (currentPage > 1) {
+            url.searchParams.set('page', (currentPage - 1).toString());
         }
 
-        this.observer = new MutationObserver(() => {
-            const shouldReload = !this.hasTableBodyTarget;
-            if (shouldReload) {
-                this.element.reload()
-            }
-        });
-        this.observer.observe(this.element, {
-            childList: true,
-            characterData: true,
-            subtree: true
-        });
+        return url
     }
 }

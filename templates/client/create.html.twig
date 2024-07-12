@@ -25,12 +25,9 @@
         <template>{{ include('partial/_flashes.html.twig') }}</template>
     </turbo-stream>
 
-    <turbo-stream action="update" targets="#client-list">
+    <turbo-stream action="preprend" targets="#client-list">
         <template>
-            <div class="d-flex flex-column align-items-center justify-content-center m-3 loader">
-                <p class="mb-3 fs-6 fw-semibold">Chargement...</p>
-                <div class="spinner"></div>
-            </div>
+            {{ include('client/_row.html.twig') }}
         </template>
     </turbo-stream>
 {% endblock %}

@@ -27,6 +27,7 @@ export default class extends Controller {
         if (this.observer) {
             this.observer.disconnect();
         }
+        document.body.classList.remove('overflow-hidden');
     }
 
     showLoading() {

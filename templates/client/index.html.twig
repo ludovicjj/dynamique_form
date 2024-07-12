@@ -45,16 +45,14 @@
                 <turbo-frame
                         id="client-list"
                         data-turbo-action="advance"
-                        src="{{ path('app_client_list', {...app.request.query.all()}) }}"
                         data-controller="listing"
                         data-action="turbo:before-fetch-request->listing#fetchLoading turbo:before-fetch-response->listing#fetchRender turbo:frame-load->listing#onRender"
                 >
-                    <div class="d-flex flex-column align-items-center justify-content-center m-3 loader">
-                        <p class="mb-3 fs-6 fw-semibold">Chargement...</p>
-                        <div class="spinner"></div>
-                    </div>
+                    {{ include('client/_list.html.twig') }}
                 </turbo-frame>
             </div>
         </div>
+
+
     </main>
 {% endblock %}
