@@ -1,0 +1,7 @@
+{% block success_stream %}
+    <turbo-stream action="remove" target="partner-list-item-{{ id }}"></turbo-stream>
+
+    <turbo-stream action="append" target="flash-container">
+        <template>{{ include('partial/_flashes.html.twig') }}</template>
+    </turbo-stream>
+{% endblock %}

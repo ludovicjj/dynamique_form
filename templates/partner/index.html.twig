@@ -43,6 +43,24 @@
             }) }}
         </div>
 
-        {{ component('Partner:PartnerSearch') }}
+        <div class="container-fluid px-4 px-md-5 py-3">
+            <section class="background-glass p-4 rounded">
+                {{ include('partner/_search_form.html.twig') }}
+            </section>
+        </div>
+
+        <div class="container-fluid px-4 px-md-5 my-4">
+            <div class="p-4 markdown-container bg-body shadow-blur--rainbow">
+                <turbo-frame
+                        id="partner-list"
+                        data-turbo-action="advance"
+                        data-controller="listing"
+                        data-action="turbo:before-fetch-request->listing#fetchLoading turbo:before-fetch-response->listing#fetchRender turbo:frame-load->listing#onRender"
+                >
+                    {{ include('partner/_list.html.twig') }}
+                </turbo-frame>
+            </div>
+        </div>
+
     </main>
 {% endblock %}

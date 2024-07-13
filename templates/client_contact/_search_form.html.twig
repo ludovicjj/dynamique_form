@@ -16,6 +16,7 @@
                     class="form-control"
                     data-action="autosubmit#debouncedSubmit"
                     placeholder="Recherche par nom ou prénom"
+                    value="{{ app.request.query.get('query') }}"
             >
         </div>
         <div style="max-width: 50px">

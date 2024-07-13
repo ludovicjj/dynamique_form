@@ -1,0 +1,48 @@
+<form
+    method="get"
+    action="{{ path('app_partner_index') }}"
+    data-controller="autosubmit"
+    data-turbo-frame="partner-list"
+>
+    <fieldset class="d-flex gap-4 justify-content-end">
+        <div class="input-group" style="max-width: 30%;">
+            <label class="input-group-text" for="country">
+                <twig:Core:Icon name="map-pin"/>
+            </label>
+            <select
+                    class="form-select" 
+                    id="country"
+                    name="country"
+                    data-action="autosubmit#debouncedSubmit"
+            >
+                <option>Recherche par pays</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}">{{ country.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group">
+            <label class="input-group-text" for="query">
+                <twig:Core:Icon name="search"/>
+            </label>
+            <input
+                    type="search"
+                    name="query"
+                    id="query"
+                    class="form-control"
+                    placeholder="Recherche par companie"
+                    value="{{ app.request.query.get('query') }}"
+                    data-action="autosubmit#debouncedSubmit"
+            >
+        </div>
+        <div class="input-group" style="max-width: 50px">
+            <a
+                    class="btn btn-secondary"
+                    href="{{ path('app_partner_create') }}"
+                    data-turbo-frame="modal"
+            >
+                <twig:Core:Icon name="plus"/>
+            </a>
+        </div>
+    </fieldset>
+</form>

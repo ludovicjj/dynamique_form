@@ -1,0 +1,9 @@
+<form
+        method="post"
+        action="{{ path('app_partner_delete', {'id': partner.id}) }}"
+>
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ partner.id) }}">
+    <button class="btn btn-danger">
+        Supprimer
+    </button>
+</form>

@@ -1,7 +1,6 @@
 <form
         method="post"
         action="{{ path('app_client_contact_delete', {'id': contact.id}) }}"
-        data-turbo-frame="client-list"
 >
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ contact.id) }}">
     <button class="btn btn-danger">

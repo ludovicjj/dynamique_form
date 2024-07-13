@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Partner;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,23 +17,30 @@ class PartnerRepository extends ServiceEntityRepository
         parent::__construct($registry, Partner::class);
     }
 
-    public function searchPaginated(int $page, int $itemPerPage, ?int $country = null): array
-    {
-        $offset = $page * $itemPerPage;
+    public function findBySearchQueryBuilder(
+        ?string $query,
+        ?int $country,
+        ?string $sort,
+        string $direction = 'DESC'
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('p');
 
-        $queryBuilder = $this->createQueryBuilder('partner');
-
-        $queryBuilder
-            ->leftJoin('partner.country', 'country')
-            ->addSelect('country')
-            ->setMaxResults($offset);
+        if ($query) {
+            $qb
+                ->andWhere('p.companyName LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        }
 
         if ($country) {
-            $queryBuilder
-                ->andWhere('country = :country')
+            $qb
+                ->andWhere('p.country = :country')
                 ->setParameter('country', $country);
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        if ($sort) {
+            $qb->orderBy('p.' . $sort, $direction);
+        }
+
+        return $qb;
     }
 }

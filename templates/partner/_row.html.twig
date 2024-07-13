@@ -1,0 +1,45 @@
+<tr id="partner-list-item-{{ partner.id }}">
+    <td>{{ partner.companyName }}</td>
+    <td>{{ partner.address1 }}</td>
+    <td>{{ partner.zipcode }}</td>
+    <td>{{ partner.city }}</td>
+    <td>{{ partner.country.name }}</td>
+    <td>{{ partner.createdAt | date('Y-m-d') }}</td>
+    <td class="d-flex gap-2">
+        <a
+                class="btn btn-secondary"
+                href="{{ path('app_partner_contact', {'id': partner.id}) }}"
+                target="_top"
+        >
+            <twig:Core:Icon name="users"/>
+        </a>
+        <a
+                class="btn btn-secondary"
+                href="{{ path('app_partner_update', {'id': partner.id}) }}"
+                data-turbo-frame="modal"
+        >
+            <twig:Core:Icon name="edit"/>
+        </a>
+        <twig:Core:Dialog size="w-25">
+            <twig:block name="trigger">
+                <button class="btn btn-secondary" data-action="dialog#open">
+                    <twig:Core:Icon name="trash"/>
+                </button>
+            </twig:block>
+            <twig:block name="dialog_title">
+                <h1 class="modal-title fs-5">Supprimer un partenaire</h1>
+            </twig:block>
+            <p class="mb-4">
+                Vous êtes sur le point de supprimer le partner
+                <span class="fw-bold">{{ partner.companyName }}</span>.
+                Toutes les données et associations avec ce partenaire seront perdu.
+            </p>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-secondary" data-action="dialog#close">
+                    Annuler
+                </button>
+                {{ include('partner/_delete_form.html.twig') }}
+            </div>
+        </twig:Core:Dialog>
+    </td>
+</tr>

@@ -1,13 +1,7 @@
 <div {{ attributes }}>
-    {{ form_start(form, {
-        attr: {
-            'novalidate': 'novalidate',
-            'data-action': 'live#action:prevent',
-            'data-live-action-param': 'update'
-        }
-    }) }}
+    {{ form_start(form) }}
 
-    <h5 class="mb-3">Informations du partenaire</h5>
+    <h5 class="mb-3 fs-6 fw-semibold">Informations du partenaire</h5>
 
     <div class="row">
         <div class="col-6">
@@ -27,7 +21,7 @@
         </div>
     </div>
 
-    <h5 class="mt-4 mb-3">Adresse</h5>
+    <h5 class="mt-4 mb-3 fs-6 fw-semibold">Adresse</h5>
 
     <div class="row">
         <div class="col-6">
@@ -45,8 +39,8 @@
     </div>
 
     <div class="mb-3 text-center">
-        <button type="submit" class="btn btn-secondary {{ this.hasValidationErrors ? 'disabled' : '' }}">Valider</button>
+        <button formnovalidate type="submit" class="btn btn-secondary">Valider</button>
     </div>
 
-    {{ form_end(form, {render_rest: false}) }}
+    {{ form_end(form) }}
 </div>
