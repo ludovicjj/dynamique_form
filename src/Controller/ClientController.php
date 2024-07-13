@@ -66,7 +66,7 @@ class ClientController extends AbstractController
             $entityManager->persist($client);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Client crée');
+            $this->addFlash('success', 'Client créé');
 
             if ($request->headers->has('turbo-frame')) {
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);

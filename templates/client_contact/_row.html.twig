@@ -1,0 +1,42 @@
+<tr id="client-contact-list-item-{{ contact.id }}">
+    <td>{{ contact.firstname }}</td>
+    <td>{{ contact.lastname }}</td>
+    <td>{{ contact.phone }}</td>
+    <td>{{ contact.email }}</td>
+    <td>{{ contact.createdAt | date('Y-m-d') }}</td>
+    <td class="d-flex gap-2">
+        <a
+                href="{{ path('app_client_contact_update', {'id': contact.id}) }}"
+                class="btn btn-secondary"
+                type="button"
+                data-turbo-frame="modal"
+        >
+            <twig:Core:Icon name="edit"/>
+        </a>
+        <twig:Core:Dialog size="w-25">
+            <twig:block name="trigger">
+                <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-action="dialog#open"
+                >
+                    <twig:Core:Icon name="trash"/>
+                </button>
+            </twig:block>
+            <twig:block name="dialog_title">
+                <h1 class="modal-title fs-5">Supprimer un contact</h1>
+            </twig:block>
+            <p class="mb-4">
+                Vous êtes sur le point de supprimer le contact
+                <span class="fw-bold">{{ contact.fullName }}</span>.
+                Toutes les données et associations avec ce contact seront perdu.
+            </p>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-secondary" data-action="dialog#close">
+                    Annuler
+                </button>
+                {{ include('client_contact/_delete_form.html.twig') }}
+            </div>
+        </twig:Core:Dialog>
+    </td>
+</tr>

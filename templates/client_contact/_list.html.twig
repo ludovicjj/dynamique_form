@@ -1,0 +1,51 @@
+<table class="table" data-listing-target="table">
+    <thead>
+    <tr>
+    <tr>
+        <th>
+            <twig:Core:SortTable
+                    routeName="app_client_contact_index"
+                    params="{{ {'id': client.id} }}"
+                    sortName="firstname"
+                    property="{{ sort }}"
+                    direction="{{ sortDirection|lower }}"
+            >
+                Prénom
+            </twig:Core:SortTable>
+        </th>
+        <th>
+            <twig:Core:SortTable
+                    routeName="app_client_contact_index"
+                    params="{{ {'id': client.id} }}"
+                    sortName="lastname"
+                    property="{{ sort }}"
+                    direction="{{ sortDirection|lower }}"
+            >
+                Nom
+            </twig:Core:SortTable>
+        </th>
+        <th>Téléphone</th>
+        <th>Email</th>
+        <th>
+            <twig:Core:SortTable
+                    routeName="app_client_contact_index"
+                    params="{{ {'id': client.id} }}"
+                    sortName="createdAt"
+                    property="{{ sort }}"
+                    direction="{{ sortDirection|lower }}"
+            >
+                Date
+            </twig:Core:SortTable>
+        </th>
+        <th>Action</th>
+    </tr>
+    </tr>
+    </thead>
+    <tbody data-listing-target="tableBody">
+    {% for contact in contacts %}
+        {{ include('client_contact/_row.html.twig') }}
+    {% endfor %}
+    </tbody>
+</table>
+
+{{ knp_pagination_render(contacts, null, {}, {'size': 'small', 'align': 'center'}) }}

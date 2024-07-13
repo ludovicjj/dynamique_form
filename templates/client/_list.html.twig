@@ -2,18 +2,18 @@
     <thead>
     <tr>
         <th>
-            <twig:SortTable routeName="app_client_index" sortName="companyName" property="{{ sort }}" direction="{{ sortDirection|lower }}">
+            <twig:Core:SortTable routeName="app_client_index" sortName="companyName" property="{{ sort }}" direction="{{ sortDirection|lower }}">
                 Companie
-            </twig:SortTable>
+            </twig:Core:SortTable>
         </th>
         <th>Adresse</th>
         <th>Code Postal</th>
         <th>Vile</th>
         <th>Pays</th>
         <th>
-            <twig:SortTable routeName="app_client_index" sortName="createdAt" property="{{ sort }}" direction="{{ sortDirection|lower }}">
+            <twig:Core:SortTable routeName="app_client_index" sortName="createdAt" property="{{ sort }}" direction="{{ sortDirection|lower }}">
                 Date
-            </twig:SortTable>
+            </twig:Core:SortTable>
         </th>
         <th>Action</th>
     </tr>

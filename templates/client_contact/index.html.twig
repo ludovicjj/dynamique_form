@@ -2,15 +2,6 @@
 
 {% block title %}Client Contact{% endblock %}
 
-{% block stylesheets %}
-{% endblock %}
-
-{% block javascripts %}
-    {% block importmap %}
-        {{ parent() }}
-    {% endblock %}
-{% endblock %}
-
 {% block body %}
     <main>
         <div class="hero">
@@ -38,7 +29,7 @@
                     },
                     {
                         'label': 'Client',
-                        'url': path('app_client')
+                        'url': path('app_client_index')
                     },
                     {
                         'text': 'Client Contact'
@@ -47,6 +38,24 @@
             }) }}
         </div>
 
-        {{ component('ClientContact:ClientContactSearch', {client: client}) }}
+        <div class="container-fluid px-4 px-md-5 py-3">
+            <section class="background-glass p-4 rounded">
+                {{ include('client_contact/_search_form.html.twig') }}
+            </section>
+        </div>
+
+        <div class="container-fluid px-4 px-md-5 my-4">
+            <div class="p-4 markdown-container bg-body shadow-blur--rainbow">
+                <turbo-frame
+                        id="client-contact-list"
+                        data-turbo-action="advance"
+                        data-controller="listing"
+                        data-action="turbo:before-fetch-request->listing#fetchLoading turbo:before-fetch-response->listing#fetchRender turbo:frame-load->listing#onRender"
+                >
+                    {{ include('client_contact/_list.html.twig') }}
+                </turbo-frame>
+            </div>
+        </div>
+
     </main>
 {% endblock %}

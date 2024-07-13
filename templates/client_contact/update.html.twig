@@ -1,16 +1,14 @@
 {% extends 'modalFrame.html.twig' %}
 
-{% block title %}Client{% endblock %}
-
 {% block body %}
     <div>
-        {{ include('client/_form.html.twig') }}
+        {{ include('client_contact/_form.html.twig') }}
     </div>
 
     {% if app.request.headers.get('turbo-frame') == 'modal' %}
         <turbo-stream action="replace" target="modal-title">
             <template>
-                <h1 class="modal-title fs-5" id="modal-title" data-modal-target="title">Création client</h1>
+                <h1 class="modal-title fs-5" id="modal-title" data-modal-target="title">Modification contact</h1>
             </template>
         </turbo-stream>
     {% endif %}
@@ -25,8 +23,7 @@
         <template>{{ include('partial/_flashes.html.twig') }}</template>
     </turbo-stream>
 
-    <turbo-stream action="prepend" targets="#client-list tbody">
-        <template>{{ include('client/_row.html.twig') }}</template>
+    <turbo-stream action="replace" target="client-contact-list-item-{{ contact.id }}">
+        <template>{{ include('client_contact/_row.html.twig') }}</template>
     </turbo-stream>
 {% endblock %}
-

@@ -2,14 +2,8 @@
 
 {% block title %}Login{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/login.css') }}">
-{% endblock %}
-
 {% block javascripts %}
-    {% block importmap %}
-        {{ parent() }}
-    {% endblock %}
+    {% block importmap %}{{ importmap('login') }}{% endblock %}
 {% endblock %}
 
 {% block body %}
@@ -20,7 +14,7 @@
         </div>
 
         {% if error %}
-            <twig:Alert type="danger" message="{{ error.messageKey|trans(error.messageData, 'security') }}"/>
+            <twig:Core:Alert type="danger" message="{{ error.messageKey|trans(error.messageData, 'security') }}"/>
         {% endif %}
 
         <form action="{{ path('app_login') }}" method="post">

@@ -9,10 +9,10 @@
         <a
                 type="button"
                 class="btn btn-secondary"
-                href="{{ path('app_client_contact', {'id': client.id}) }}"
+                href="{{ path('app_client_contact_index', {'id': client.id}) }}"
                 target="_top"
         >
-            <twig:Icon name="users"/>
+            <twig:Core:Icon name="users"/>
         </a>
 
         <a
@@ -20,12 +20,12 @@
                 href="{{ path('app_client_update', {'id': client.id}) }}"
                 data-turbo-frame="modal"
         >
-            <twig:Icon name="edit"/>
+            <twig:Core:Icon name="edit"/>
         </a>
-        <twig:Dialog size="w-25">
+        <twig:Core:Dialog size="w-25">
             <twig:block name="trigger">
                 <button class="btn btn-secondary" data-action="dialog#open">
-                    <twig:Icon name="trash"/>
+                    <twig:Core:Icon name="trash"/>
                 </button>
             </twig:block>
             <twig:block name="dialog_title">
@@ -42,6 +42,6 @@
                 </button>
                 {{ include('client/_delete_form.html.twig') }}
             </div>
-        </twig:Dialog>
+        </twig:Core:Dialog>
     </td>
 </tr>

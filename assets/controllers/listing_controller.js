@@ -9,7 +9,6 @@ export default class extends Controller {
             return
         }
 
-        console.log(this.urlValue)
         this.observer = new MutationObserver(() => {
             const shouldReload = !this.hasTableBodyTarget;
 
@@ -49,15 +48,5 @@ export default class extends Controller {
 
     getCurrentURL () {
         return window.location.href
-    }
-
-    _getUrl() {
-        let url = new URL(this.urlValue, window.location.origin);
-        let currentPage = parseInt(url.searchParams.get('page'), 10);
-        if (currentPage > 1) {
-            url.searchParams.set('page', (currentPage - 1).toString());
-        }
-
-        return url
     }
 }

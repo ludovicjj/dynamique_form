@@ -16,8 +16,9 @@ return [
         'path' => './assets/js/app.js',
         'entrypoint' => true,
     ],
-    'duck' => [
-        'path' => './assets/js/duck.js',
+    'login' => [
+        'path' => './assets/js/login.js',
+        'entrypoint' => true,
     ],
     'client_case_show' => [
         'path' => './assets/styles/client_case_show.css',

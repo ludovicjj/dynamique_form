@@ -1,0 +1,31 @@
+<form
+        method="get"
+        action="{{ path('app_client_contact_index', {'id': client.id}) }}"
+        data-controller="autosubmit"
+        data-turbo-frame="client-contact-list"
+>
+    <fieldset class="d-flex gap-4 justify-content-end">
+        <div class="input-group" style="max-width: 30%">
+            <label class="input-group-text" for="query">
+                <twig:Core:Icon name="search"/>
+            </label>
+            <input
+                    type="search"
+                    id="query"
+                    name="query"
+                    class="form-control"
+                    data-action="autosubmit#debouncedSubmit"
+                    placeholder="Recherche par nom ou prénom"
+            >
+        </div>
+        <div style="max-width: 50px">
+            <a
+                    class="btn btn-secondary"
+                    href="{{ path('app_client_contact_create', {'id': client.id}) }}"
+                    data-turbo-frame="modal"
+            >
+                <twig:Core:Icon name="plus"/>
+            </a>
+        </div>
+    </fieldset>
+</form>

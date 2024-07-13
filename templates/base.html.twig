@@ -15,12 +15,12 @@
     <body>
         <div class="App">
             {% if is_granted('ROLE_USER') %}
-                <twig:Menu />
+                <twig:Core:Menu />
             {% endif %}
 
             {% block body %}{% endblock %}
 
-            <twig:Modal size="modal-lg">
+            <twig:Core:Modal size="modal-lg">
                 <turbo-frame
                         id="modal"
                         data-modal-target="dynamicContent"
@@ -31,7 +31,7 @@
                         <div class="spinner"></div>
                     </div>
                 </twig:block>
-            </twig:Modal>
+            </twig:Core:Modal>
 
             <div id="flash-container" data-turbo-temporary class="position-fixed top-0 end-0 mt-4 me-4">
                 {{ include('partial/_flashes.html.twig') }}

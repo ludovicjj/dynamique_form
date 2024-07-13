@@ -18,24 +18,37 @@ class ClientContactRepository extends ServiceEntityRepository
         parent::__construct($registry, ClientContact::class);
     }
 
-    public function searchPaginated(?Client $client, int $page, int $itemPerPage): array
-    {
-        if (!$client) {
-            return [];
+    public function findBySearchQueryBuilder(
+        Client $client,
+        ?string $query,
+        ?string $sort,
+        string $direction = 'DESC'
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('cc');
+
+        $subQuery = $this->getEntityManager()->createQueryBuilder()
+            ->select('cc_2.id')
+            ->from(ClientContact::class, 'cc_2')
+            ->orWhere($qb->expr()->like('cc_2.firstname', ':query'))
+            ->orWhere($qb->expr()->like('cc_2.lastname', ':query'))
+            ->getDQL();
+
+
+        $qb
+            ->andWhere('cc.client = :client')
+            ->setParameter('client', $client);
+
+        if ($query) {
+            $qb
+                ->andWhere($qb->expr()->in('cc.id', $subQuery))
+                ->setParameter('query', '%' . $query . '%');
         }
 
-        $offset = $page * $itemPerPage;
+        if ($sort) {
+            $qb->orderBy('cc.' . $sort, $direction);
+        }
 
-        $queryBuilder = $this->createQueryBuilder('client_contact');
-
-        $queryBuilder
-            ->leftJoin('client_contact.client', 'client')
-            ->andWhere('client = :client')
-            ->setParameter('client', $client)
-            ->addOrderBy('client_contact.createdAt', 'DESC')
-            ->setMaxResults($offset);
-
-        return $queryBuilder->getQuery()->getResult();
+        return $qb;
     }
 
     public function findByClientQueryBuilder(Client $client): QueryBuilder
