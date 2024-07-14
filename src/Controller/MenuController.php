@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Menu;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -1,0 +1,32 @@
+<form
+        method="get"
+        action="{{ path('app_partner_contact_index', {'id': partner.id}) }}"
+        data-controller="autosubmit"
+        data-turbo-frame="partner-contact-list"
+>
+    <fieldset class="d-flex gap-4 justify-content-end">
+        <div class="input-group" style="max-width: 30%">
+            <label class="input-group-text" for="query">
+                <twig:Core:Icon name="search"/>
+            </label>
+            <input
+                    type="search"
+                    id="query"
+                    name="query"
+                    class="form-control"
+                    data-action="autosubmit#debouncedSubmit"
+                    placeholder="Recherche par nom ou prénom"
+                    value="{{ app.request.query.get('query') }}"
+            >
+        </div>
+        <div class="input-group" style="max-width: 50px">
+            <a
+                    class="btn btn-secondary"
+                    href="{{ path('app_partner_contact_create', {'id': partner.id}) }}"
+                    data-turbo-frame="modal"
+            >
+                <twig:Core:Icon name="plus"/>
+            </a>
+        </div>
+    </fieldset>
+</form>

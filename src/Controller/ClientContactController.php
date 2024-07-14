@@ -28,6 +28,9 @@ class ClientContactController extends AbstractController
         #[MapQueryParameter] string $sortDirection = 'DESC',
         #[MapQueryParameter('query')] string $query = null,
     ): Response {
+        $validSorts = ['firstname', 'lastname', 'createdAt'];
+        $sort = in_array($sort, $validSorts) ? $sort : 'createdAt';
+
         $pagination = $paginator->paginate(
             $clientContactRepository->findBySearchQueryBuilder($client, $query, $sort, $sortDirection),
             $page,
@@ -66,7 +69,7 @@ class ClientContactController extends AbstractController
             }
 
             return $this->redirectToRoute('app_client_contact_index', [
-                'id' => $client
+                'id' => $client->getId()
             ], Response::HTTP_SEE_OTHER);
         }
 

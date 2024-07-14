@@ -1,10 +1,10 @@
 <table class="table" data-listing-target="table">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 <twig:Core:SortTable
-                        routeName="app_client_contact_index"
-                        params="{{ {'id': client.id} }}"
+                        routeName="app_partner_contact_index"
+                        params="{{ {'id': partner.id} }}"
                         sortName="firstname"
                         property="{{ sort }}"
                         direction="{{ sortDirection|lower }}"
@@ -12,10 +12,10 @@
                     Prénom
                 </twig:Core:SortTable>
             </th>
-            <th>
+            <th scope="col">
                 <twig:Core:SortTable
-                        routeName="app_client_contact_index"
-                        params="{{ {'id': client.id} }}"
+                        routeName="app_partner_contact_index"
+                        params="{{ {'id': partner.id} }}"
                         sortName="lastname"
                         property="{{ sort }}"
                         direction="{{ sortDirection|lower }}"
@@ -23,12 +23,12 @@
                     Nom
                 </twig:Core:SortTable>
             </th>
-            <th>Téléphone</th>
-            <th>Email</th>
-            <th>
+            <th scope="col">Téléphone</th>
+            <th scope="col">Email</th>
+            <th scope="col">
                 <twig:Core:SortTable
-                        routeName="app_client_contact_index"
-                        params="{{ {'id': client.id} }}"
+                        routeName="app_partner_contact_index"
+                        params="{{ {'id': partner.id} }}"
                         sortName="createdAt"
                         property="{{ sort }}"
                         direction="{{ sortDirection|lower }}"
@@ -36,12 +36,12 @@
                     Date
                 </twig:Core:SortTable>
             </th>
-            <th>Action</th>
+            <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody data-listing-target="tableBody">
     {% for contact in contacts %}
-        {{ include('client_contact/_row.html.twig') }}
+        {{ include('partner_contact/_row.html.twig') }}
     {% endfor %}
     </tbody>
 </table>

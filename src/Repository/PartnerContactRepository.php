@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\ClientContact;
 use App\Entity\Partner;
 use App\Entity\PartnerContact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -18,6 +19,39 @@ class PartnerContactRepository extends ServiceEntityRepository
         parent::__construct($registry, PartnerContact::class);
     }
 
+    public function findBySearchQueryBuilder(
+        Partner $partner,
+        ?string $query,
+        ?string $sort,
+        string $direction = 'DESC'
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('pc');
+
+        $subQuery = $this->getEntityManager()->createQueryBuilder()
+            ->select('pc_2.id')
+            ->from(PartnerContact::class, 'pc_2')
+            ->orWhere($qb->expr()->like('pc_2.firstname', ':query'))
+            ->orWhere($qb->expr()->like('pc_2.lastname', ':query'))
+            ->getDQL();
+
+
+        $qb
+            ->andWhere('pc.partner = :partner')
+            ->setParameter('partner', $partner);
+
+        if ($query) {
+            $qb
+                ->andWhere($qb->expr()->in('pc.id', $subQuery))
+                ->setParameter('query', '%' . $query . '%');
+        }
+
+        if ($sort) {
+            $qb->orderBy('pc.' . $sort, $direction);
+        }
+
+        return $qb;
+    }
+
     public function findByPartnerQueryBuilder(Partner $partner): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('partner_contact');
@@ -28,20 +62,5 @@ class PartnerContactRepository extends ServiceEntityRepository
             ->orderBy('partner_contact.firstname', 'ASC');
 
         return $queryBuilder;
-    }
-
-    public function searchPaginated(?Partner $partner): array
-    {
-        if (!$partner) {
-            return [];
-        }
-
-        $queryBuilder = $this->createQueryBuilder('partner_contact');
-
-        $queryBuilder
-            ->andWhere('partner_contact.partner = :partner')
-            ->setParameter('partner', $partner);
-
-        return $queryBuilder->getQuery()->getResult();
     }
 }

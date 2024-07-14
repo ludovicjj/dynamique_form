@@ -1,22 +1,22 @@
 <table class="table" data-listing-target="table">
     <thead>
-    <tr>
-        <th>
-            <twig:Core:SortTable routeName="app_client_index" sortName="companyName" property="{{ sort }}" direction="{{ sortDirection|lower }}">
-                Companie
-            </twig:Core:SortTable>
-        </th>
-        <th>Adresse</th>
-        <th>Code Postal</th>
-        <th>Vile</th>
-        <th>Pays</th>
-        <th>
-            <twig:Core:SortTable routeName="app_client_index" sortName="createdAt" property="{{ sort }}" direction="{{ sortDirection|lower }}">
-                Date
-            </twig:Core:SortTable>
-        </th>
-        <th>Action</th>
-    </tr>
+        <tr>
+            <th>
+                <twig:Core:SortTable routeName="app_client_index" sortName="companyName" property="{{ sort }}" direction="{{ sortDirection|lower }}">
+                    Companie
+                </twig:Core:SortTable>
+            </th>
+            <th>Adresse</th>
+            <th>Code Postal</th>
+            <th>Vile</th>
+            <th>Pays</th>
+            <th>
+                <twig:Core:SortTable routeName="app_client_index" sortName="createdAt" property="{{ sort }}" direction="{{ sortDirection|lower }}">
+                    Date
+                </twig:Core:SortTable>
+            </th>
+            <th>Action</th>
+        </tr>
     </thead>
     <tbody data-listing-target="tableBody">
     {% for client in clients %}
