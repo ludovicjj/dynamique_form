@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\ClientCase;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,23 +18,55 @@ class ClientCaseRepository extends ServiceEntityRepository
         parent::__construct($registry, ClientCase::class);
     }
 
-    public function searchPaginated(string $query, int $page, int $itemPerPage): array
-    {
-        $offset = $page * $itemPerPage;
+    public function findBySearchQueryBuilder(
+        ?string $query,
+        ?int $userId,
+        ?string $sort,
+        string $direction = 'DESC'
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('cc');
 
-        $queryBuilder = $this->createQueryBuilder('client_case');
+        $qb
+            ->leftJoin('cc.collaborators', 'collaborator')
+            ->addSelect('collaborator');
+
+        $subQuery = $this->getEntityManager()->createQueryBuilder()
+            ->select('cc_2.id')
+            ->from(ClientCase::class, 'cc_2')
+            ->orWhere($qb->expr()->like('cc_2.reference', ':query'))
+            ->orWhere($qb->expr()->like('cc_2.projectName', ':query'))
+            ->getDQL();
+
+        $collaboratorSubQuery = $this->getEntityManager()->createQueryBuilder()
+            ->select('cc_3.id')
+            ->from(ClientCase::class, 'cc_3')
+            ->leftJoin('cc_3.collaborators', 'sub_collaborator')
+            ->orWhere($qb->expr()->eq('cc_3.manager', ':user_id'))
+            ->orWhere($qb->expr()->eq('sub_collaborator', ':user_id'))
+            ->getDQL();
+
 
         if ($query) {
-            $queryBuilder
-                ->andWhere($queryBuilder->expr()->like('client_case.projectName', ':project_name'))
-                ->setParameter('project_name', "%".$query."%");
+            $qb
+                ->andWhere($qb->expr()->in('cc.id', $subQuery))
+                ->setParameter('query', '%' . $query . '%');
         }
 
-        $queryBuilder
-            ->setMaxResults($offset)
-            ->addOrderBy('client_case.id', 'DESC');
+        if ($userId) {
+            if ($userId === -1) {
+                $qb->andWhere($qb->expr()->isNull('cc.manager'));
+            } else {
+                $qb
+                    ->andWhere($qb->expr()->in('cc.id', $collaboratorSubQuery))
+                    ->setParameter('user_id', $userId);
+            }
+        }
 
-        return $queryBuilder->getQuery()->getResult();
+        if ($sort) {
+            $qb->orderBy('cc.' . $sort, $direction);
+        }
+
+        return $qb;
     }
 
     public function clientCaseCount(string $query): int

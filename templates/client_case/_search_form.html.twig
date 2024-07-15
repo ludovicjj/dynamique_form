@@ -1,0 +1,54 @@
+<form
+        method="get"
+        action="{{ path('app_client_case_index') }}"
+        data-controller="autosubmit"
+        data-turbo-frame="client-case-list"
+>
+    <fieldset class="d-flex gap-4">
+        <div class="input-group" style="max-width: 30%;">
+            <label class="input-group-text" for="collaborator">
+                <twig:Core:Icon name="user"/>
+            </label>
+            {% set collaboratorSelected = app.request.query.get('collaborator') %}
+            <select
+                    class="form-select"
+                    id="collaborator"
+                    name="collaborator"
+                    data-action="autosubmit#debouncedSubmit"
+            >
+                <option value="0" {{ collaboratorSelected == 0 ? 'selected' : '' }}>Tous les Collaborateurs</option>
+                <option value="-1" {{ collaboratorSelected == -1 ? 'selected' : '' }}>Sans Collaborateur</option>
+                {% for collaborator in collaborators %}
+                    <option value="{{ collaborator.id }}" {{ collaborator.id == collaboratorSelected ? 'selected' : '' }}>
+                        {{ collaborator.fullname }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label class="input-group-text" for="query">
+                <twig:Core:Icon name="search"/>
+            </label>
+            <input
+                    type="search"
+                    id="query"
+                    name="query"
+                    class="form-control"
+                    placeholder="Recherche par référence ou nom"
+                    value="{{ app.request.query.get('query') }}"
+                    data-action="autosubmit#debouncedSubmit"
+            >
+        </div>
+
+        <div class="input-group" style="max-width: 50px">
+            <a
+                    class="btn btn-secondary"
+                    href="{{ path('app_client_case_create') }}"
+                    data-turbo-frame="modal"
+            >
+                <twig:Core:Icon name="plus"/>
+            </a>
+        </div>
+    </fieldset>
+</form>

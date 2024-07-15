@@ -1,0 +1,48 @@
+<tr id="client-case-list-item-{{ clientCase.id }}">
+    <td>{{ clientCase.reference }}</td>
+    <td>{{ clientCase.projectName }}</td>
+    <td>{{ clientCase.city }}</td>
+    <td>{{ clientCase.clientCaseStatus.name }}</td>
+    <td>{{ clientCase.manager.trigram | default('-') }}</td>
+    <td>{{ clientCase.collaborators | map(c => c.trigram) | join(' ') }}</td>
+    <td>{{ clientCase.createdAt | date('d/m/Y') }}</td>
+    <td class="d-flex gap-2">
+        <a
+                type="button"
+                class="btn btn-secondary"
+                href="{{ path('app_client_case_show', {'id': clientCase.id}) }}"
+                target="_top"
+        >
+            <twig:Core:Icon name="eye"/>
+        </a>
+
+        <a
+                class="btn btn-secondary"
+                href="{{ path('app_client_case_update', {'id': clientCase.id}) }}"
+                data-turbo-frame="modal"
+        >
+            <twig:Core:Icon name="edit"/>
+        </a>
+
+        <twig:Core:Dialog size="w-25">
+            <twig:block name="trigger">
+                <button class="btn btn-secondary" data-action="dialog#open">
+                    <twig:Core:Icon name="trash"/>
+                </button>
+            </twig:block>
+            <twig:block name="dialog_title">
+                <h1 class="modal-title fs-5">Supprimer une affaire</h1>
+            </twig:block>
+            <p class="mb-4">
+                Vous êtes sur le point de supprimer l'affaire
+                <span class="fw-bold">{{ clientCase.reference }}</span>.
+                Toutes les données et associations avec cette affaire seront perdu.
+            </p>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-secondary" data-action="dialog#close">
+                    Annuler
+                </button>
+                {{ include('client_case/_delete_form.html.twig') }}
+            </div>
+        </twig:Core:Dialog>
+    </td>

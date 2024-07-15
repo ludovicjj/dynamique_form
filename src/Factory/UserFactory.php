@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\User;
+use App\Service\UserService;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
@@ -39,6 +40,7 @@ final class UserFactory extends PersistentProxyObjectFactory
             'firstname' => self::faker()->firstName,
             'lastname' => self::faker()->lastName,
             'roles' => [],
+            'trigram' => 'ABC',
             'jobTitle' => UserJobTitleFactory::createOne()
         ];
     }
@@ -65,6 +67,8 @@ final class UserFactory extends PersistentProxyObjectFactory
                     $user,
                     $user->getPassword()
                 ));
+
+                $user->setTrigram(UserService::generateTrigram($user));
             });
     }
 }

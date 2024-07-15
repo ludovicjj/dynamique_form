@@ -37,6 +37,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $lastname = null;
 
+    #[ORM\Column]
+    private ?string $trigram = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserJobTitle $jobTitle = null;
@@ -159,6 +162,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(?string $lastname): static
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getTrigram(): ?string
+    {
+        return $this->trigram;
+    }
+
+    public function setTrigram(?string $trigram): self
+    {
+        $this->trigram = $trigram;
 
         return $this;
     }

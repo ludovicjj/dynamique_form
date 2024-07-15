@@ -17,7 +17,7 @@ class Menu
     public array $links = [
         [
             'label' => 'Affaires',
-            'route' => 'app_client_case',
+            'route' => 'app_client_case_index',
             'icon' => 'file'
         ],
         [
