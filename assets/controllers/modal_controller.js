@@ -28,6 +28,7 @@ export default class extends Controller {
 
         this.element.addEventListener('hidden.bs.modal', () => {
             this.resetModalTitle()
+            this.dynamicContentTarget.innerHTML = ''
         })
     }
 

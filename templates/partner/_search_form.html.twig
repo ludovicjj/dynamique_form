@@ -15,9 +15,11 @@
                     name="country"
                     data-action="autosubmit#debouncedSubmit"
             >
-                <option>Recherche par pays</option>
+                <option value="">Recherche par pays</option>
                 {% for country in countries %}
-                    <option value="{{ country.id }}">{{ country.name }}</option>
+                    <option value="{{ country.id }}" {{ country.id == app.request.query.get('country') ? 'selected' : '' }}>
+                        {{ country.name }}
+                    </option>
                 {% endfor %}
             </select>
         </div>
