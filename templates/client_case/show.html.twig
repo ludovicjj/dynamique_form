@@ -6,12 +6,6 @@
     <link rel="stylesheet" href="{{ asset('styles/client_case_show.css') }}" />
 {% endblock %}
 
-{% block javascripts %}
-    {% block importmap %}
-        {{ parent() }}
-    {% endblock %}
-{% endblock %}
-
 {% block body %}
     <main>
         <div class="hero">
@@ -39,15 +33,98 @@
                     },
                     {
                         'label': 'Affaires',
-                        'url': path('app_client_case')
+                        'url': path('app_client_case_index')
                     },
                     {
-                        'text': client_case.reference
+                        'text': clientCase.reference
                     }
                 ]
             }) }}
         </div>
 
-        {{ component('ClientCase:ClientCaseShow', {clientCase: client_case}) }}
+        <div class="container-fluid px-4 px-md-5 py-3">
+            {# ClientCase Card #}
+            <div class="card client-case-card bg-transparent border-secondary-subtle card-bg text-white mb-3">
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-12 col-md-6 pb-2 mb-1 pb-md-0 mb-md-0 custom-border">
+                            <div class="row h-100">
+                                <div class="col-12 col-md-6 d-flex flex-md-column justify-content-between">
+                                    <div class="h4 name">
+                                        {{ clientCase.projectName }}
+                                    </div>
+                                    <div class="mb-3 mb-md-0">
+                                        <button
+                                                class="btn btn-secondary"
+                                                type="button"
+                                        >
+                                            <twig:Core:Icon name="list"/> Récapitulatif
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 text-end">
+                                    <div class="d-flex flex-row flex-md-column">
+                                        <ul class="items list-unstyled">
+                                            {% for mission in clientCase.missions %}
+                                                <li class="d-inline-block item item-sm text-center">{{ mission.name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="row">
+                                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                    <div>{{ clientCase.projectName }}</div>
+                                    <div>REF : #{{ clientCase.reference }}</div>
+                                    <div>Client : <span class="fw-bold">{{ clientCase.client.companyName }}</span></div>
+                                    <div>Client Contact(s) :</div>
+                                    <div>
+                                        <ul class="items list-unstyled">
+                                            {% for clientContact in clientCase.clientContacts %}
+                                                <li class="d-inline-block item">{{ clientContact.firstname ~ ' ' ~ clientContact.lastname }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="fw-bold">Adresse du chantier :</div>
+                                    <div>{{ clientCase.address1 }}</div>
+                                    <div>{{ clientCase.zipcode ~ ' ' ~  clientCase.city}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {# Document Card #}
+                <section class="col-6 document">
+                    <div class="card bg-transparent card-bg h-100">
+                        <div class="card-body">
+                            <div class="d-flex flex-row justify-content-between mb-3">
+                                <span class="fw-bold">Documents</span>
+                                <div>
+                                    <a
+                                            class="btn btn-secondary btn-sm"
+                                            href="{{ path('app_client_case_document', {'id': clientCase.id}) }}"
+                                            data-turbo-frame="modal"
+                                    >
+                                        <twig:Core:Icon name="plus"/> Gérer les documents
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row tabs" id="document-list-tab">
+                                {{ include('client_case/_list_document_tab.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
     </main>
 {% endblock %}

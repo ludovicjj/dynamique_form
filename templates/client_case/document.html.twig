@@ -1,0 +1,15 @@
+{% extends 'modalFrame.html.twig' %}
+
+{% block body %}
+    <div>
+        {{ include('client_case/_form_document.html.twig') }}
+    </div>
+
+    {% if app.request.headers.get('turbo-frame') == 'modal' %}
+        <turbo-stream action="replace" target="modal-title">
+            <template>
+                <h1 class="modal-title fs-5" id="modal-title" data-modal-target="title">Gestion documents</h1>
+            </template>
+        </turbo-stream>
+    {% endif %}
+{% endblock %}

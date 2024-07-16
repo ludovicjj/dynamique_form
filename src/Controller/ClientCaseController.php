@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use App\Entity\ClientCase;
 use App\Entity\User;
-use App\Form\Type\ClientCaseCreateType;
+use App\Form\Type\ClientCaseDocumentType;
 use App\Form\Type\ClientCaseType;
 use App\Repository\ClientCaseRepository;
 use App\Repository\ClientCaseStatusRepository;
 use App\Repository\UserRepository;
+use App\Service\DocumentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -40,7 +41,7 @@ class ClientCaseController extends AbstractController
         $userId = (int)$user;
 
         $pagination = $paginator->paginate(
-            $clientCaseRepository->findBySearchQueryBuilder($query, $user, $sort, $sortDirection),
+            $clientCaseRepository->findBySearchQueryBuilder($query, $userId, $sort, $sortDirection),
             $page,
             15
         );
@@ -146,7 +147,45 @@ class ClientCaseController extends AbstractController
     ): Response
     {
         return $this->render('client_case/show.html.twig', [
-            'client_case' => $clientCase
+            'clientCase' => $clientCase
+        ]);
+    }
+
+    #[Route('/client-case/{id}/document', name: "app_client_case_document")]
+    public function document(
+        Request $request,
+        ClientCase $clientCase,
+        DocumentService $documentService,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $form = $this->createForm(ClientCaseDocumentType::class, $clientCase, [
+            'action' => $this->generateUrl('app_client_case_document', ['id' => $clientCase->getId()])
+        ]);
+
+        $form->handleRequest($request);
+
+        $documentData = $documentService->getDocumentData($clientCase);
+
+        // TODO constraint name
+        if ($form->isSubmitted() && $form->isValid()) {
+            $files = $request->files->get('client_case_document', [])['files'] ?? [];
+            $documentService->buildAndPersist($form, $clientCase, $files);
+
+            if ($documentService->hasChangeSet($clientCase, $entityManager)) {
+                $this->addFlash('success', 'Documents modifiés');
+            }
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_client_case_show', [
+                'id' => $clientCase->getId()
+            ]);
+        }
+
+        return $this->render('client_case/document.html.twig', [
+            'form' => $form,
+            'clientCase' => $clientCase,
+            'documentData' => $documentData
         ]);
     }
 

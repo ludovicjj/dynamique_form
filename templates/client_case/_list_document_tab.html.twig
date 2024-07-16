@@ -1,0 +1,50 @@
+{# Tab Nav #}
+<div class="col-4 tab-nav">
+    <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
+        {% for document in clientCase.documents %}
+            <button
+                    class="nav-link{% if loop.first %} active{% endif %}"
+                    data-bs-toggle="pill"
+                    data-bs-target="#document-tab-{{ document.id }}"
+                    type="button"
+                    role="tab"
+                    aria-selected="{{ loop.first ? 'true' : 'false'}}"
+            >
+                {{ document.name }}
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+{# Tab Content #}
+<div class="col-8">
+    <div class="tab-content">
+        {% for document in clientCase.documents %}
+            <div
+                    class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                    id="document-tab-{{ document.id }}"
+                    role="tabpanel"
+            >
+                <div class="bg-body-secondary {{ loop.last ? '' : 'mb-3'}} rounded d-flex flex-row align-items-center">
+                    <div class="p-2">
+                        <twig:Core:Icon name="file"/>
+                    </div>
+                    <div class="p-2">
+                        <span class="d-block fw-bold">{{ document.name }}</span>
+                        reference : {{ document.reference }}<br>
+                        indice : {{ document.indice }}<br>
+                        tag: {{ document.tag }}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="tab-pane fade show active" role="tabpanel">
+                <div class="bg-body-secondary rounded d-flex flex-row align-items-center">
+                    <div class="p-2">
+                        Cette affaire ne comporte aucun document.
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
