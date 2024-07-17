@@ -2,8 +2,8 @@
 
 {% block title %}Affaires{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/client_case_show.css') }}" />
+{% block javascripts %}
+    {% block importmap %}{{ importmap('client_case_show') }}{% endblock %}
 {% endblock %}
 
 {% block body %}

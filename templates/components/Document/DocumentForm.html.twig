@@ -11,7 +11,12 @@
                     <twig:Core:Icon name="cloud-upload"/>
                 </div>
                 <div class="drag-area-info" data-document-target="dropAreaInfo">Glisser et déposer vos fichiers ici</div>
-                {{ form_row(form.files) }}
+                {{ form_row(form.files, {
+                    'attr': {
+                        'data-action': 'change->document#onUpload',
+                        'data-document-target': 'inputFile'
+                    }
+                }) }}
 {#                <input#}
 {#                        type="file"#}
 {#                        name="multiple[]"#}

@@ -21,7 +21,8 @@ return [
         'entrypoint' => true,
     ],
     'client_case_show' => [
-        'path' => './assets/styles/client_case_show.css',
+        'path' => './assets/js/client_case_show.js',
+        'entrypoint' => true,
     ],
     'bootstrap' => [
         'version' => '5.3.3',

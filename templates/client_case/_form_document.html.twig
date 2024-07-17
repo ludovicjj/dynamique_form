@@ -1,10 +1,14 @@
 <h5 class="mb-3">Information des documents</h5>
 
-{{ form_start(form, {
-    'attr': {
-        'data-turbo-frame': '_top'
-    }
-}) }}
+{{ form_start(form) }}
+
+{% if form.vars.errors|length > 0 %}
+    {% set errorMessages = [] %}
+    {% for error in form.vars.errors %}
+        <twig:Core:Alert type="danger" message="{{ error.messageTemplate }}" />
+    {% endfor %}
+{% endif %}
+
 <div class="row document-modal-tabs">
     {# tab #}
     <div class="col-4 tab-nav">

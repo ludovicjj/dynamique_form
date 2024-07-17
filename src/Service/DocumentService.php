@@ -4,11 +4,12 @@ namespace App\Service;
 
 use App\Entity\ClientCase;
 use App\Entity\Document;
+use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Exception;
 
 class DocumentService
 {
@@ -24,11 +25,15 @@ class DocumentService
     public function __construct(
         private readonly Security $security,
         private readonly EntityManagerInterface $entityManager,
+        private readonly DocumentRepository $documentRepository,
         private array $documents = []
     ) {
     }
 
-    public function buildAndPersist(FormInterface $form, ClientCase $clientCase, array $files): void
+    /**
+     * @throws Exception
+     */
+    public function build(FormInterface $form, ClientCase $clientCase, array $files): void
     {
         $data = $this->extractFormData($form);
 
@@ -64,21 +69,23 @@ class DocumentService
      */
     public function getDocumentData(ClientCase $clientCase): array
     {
-        return $clientCase->getDocuments()->map(function(Document $document) {
+        $documents = $this->documentRepository->findAllByClientCase($clientCase);
+
+        return array_map(function (Document $document) {
             return [
                 'id' => $document->getId(),
                 'name' => $document->getName(),
             ];
-        })->toArray();
+        }, $documents);
     }
 
-    public function hasChangeSet(ClientCase $clientCase, EntityManagerInterface $entityManager): bool
+    public function hasChangeSet(ClientCase $clientCase): bool
     {
         if (!empty($this->documents)) {
             return true;
         }
 
-        $unitOfWork = $entityManager->getUnitOfWork();
+        $unitOfWork = $this->entityManager->getUnitOfWork();
         foreach ($clientCase->getDocuments() as $document) {
             $originalData = $unitOfWork->getOriginalEntityData($document);
 
@@ -88,7 +95,7 @@ class DocumentService
                 $originalData['tag'] !== $document->getTag() ||
                 $originalData['indice'] !== $document->getIndice() ||
                 $originalData['addedAt'] !== $document->getAddedAt() ||
-                $originalData['createdBy'] !== $document->getCreatedBy()?->getId()
+                $originalData['created_by_id'] !== $document->getCreatedBy()?->getId()
             ) {
                 return true;
             }
@@ -118,6 +125,9 @@ class DocumentService
         return count($files);
     }
 
+    /**
+     * @throws Exception
+     */
     private function buildDocument(
         array $data,
         ?UploadedFile $file = null,
@@ -142,7 +152,7 @@ class DocumentService
 
         } else {
             if (empty($data['name'])) {
-                throw new UnprocessableEntityHttpException();
+                throw new Exception("La désignation du document est obligatoire lors d'une creation sans fichier.");
             } else {
                 $document->setName($data['name']);
             }

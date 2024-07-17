@@ -24,6 +24,7 @@ export default class extends Controller {
         const count = e.currentTarget.files.length
         if (count > 1) {
             this.inputNameTarget.setAttribute('disabled', 'disabled')
+            this.inputNameTarget.value = '';
         } else {
             this.inputNameTarget.removeAttribute('disabled')
         }

@@ -8,12 +8,14 @@ use App\Form\Type\ClientCaseDocumentType;
 use App\Form\Type\ClientCaseType;
 use App\Repository\ClientCaseRepository;
 use App\Repository\ClientCaseStatusRepository;
+use App\Repository\DocumentRepository;
 use App\Repository\UserRepository;
 use App\Service\DocumentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +23,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\UX\Turbo\TurboBundle;
+use Exception;
 
 class ClientCaseController extends AbstractController
 {
@@ -131,7 +134,7 @@ class ClientCaseController extends AbstractController
             if ($request->headers->has('turbo-frame')) {
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
-                return $this->renderBlock('client_case/delete.html.twig', 'success_stream', [
+                return $this->renderBlock('client_case/delete.html.twig', 'stream_response', [
                     'id' => $id,
                 ]);
             }
@@ -147,7 +150,8 @@ class ClientCaseController extends AbstractController
     ): Response
     {
         return $this->render('client_case/show.html.twig', [
-            'clientCase' => $clientCase
+            'clientCase' => $clientCase,
+            'documents' => $clientCase->getDocuments()
         ]);
     }
 
@@ -156,30 +160,43 @@ class ClientCaseController extends AbstractController
         Request $request,
         ClientCase $clientCase,
         DocumentService $documentService,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        DocumentRepository $documentRepository
     ): Response {
         $form = $this->createForm(ClientCaseDocumentType::class, $clientCase, [
             'action' => $this->generateUrl('app_client_case_document', ['id' => $clientCase->getId()])
         ]);
 
         $form->handleRequest($request);
-
         $documentData = $documentService->getDocumentData($clientCase);
 
-        // TODO constraint name
-        if ($form->isSubmitted() && $form->isValid()) {
-            $files = $request->files->get('client_case_document', [])['files'] ?? [];
-            $documentService->buildAndPersist($form, $clientCase, $files);
+        if ($form->isSubmitted()) {
+            try {
+                $files = $request->files->get('client_case_document', [])['files'] ?? [];
+                $documentService->build($form, $clientCase, $files);
 
-            if ($documentService->hasChangeSet($clientCase, $entityManager)) {
-                $this->addFlash('success', 'Documents modifiés');
+                if ($form->isValid()) {
+                    if ($documentService->hasChangeSet($clientCase)) {
+                        $this->addFlash('success', 'Documents modifiés');
+                    }
+                    $entityManager->flush();
+
+                    if ($request->headers->has('turbo-frame')) {
+                        $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+                        return $this->renderBlock('client_case/document.html.twig', 'stream_response', [
+                            'documents' => $documentRepository->findAllByClientCase($clientCase)
+                        ]);
+                    }
+
+                    return $this->redirectToRoute('app_client_case_show', [
+                        'id' => $clientCase->getId()
+                    ]);
+                }
+            } catch (Exception $exception) {
+                $form->addError(new FormError($exception->getMessage()));
+                $form->get('name')->addError(new FormError('Cette valeur ne doit pas être vide.'));
             }
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_client_case_show', [
-                'id' => $clientCase->getId()
-            ]);
         }
 
         return $this->render('client_case/document.html.twig', [

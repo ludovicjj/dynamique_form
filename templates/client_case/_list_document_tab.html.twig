@@ -1,7 +1,7 @@
 {# Tab Nav #}
 <div class="col-4 tab-nav">
     <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
-        {% for document in clientCase.documents %}
+        {% for document in documents %}
             <button
                     class="nav-link{% if loop.first %} active{% endif %}"
                     data-bs-toggle="pill"
@@ -19,13 +19,13 @@
 {# Tab Content #}
 <div class="col-8">
     <div class="tab-content">
-        {% for document in clientCase.documents %}
+        {% for document in documents %}
             <div
-                    class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                    class="tab-pane fade h-100 {% if loop.first %}show active{% endif %}"
                     id="document-tab-{{ document.id }}"
                     role="tabpanel"
             >
-                <div class="bg-body-secondary {{ loop.last ? '' : 'mb-3'}} rounded d-flex flex-row align-items-center">
+                <div class="bg-body-secondary h-100 rounded d-flex flex-row align-items-center">
                     <div class="p-2">
                         <twig:Core:Icon name="file"/>
                     </div>
