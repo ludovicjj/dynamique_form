@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\ClientCase;
 use App\Entity\Document;
-use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormInterface;
@@ -25,7 +24,6 @@ class DocumentService
     public function __construct(
         private readonly Security $security,
         private readonly EntityManagerInterface $entityManager,
-        private readonly DocumentRepository $documentRepository,
         private array $documents = []
     ) {
     }
@@ -62,21 +60,6 @@ class DocumentService
                 $this->documents[] = $document;
             }
         }
-    }
-
-    /**
-     * Get array with id and name used by nav tab into document modal
-     */
-    public function getDocumentData(ClientCase $clientCase): array
-    {
-        $documents = $this->documentRepository->findAllByClientCase($clientCase);
-
-        return array_map(function (Document $document) {
-            return [
-                'id' => $document->getId(),
-                'name' => $document->getName(),
-            ];
-        }, $documents);
     }
 
     public function hasChangeSet(ClientCase $clientCase): bool

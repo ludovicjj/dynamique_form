@@ -1,39 +1,33 @@
 <div {{ attributes.defaults({
     'class': class,
     'role': "tabpanel",
-    'id': id,
-    'data-controller': 'document'
+    'id': id
 }) }}>
     <div class="row">
         <div class="col-12 mb-3">
-            <div class="drag-area" data-document-target="dropArea">
+            <div class="drag-area" data-client-case-document-form-target="dropArea">
                 <div class="drag-area-icon">
                     <twig:Core:Icon name="cloud-upload"/>
                 </div>
-                <div class="drag-area-info" data-document-target="dropAreaInfo">Glisser et déposer vos fichiers ici</div>
+                <div
+                        class="drag-area-info"
+                        data-client-case-document-form-target="dropAreaInfo"
+                >
+                    Glisser et déposer vos fichiers ici
+                </div>
                 {{ form_row(form.files, {
                     'attr': {
-                        'data-action': 'change->document#onUpload',
-                        'data-document-target': 'inputFile'
-                    }
+                        'data-action': 'change->client-case-document-form#onUpload',
+                        'data-client-case-document-form-target': 'inputFile',
+                        'hidden': 'hidden'
+                    },
                 }) }}
-{#                <input#}
-{#                        type="file"#}
-{#                        name="multiple[]"#}
-{#                        autocomplete="off"#}
-{#                        multiple=""#}
-{#                        id="multiple-files"#}
-{#                        class="form-control"#}
-{#                        data-action="change->document#onUpload"#}
-{#                        data-document-target="inputFile"#}
-{#                        hidden#}
-{#                >#}
             </div>
         </div>
         <div class="col-12">
             {{ form_row(form.name, {
                 'attr': {
-                    'data-document-target': 'inputName'
+                    'data-client-case-document-form-target': 'inputName'
                 }
             }) }}
         </div>

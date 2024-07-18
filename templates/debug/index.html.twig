@@ -2,19 +2,22 @@
 
 {% block title %}Affaires{% endblock %}
 
-{% block stylesheets %}
-{% endblock %}
 
-{% block javascripts %}
-    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
-    {% block importmap %}
-        {{ parent() }}
-    {% endblock %}
-{% endblock %}
+{#{% block javascripts %}#}
+{#    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>#}
+{#    {% block importmap %}#}
+{#        {{ parent() }}#}
+{#    {% endblock %}#}
+{#{% endblock %}#}
 
 {% block body %}
     <main>
         <div class="container-fluid px-4 px-md-5 my-4">
+            <a
+                    class="btn btn-secondary"
+                    href="{{ path('app_debug_test') }}"
+                    data-turbo-frame="modal"
+            >click</a>
 {#            {{ component('CkEditor') }}#}
         </div>
     </main>

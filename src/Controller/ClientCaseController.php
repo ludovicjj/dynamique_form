@@ -168,7 +168,6 @@ class ClientCaseController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-        $documentData = $documentService->getDocumentData($clientCase);
 
         if ($form->isSubmitted()) {
             try {
@@ -201,8 +200,7 @@ class ClientCaseController extends AbstractController
 
         return $this->render('client_case/document.html.twig', [
             'form' => $form,
-            'clientCase' => $clientCase,
-            'documentData' => $documentData
+            'clientCase' => $clientCase
         ]);
     }
 

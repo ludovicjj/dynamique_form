@@ -1,29 +1,25 @@
-<div {{ attributes }}>
+<div {{ attributes.defaults({
+    'data-controller': 'client-case-document-form'
+}) }}>
 
     <h5 class="mb-3">Information des documents</h5>
 
-    {{ form_start(form, {
-        attr: {
-            'novalidate': 'novalidate',
-            'data-action': 'live#action:prevent',
-            'data-live-action-param': 'files(multiple[])|save'
-        }
-    }) }}
+    {{ form_start(form) }}
 
     {% if form.vars.errors|length > 0 %}
         {% set errorMessages = [] %}
         {% for error in form.vars.errors %}
-            {% set errorMessages = errorMessages | merge([error.messageTemplate]) %}
+            <twig:Core:Alert type="danger" message="{{ error.messageTemplate }}" />
         {% endfor %}
-        <twig:Core:Alert type="danger" messages="{{ errorMessages }}" />
     {% endif %}
+
     <div class="row document-modal-tabs">
         <div class="col-4 tab-nav">
             <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
                 <button
                         class="nav-link active"
                         data-bs-toggle="pill"
-                        data-bs-target="#tab-modal-document-default"
+                        data-bs-target="#tab-create-document"
                         type="button"
                         role="tab"
                         aria-selected="true"
@@ -34,7 +30,7 @@
                     <button
                             class="nav-link"
                             data-bs-toggle="pill"
-                            data-bs-target="#tab-modal-document-{{ document.id }}"
+                            data-bs-target="#tab-update-document-{{ document.id }}"
                             type="button"
                             role="tab"
                             aria-selected="false"
@@ -49,18 +45,18 @@
                 <twig:Document:DocumentForm
                         form="{{ form }}"
                         class="tab-pane fade show active"
-                        id="tab-modal-document-default"
+                        id="tab-create-document"
                 />
                 {% for key, documentForm in form.documents %}
                     <twig:Document:DocumentCollectionForm
                             form="{{ documentForm }}"
                             class="tab-pane fade"
-                            id="tab-modal-document-{{ documentForm.vars.value.id }}"
+                            id="tab-update-document-{{ documentForm.vars.value.id }}"
                     />
                 {% endfor %}
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-secondary">
+                <button type="submit" formnovalidate class="btn btn-secondary">
                     Valider
                 </button>
             </div>

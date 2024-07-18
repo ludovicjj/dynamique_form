@@ -1,8 +1,14 @@
 import { Controller } from '@hotwired/stimulus';
+import { getComponent } from '@symfony/ux-live-component';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
     static targets = ["inputName", "inputFile", "dropArea", "dropAreaInfo"]
+
+    /**
+     * @type {string|null}
+     */
+    message = null;
 
     connect() {
         this.counter = 0;
@@ -19,8 +25,18 @@ export default class extends Controller {
         this.inputFile.addEventListener('change', this.onUpload.bind(this))
     }
 
+    async initialize() {
+        this.component = await getComponent(this.element);
+
+        // do something after the component re-renders
+        this.component.on('render:finished', () => {
+            if (this.message) {
+                this.dropAreaInfo.textContent = this.message
+            }
+        });
+    }
+
     onUpload(e) {
-        console.log(e.currentTarget.files)
         const count = e.currentTarget.files.length
         if (count > 1) {
             this.inputNameTarget.setAttribute('disabled', 'disabled')
@@ -30,12 +46,15 @@ export default class extends Controller {
         }
 
         if (count === 0) {
+            this.message = null;
             this.dropAreaInfo.textContent = this.defaultMessage
         }
         if (count === 1) {
+            this.message = e.currentTarget.files[0]?.name || '1 fichier'
             this.dropAreaInfo.textContent = e.currentTarget.files[0]?.name || '1 fichier'
         }
         if (count > 1) {
+            this.message = `${count} fichier${count > 1 ? 's' : ''}`
             this.dropAreaInfo.textContent = `${count} fichier${count > 1 ? 's' : ''}`
         }
     }
