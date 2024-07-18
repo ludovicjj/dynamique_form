@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\ClientCase;
 use App\Entity\Partner;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -42,5 +43,19 @@ class PartnerRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+    public function findPartnerByClientCase(ClientCase $clientCase): array
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb
+            ->innerJoin('p.partnerContacts', 'pc')
+            ->innerJoin('pc.clientCases', 'cc')
+            ->andWhere('cc = :client_case')
+            ->addSelect('pc')
+            ->setParameter('client_case', $clientCase);
+
+        return $qb->getQuery()->getResult();
     }
 }

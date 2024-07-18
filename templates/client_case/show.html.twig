@@ -124,6 +124,26 @@
                         </div>
                     </div>
                 </section>
+
+                {# Partner #}
+                <section class="col-6 partner">
+                    <div class="card bg-transparent card-bg">
+                        <div class="card-body">
+                            <div class="d-flex flex-row justify-content-between mb-3">
+                                <span class="fw-bold">Partenaires</span>
+                                <div>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <twig:Core:Icon name="plus"/>
+                                        Gérer les partenaires
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row tabs" id="partner-list-tab">
+                                {{ include('client_case/_list_partner_tab.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </main>

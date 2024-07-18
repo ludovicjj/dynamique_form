@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\ClientContact;
 use App\Entity\Partner;
 use App\Entity\PartnerContact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -50,17 +49,5 @@ class PartnerContactRepository extends ServiceEntityRepository
         }
 
         return $qb;
-    }
-
-    public function findByPartnerQueryBuilder(Partner $partner): QueryBuilder
-    {
-        $queryBuilder = $this->createQueryBuilder('partner_contact');
-
-        $queryBuilder
-            ->andWhere('partner_contact.partner = :partner')
-            ->setParameter('partner', $partner)
-            ->orderBy('partner_contact.firstname', 'ASC');
-
-        return $queryBuilder;
     }
 }

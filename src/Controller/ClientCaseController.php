@@ -9,6 +9,7 @@ use App\Form\Type\ClientCaseType;
 use App\Repository\ClientCaseRepository;
 use App\Repository\ClientCaseStatusRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\PartnerRepository;
 use App\Repository\UserRepository;
 use App\Service\DocumentService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -146,12 +147,15 @@ class ClientCaseController extends AbstractController
     #[Route('/client-case/{id}', name: "app_client_case_show")]
     public function show(
         #[MapEntity(expr: 'repository.findClientCaseShow(id)')]
-        ClientCase $clientCase
-    ): Response
-    {
+        ClientCase $clientCase,
+        PartnerRepository $partnerRepository
+    ): Response {
+        $partners = $partnerRepository->findPartnerByClientCase($clientCase);
+
         return $this->render('client_case/show.html.twig', [
             'clientCase' => $clientCase,
-            'documents' => $clientCase->getDocuments()
+            'documents' => $clientCase->getDocuments(),
+            'partners' => $partners
         ]);
     }
 

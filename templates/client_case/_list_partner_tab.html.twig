@@ -1,0 +1,43 @@
+{# Tab Nav #}
+<div class="col-4 tab-nav">
+    <div class="nav flex-column nav-pills bg-body-secondary rounded" role="tablist" aria-orientation="vertical">
+        {% for partner in partners %}
+            <button
+                    class="nav-link {% if loop.first %} active{% endif %}"
+                    data-bs-toggle="pill"
+                    data-bs-target="#partner-tab-{{ partner.id }}"
+                    type="button"
+                    role="tab"
+                    aria-selected="{{ loop.first ? 'true' : 'false'}}"
+            >
+                {{ partner.companyName }}
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+{# Tab Content #}
+<div class="col-8">
+    <div class="tab-content">
+        {% for partner in partners %}
+            <div
+                    class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                    id="partner-tab-{{ partner.id }}"
+                    role="tabpanel"
+            >
+                {% for partnerContact in partner.partnerContacts %}
+                    <div class="bg-body-secondary {{ loop.last ? '' : 'mb-3'}} rounded d-flex flex-row align-items-center">
+                        <div class="p-2">
+                            <twig:Core:Icon name="user"/>
+                        </div>
+                        <div class="p-2">
+                            <span class="d-block fw-bold">{{ partnerContact.firstname }} {{ partnerContact.lastname }}</span>
+                            <span class="d-block">{{ partnerContact.email }}</span>
+                            <span class="d-block">{{ partnerContact.phone }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
