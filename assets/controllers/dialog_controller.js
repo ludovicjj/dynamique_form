@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
-    static targets = ['dialog', 'dynamicContent', 'loadingContent', 'dialogClose'];
+    static targets = ['dialog', 'dynamicContent', 'loadingContent', 'dialogClose', 'title'];
 
     observer = null;
 
@@ -61,6 +61,17 @@ export default class extends Controller {
             this.dialogTarget.close();
             this.dialogTarget.classList.remove('close'); // Réinitialiser la classe
             document.body.classList.remove('overflow-hidden');
+            this.resetModalTitle()
         }, 500);
+    }
+
+    resetModalTitle() {
+        if (!this.hasTitleTarget) {
+            return
+        }
+
+        this.titleTarget.classList.remove('fs-5')
+        this.titleTarget.classList.add('fs-6', 'fw-normal')
+        this.titleTarget.textContent = 'Chargement...'
     }
 }

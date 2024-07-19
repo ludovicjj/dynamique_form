@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ClientCase;
 use App\Entity\User;
 use App\Form\Type\ClientCaseDocumentType;
+use App\Form\Type\ClientCasePartnerType;
 use App\Form\Type\ClientCaseType;
 use App\Repository\ClientCaseRepository;
 use App\Repository\ClientCaseStatusRepository;
@@ -160,7 +161,7 @@ class ClientCaseController extends AbstractController
     }
 
     #[Route('/client-case/{id}/document', name: "app_client_case_document")]
-    public function document(
+    public function manageDocument(
         Request $request,
         ClientCase $clientCase,
         DocumentService $documentService,
@@ -205,6 +206,39 @@ class ClientCaseController extends AbstractController
         return $this->render('client_case/document.html.twig', [
             'form' => $form,
             'clientCase' => $clientCase
+        ]);
+    }
+
+    #[Route('/client-case/{id}/partner', name: "app_client_case_partner")]
+    public function managerPartner(
+        Request $request,
+        ClientCase $clientCase,
+        EntityManagerInterface $entityManager,
+        PartnerRepository $partnerRepository
+    ): Response {
+        $form = $this->createForm(ClientCasePartnerType::class, $clientCase, [
+            'action' => $this->generateUrl('app_client_case_partner', ['id' => $clientCase->getId()])
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Partenaires modifiés');
+
+            if ($request->headers->has('turbo-frame')) {
+                $partners = $partnerRepository->findPartnerByClientCase($clientCase);
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+                return $this->renderBlock('client_case/partner.html.twig', 'stream_response', [
+                    'partners' => $partners
+                ]);
+            }
+        }
+
+        return $this->render('client_case/partner.html.twig', [
+            'clientCase' => $clientCase,
+            'form' => $form
         ]);
     }
 

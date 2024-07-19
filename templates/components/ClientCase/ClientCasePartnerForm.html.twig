@@ -1,11 +1,7 @@
-<div {{ attributes.defaults(stimulus_controller('client-case-partner')) }}>
-    {{ form_start(form, {
-        attr: {
-            'novalidate': 'novalidate',
-            'data-action': 'live#action:prevent',
-            'data-live-action-param': 'save'
-        }
-    }) }}
+<div {{ attributes.defaults({
+    'data-controller': 'client-case-partner-form'
+}) }}>
+    {{ form_start(form) }}
 
     <div class="row">
         <div class="col-12">
@@ -16,11 +12,10 @@
                 <input
                         type="text"
                         class="form-control"
-                        name="search-partner"
-                        placeholder="Recherche un contact"
+                        placeholder="Rechercher un contact"
                         aria-label="Contact"
-                        data-action="input->client-case-partner#onSearchPartner"
-                        data-client-case-partner-target="search"
+                        data-action="input->client-case-partner-form#onSearchPartner"
+                        data-client-case-partner-form-target="search"
                 >
             </div>
         </div>
@@ -28,8 +23,8 @@
         <div class="col-12">
             {{ form_row(form.partner, {
                 'attr': {
-                    'data-client-case-partner-target': 'partner',
-                    'data-action': 'change->client-case-partner#onChangePartner'
+                    'data-client-case-partner-form-target': 'partner',
+                    'data-action': 'change->client-case-partner-form#onChangePartner'
                 }
             }) }}
         </div>
@@ -37,13 +32,13 @@
             {{ form_label(form.partnerContacts, '', {'label_attr': {'class': 'pt-0'}}) }}
             {{ form_widget(form.partnerContacts, {
                 'attr': {
-                    'data-client-case-partner-target': 'partnerContact',
+                    'data-client-case-partner-form-target': 'partnerContact',
                     'class': 'd-none choice-wrapper choice-wrapper-7 mb-3'
                 }
             }) }}
             <div
                     class="alert alert-light"
-                    data-client-case-partner-target="partnerContactAlert"
+                    data-client-case-partner-form-target="partnerContactAlert"
                     style="padding-top:7px; padding-bottom:7px"
             >
                 Vous devez selectionner un partenaire.
@@ -52,8 +47,8 @@
     </div>
 
     <div class="mb-3 text-center">
-        <button type="submit" class="btn btn-secondary {{ this.hasValidationErrors ? 'disabled' : '' }}">Valider</button>
+        <button type="submit" formnovalidate class="btn btn-secondary">Valider</button>
     </div>
 
-    {{ form_end(form, {render_rest: false}) }}
+    {{ form_end(form) }}
 </div>

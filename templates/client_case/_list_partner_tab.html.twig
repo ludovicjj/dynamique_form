@@ -38,6 +38,14 @@
                     </div>
                 {% endfor %}
             </div>
+        {% else %}
+            <div class="tab-pane fade show active" role="tabpanel">
+                <div class="bg-body-secondary rounded d-flex flex-row align-items-center">
+                    <div class="p-2">
+                        Cette affaire ne comporte aucun partenaire.
+                    </div>
+                </div>
+            </div>
         {% endfor %}
     </div>
 </div>

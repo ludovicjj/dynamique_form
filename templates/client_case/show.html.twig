@@ -17,7 +17,7 @@
                     </h1>
                     <div class="intro mt-4">
                         <p>
-                            Handle a classic CRUD with LiveComponent and EventListener
+                            Handle a classic CRUD with LiveComponent, AssetMapper, Stimulus and Turbo
                         </p>
                     </div>
                 </div>
@@ -48,6 +48,7 @@
                 <div class="card-body">
                     <div class="row">
 
+                        {# ClientCase Card - Left side #}
                         <div class="col-12 col-md-6 pb-2 mb-1 pb-md-0 mb-md-0 custom-border">
                             <div class="row h-100">
                                 <div class="col-12 col-md-6 d-flex flex-md-column justify-content-between">
@@ -75,6 +76,7 @@
                             </div>
                         </div>
 
+                        {# ClientCase Card - Right side #}
                         <div class="col-12 col-md-6">
                             <div class="row">
                                 <div class="col-12 col-md-6 mb-3 mb-md-0">
@@ -132,10 +134,14 @@
                             <div class="d-flex flex-row justify-content-between mb-3">
                                 <span class="fw-bold">Partenaires</span>
                                 <div>
-                                    <button class="btn btn-secondary btn-sm">
+                                    <a
+                                            class="btn btn-secondary btn-sm"
+                                            href="{{ path('app_client_case_partner', {'id': clientCase.id}) }}"
+                                            data-turbo-frame="dialog"
+                                    >
                                         <twig:Core:Icon name="plus"/>
                                         Gérer les partenaires
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <div class="row tabs" id="partner-list-tab">
@@ -147,4 +153,22 @@
             </div>
         </div>
     </main>
+
+    {# Modal Partner Management #}
+    <twig:Core:Dialog size="w-50">
+        <twig:block name="dialog_title">
+            <h1 class="modal-title fs-6 fw-normal" id="modal-title" data-dialog-target="title">Chargement...</h1>
+        </twig:block>
+
+        <turbo-frame
+                id="dialog"
+                data-dialog-target="dynamicContent"
+                data-action="turbo:before-fetch-request->dialog#showLoading"
+        ></turbo-frame>
+        <twig:block name="loading_content">
+            <div class="d-flex justify-content-center m-3 loader">
+                <div class="spinner"></div>
+            </div>
+        </twig:block>
+    </twig:Core:Dialog>
 {% endblock %}
