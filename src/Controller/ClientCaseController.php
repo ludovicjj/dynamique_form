@@ -149,14 +149,16 @@ class ClientCaseController extends AbstractController
     public function show(
         #[MapEntity(expr: 'repository.findClientCaseShow(id)')]
         ClientCase $clientCase,
-        PartnerRepository $partnerRepository
+        PartnerRepository $partnerRepository,
+        ClientCaseStatusRepository $clientCaseStatusRepository
     ): Response {
         $partners = $partnerRepository->findPartnerByClientCase($clientCase);
 
         return $this->render('client_case/show.html.twig', [
             'clientCase' => $clientCase,
             'documents' => $clientCase->getDocuments(),
-            'partners' => $partners
+            'partners' => $partners,
+            'clientCaseStatus' => $clientCaseStatusRepository->findAll()
         ]);
     }
 

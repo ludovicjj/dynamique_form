@@ -151,6 +151,32 @@
                     </div>
                 </section>
             </div>
+
+            <div class="row">
+                <section class="col-12 mt-3 report">
+                    <div class="card bg-transparent card-bg">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="report-tab" role="tablist">
+                                {% for status in clientCaseStatus %}
+                                    <li class="nav-item col-4" role="presentation">
+                                        <button
+                                                class="nav-link w-100{% if status.id == clientCase.clientCaseStatus.id %} active{% endif %}"
+                                                id="status-tab-{{ status.id }}"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#status-{{ status.id }}"
+                                                type="button"
+                                                role="tab"
+                                                aria-selected="true"
+                                        >
+                                            {{ status.name }}
+                                        </button>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     </main>
 

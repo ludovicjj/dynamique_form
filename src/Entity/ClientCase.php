@@ -144,6 +144,12 @@ class ClientCase
     #[Assert\Valid]
     private Collection $documents;
 
+    /**
+     * @var Collection<int, Report>
+     */
+    #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'clientCase')]
+    private Collection $reports;
+
     public function __construct()
     {
         $this->partnerContacts = new ArrayCollection();
@@ -155,6 +161,7 @@ class ClientCase
         $this->projectFeatures = new ArrayCollection();
         $this->isDraft = true;
         $this->documents = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -593,6 +600,36 @@ class ClientCase
             // set the owning side to null (unless already changed)
             if ($document->getClientCase() === $this) {
                 $document->setClientCase(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setClientCase($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getClientCase() === $this) {
+                $report->setClientCase(null);
             }
         }
 

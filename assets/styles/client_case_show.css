@@ -79,6 +79,17 @@
     background-color: #6C757D;
 }
 
+#report-tab li.nav-item {
+    flex: 1 1 auto;
+}
+#report-tab li.nav-item button {
+    color: inherit;
+}
+#report-tab li.nav-item button.active {
+    background-color: var(--bs-secondary-bg);
+    color: inherit;
+}
+
 @media (max-width: 768px) {
     .client-case-card .custom-border {
         border-right: none;

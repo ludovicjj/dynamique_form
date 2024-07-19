@@ -14,6 +14,9 @@ use App\Factory\PartnerContactFactory;
 use App\Factory\PartnerFactory;
 use App\Factory\PartnerJobTitleFactory;
 use App\Factory\ProjectFeatureFactory;
+use App\Factory\ReportTypeFactory;
+use App\Factory\ReviewGroupFactory;
+use App\Factory\ReviewValueFactory;
 use App\Factory\UserFactory;
 use App\Factory\UserJobTitleFactory;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,13 +40,12 @@ class DataCommand extends Command
         $io->title('Init import data...');
         $this->purgeTable();
 
-        $progressBar = $io->createProgressBar(13);
+        $progressBar = $io->createProgressBar(16);
 
+        // user
         $this->importUserJobTitle();
-        $progressBar->advance();
-
         $this->importUser();
-        $progressBar->advance();
+        $progressBar->advance(2);
 
         $this->importCountry();
         $progressBar->advance();
@@ -60,26 +62,24 @@ class DataCommand extends Command
         $this->importClientCaseStatus();
         $progressBar->advance();
 
-        // ClientCase
-        //$this->importClientCase();
+        // Report
+        $this->importReportType();
+        $progressBar->advance();
+
+        // Review
+        $this->importReviewGroup();
+        $this->importReviewValue();
+        $progressBar->advance(2);
 
         // Partner
         $this->importPartnerJobTitle();
-        $progressBar->advance();
-
         $this->importPartner();
-        $progressBar->advance();
-
         $this->importPartnerContact();
-        $progressBar->advance();
+        $progressBar->advance(3);
 
         // Client
         $this->importClientJobTitle();
-        $progressBar->advance();
-
         $this->importClient();
-        $progressBar->advance();
-
         $this->importClientContact();
         $progressBar->finish();
 
@@ -200,15 +200,144 @@ class DataCommand extends Command
         );
     }
 
-    private function importClientCase(): void
+    private function importReportType(): void
     {
-        ClientCaseFactory::createSequence(
-            function() {
-                foreach (range(1, 200) as $i) {
-                    yield ['country' => CountryFactory::random()];
-                }
-            }
-        );
+        ReportTypeFactory::createSequence([
+                ['name' => 'Avis sur AD', 'code' => 'AD'],
+                ['name' => 'Avis sur FCE', 'code' => 'FCE'],
+                ['name' => 'Avis sur SAv', 'code' => 'SAv'],
+                ['name' => 'Avis sur RFCT', 'code' => 'RFCT'],
+                ['name' => 'Avis sur Esquisse', 'code' => 'ESQ'],
+                ['name' => 'Avis sur Diagnostic', 'code' => 'DIAG'],
+                ['name' => 'Avis sur PC', 'code' => 'PC'],
+                ['name' => 'Avis sur APS', 'code' => 'APS'],
+                ['name' => 'Avis sur APD', 'code' => 'APD'],
+                ['name' => 'Avis sur AVP', 'code' => 'AVP'],
+                ['name' => 'Avis sur PRO', 'code' => 'PRO'],
+                ['name' => 'Avis sur RICT', 'code' => 'RICT'],
+                ['name' => 'Avis sur RVRAT', 'code' => 'RVRAT'],
+        ]);
+    }
+
+    private function importReviewValue(): void
+    {
+        ReviewValueFactory::createSequence([
+            ['name' => 'F'],
+            ['name' => 'S'],
+            ['name' => 'D'],
+            ['name' => 'PM'],
+            ['name' => 'SO'],
+            ['name' => 'HM'],
+        ]);
+    }
+
+    private function importReviewGroup(): void
+    {
+        ReviewGroupFactory::createSequence([
+            ['name' => "Solidité"],
+            ['name' => "Avoisinants"],
+            ['name' => "Existants"],
+            ['name' => "Géotechnique"],
+            ['name' => "Voiries"],
+            ['name' => "Réseaux enterrés"],
+            ['name' => "Confortement de sol"],
+            ['name' => "Fondations profondes"],
+            ['name' => "Fondations superficielles"],
+            ['name' => "Mur de soutènement"],
+            ['name' => "Talus, remblais"],
+            ['name' => "Dallage"],
+            ['name' => "Radier"],
+            ['name' => "Reprise en sous œuvre"],
+            ['name' => "Superstructure béton"],
+            ['name' => "Escaliers"],
+            ['name' => "Gaine d'ascenseur"],
+            ['name' => "Charpente métallique"],
+            ['name' => "Charpente bois"],
+            ['name' => "Ossature bois"],
+            ['name' => "Structure mixte"],
+            ['name' => "Couverture"],
+            ['name' => "Cuvelage"],
+            ['name' => "Etanchéité"],
+            ['name' => "Verrière"],
+            ['name' => "Descentes d'eaux pluviales"],
+            ['name' => "Menuiseries extérieures"],
+            ['name' => "Bardage"],
+            ['name' => "Façades rideaux"],
+            ['name' => "VEC VEA vitrages extérieurs collés/ attachés"],
+            ['name' => "Panneaux préfabriqués de façade"],
+            ['name' => "Murs de façade"],
+            ['name' => "Enduits"],
+            ['name' => "Isolation thermique par l'extérieur"],
+            ['name' => "Revêtement de façade collé"],
+            ['name' => "Revêtement de façade attaché"],
+            ['name' => "Facade à ossature bois"],
+            ['name' => "Cloisons"],
+            ['name' => "Chapes"],
+            ['name' => "Revêtement de sols durs"],
+            ['name' => "Revêtement de sol souples"],
+            ['name' => "Revêtement de sol résine"],
+            ['name' => "Faux-plafonds"],
+            ['name' => "Peinture"],
+            ['name' => "Menuiseries intérieures"],
+            ['name' => "Garde-corps"],
+            ['name' => "Portes automatiques"],
+            ['name' => "Appareils de levage"],
+            ['name' => "Courant fort"],
+            ['name' => "Courant faible"],
+            ['name' => "Photovoltaïque"],
+            ['name' => "Sonorisation"],
+            ['name' => "Plomberie sanitaire"],
+            ['name' => "Ventilation, climatisation, VMC"],
+            ['name' => "Chauffage eau chaude"],
+            ['name' => "Assainissement"],
+            ['name' => "Air comprimé industriel"],
+            ['name' => "Sécurité incendie"],
+            ['name' => "Classement"],
+            ['name' => "Desserte du bâtiment"],
+            ['name' => "Isolement par rapport aux tiers"],
+            ['name' => "Résistance au feu des structures"],
+            ['name' => "Evacuation des PMR"],
+            ['name' => "Couvertures"],
+            ['name' => "Façades"],
+            ['name' => "Distribution Intérieure"],
+            ['name' => "Atriums"],
+            ['name' => "Locaux à risques"],
+            ['name' => "Conduits et gaines"],
+            ['name' => "Dégagements"],
+            ['name' => "Aménagements intérieurs"],
+            ['name' => "Désenfumage"],
+            ['name' => "Gaz combustibles"],
+            ['name' => "Fluides médicaux"],
+            ['name' => "Fluides spéciaux"],
+            ['name' => "Ascenseurs et monte-charges"],
+            ['name' => "Grandes cuisines"],
+            ['name' => "Poteaux d'incendie"],
+            ['name' => "Robinets d'incendie armés"],
+            ['name' => "Colonnes sèches"],
+            ['name' => "Colonnes en charge"],
+            ['name' => "Extinction automatique à eau"],
+            ['name' => "Extinction automatique à gaz"],
+            ['name' => "Extincteurs"],
+            ['name' => "Détection Incendie"],
+            ['name' => "SSI"],
+            ['name' => "Système d'alarme"],
+            ['name' => "Dispositions particulières"],
+            ['name' => "Accessibilité PMR"],
+            ['name' => "Cheminements extérieurs"],
+            ['name' => "Stationnement automobile"],
+            ['name' => "Accès au bâtiment"],
+            ['name' => "Circulations intérieures horizontales"],
+            ['name' => "Circulations intérieures verticales"],
+            ['name' => "Revêtements sols et plafonds"],
+            ['name' => "Portes"],
+            ['name' => "Locaux, équipements et dispositifs de commande"],
+            ['name' => "Sanitaires"],
+            ['name' => "Sorties"],
+            ['name' => "Eclairage"],
+            ['name' => "Accueil du public"],
+            ['name' => "Tapis roulants, escaliers et plans inclinés"],
+            ['name' => "Locaux d'hébergement"]
+        ]);
     }
 
     public function importPartnerJobTitle(): void
@@ -283,7 +412,7 @@ class DataCommand extends Command
         );
     }
 
-    private function purgeTable()
+    private function purgeTable(): void
     {
         $connection = $this->entityManager->getConnection();
 
@@ -308,6 +437,12 @@ class DataCommand extends Command
             'partner_contact',
             'partner_job_title',
             'project_feature',
+            'report',
+            'report_type',
+            'review',
+            'review_document',
+            'review_group',
+            'review_value',
             'user',
             'user_job_title'
         ];
