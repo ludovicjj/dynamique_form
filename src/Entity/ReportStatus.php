@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientCaseStatusRepository;
+use App\Repository\ReportStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ClientCaseStatusRepository::class)]
-class ClientCaseStatus
+#[ORM\Entity(repositoryClass: ReportStatusRepository::class)]
+class ReportStatus
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,7 +16,7 @@ class ClientCaseStatus
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $code = null;
 
     public function getId(): ?int

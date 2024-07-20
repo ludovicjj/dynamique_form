@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\ClientCase;
 use App\Entity\Report;
+use App\Entity\ReportType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,40 @@ class ReportRepository extends ServiceEntityRepository
         parent::__construct($registry, Report::class);
     }
 
-    //    /**
-    //     * @return Report[] Returns an array of Report objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findCountDraftByClientCase(ClientCase $clientCase): int
+    {
+        $qb = $this->createQueryBuilder('r');
 
-    //    public function findOneBySomeField($value): ?Report
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $qb
+            ->select('COUNT(r.id)')
+
+            ->leftJoin('r.reportStatus', 'rs')
+            ->andWhere('rs.code = :code')
+            ->setParameter('code', 'draft')
+
+            ->leftJoin('r.clientCase', 'cc')
+            ->andWhere('cc = :client_case')
+            ->setParameter('client_case', $clientCase);
+
+        return (int)$qb->getQuery()->getSingleScalarResult() ?? 0;
+    }
+
+    public function findLastReportByTypeAndClientCase(ReportType $reportType, ClientCase $clientCase): ?Report
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        $qb
+            ->leftJoin('r.reportType', 'rt')
+            ->andWhere('rt = :report_type')
+            ->setParameter('report_type', $reportType)
+
+            ->leftJoin('r.clientCase', 'cc')
+            ->andWhere('cc = :client_case')
+            ->setParameter('client_case', $clientCase)
+
+            ->orderBy("r.number", "DESC")
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

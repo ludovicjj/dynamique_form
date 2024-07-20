@@ -14,6 +14,7 @@ use App\Factory\PartnerContactFactory;
 use App\Factory\PartnerFactory;
 use App\Factory\PartnerJobTitleFactory;
 use App\Factory\ProjectFeatureFactory;
+use App\Factory\ReportStatusFactory;
 use App\Factory\ReportTypeFactory;
 use App\Factory\ReviewGroupFactory;
 use App\Factory\ReviewValueFactory;
@@ -40,13 +41,14 @@ class DataCommand extends Command
         $io->title('Init import data...');
         $this->purgeTable();
 
-        $progressBar = $io->createProgressBar(16);
+        $progressBar = $io->createProgressBar(17);
 
         // user
         $this->importUserJobTitle();
         $this->importUser();
         $progressBar->advance(2);
 
+        // Global
         $this->importCountry();
         $progressBar->advance();
 
@@ -64,7 +66,8 @@ class DataCommand extends Command
 
         // Report
         $this->importReportType();
-        $progressBar->advance();
+        $this->importReportStatus();
+        $progressBar->advance(2);
 
         // Review
         $this->importReviewGroup();
@@ -155,9 +158,9 @@ class DataCommand extends Command
     private function importClientCaseStatus(): void
     {
         ClientCaseStatusFactory::createSequence([
-            ['name' => 'Conception'],
-            ['name' => 'Travaux'],
-            ['name' => 'Réception'],
+            ['name' => 'Conception', 'code' => 'design'],
+            ['name' => 'Travaux', 'code' => 'construction'],
+            ['name' => 'Réception', 'code' => 'handover'],
         ]);
     }
 
@@ -216,6 +219,15 @@ class DataCommand extends Command
                 ['name' => 'Avis sur PRO', 'code' => 'PRO'],
                 ['name' => 'Avis sur RICT', 'code' => 'RICT'],
                 ['name' => 'Avis sur RVRAT', 'code' => 'RVRAT'],
+        ]);
+    }
+
+    private function importReportStatus(): void
+    {
+        ReportStatusFactory::createSequence([
+           ['name' => 'Brouillon', 'code' => 'draft'],
+           ['name' => 'En attente de validation', 'code' => 'pending'],
+           ['name' => 'Validé', 'code' => 'validate'],
         ]);
     }
 
@@ -438,6 +450,7 @@ class DataCommand extends Command
             'partner_job_title',
             'project_feature',
             'report',
+            'report_status',
             'report_type',
             'review',
             'review_document',

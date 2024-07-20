@@ -22,7 +22,10 @@ class Report
     private ?string $reference = null;
 
     #[ORM\Column]
-    private ?bool $draft = null;
+    private bool $draft;
+
+    #[ORM\Column]
+    private ?int $number = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTimeInterface $createdAt;
@@ -51,8 +54,13 @@ class Report
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'report')]
     private Collection $reviews;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ReportStatus $reportStatus = null;
+
     public function __construct()
     {
+        $this->draft = true;
         $this->createdAt = new DateTime();
         $this->reviews = new ArrayCollection();
     }
@@ -74,7 +82,7 @@ class Report
         return $this;
     }
 
-    public function isDraft(): ?bool
+    public function isDraft(): bool
     {
         return $this->draft;
     }
@@ -82,6 +90,18 @@ class Report
     public function setDraft(bool $draft): static
     {
         $this->draft = $draft;
+
+        return $this;
+    }
+
+    public function getNumber(): ?int
+    {
+        return $this->number;
+    }
+
+    public function setNumber(?int $number): self
+    {
+        $this->number = $number;
 
         return $this;
     }
@@ -184,6 +204,18 @@ class Report
                 $review->setReport(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getReportStatus(): ?ReportStatus
+    {
+        return $this->reportStatus;
+    }
+
+    public function setReportStatus(?ReportStatus $reportStatus): static
+    {
+        $this->reportStatus = $reportStatus;
 
         return $this;
     }

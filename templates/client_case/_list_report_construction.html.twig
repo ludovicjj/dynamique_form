@@ -1,0 +1,19 @@
+<div class="d-flex gap-1 justify-content-end mt-3">
+    <form
+            method="post"
+            action="{{ path('app_report_create', {'id': clientCase.id, 'reportType': 1}) }}"
+    >
+        <button class="btn btn-secondary">Créer AD</button>
+    </form>
+
+    <form
+            method="post"
+            action="{{ path('app_report_create', {'id': clientCase.id, 'reportType': 2}) }}"
+    >
+        <button class="btn btn-secondary">Créer FCE</button>
+    </form>
+
+    <button class="btn btn-secondary">
+        Créer SAv
+    </button>
+</div>

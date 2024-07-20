@@ -1,7 +1,8 @@
-{% props size='' %}
+{% props size='', class='' %}
 <div {{ attributes.defaults({
     'data-controller': 'dialog',
-    'data-action': 'turbo:before-cache@window->dialog#close'
+    'data-action': 'turbo:before-cache@window->dialog#close',
+    'class': class ? class : false,
 }) }}>
     {% block trigger %}{% endblock %}
     <dialog

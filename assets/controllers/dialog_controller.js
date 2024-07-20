@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
-    static targets = ['dialog', 'dynamicContent', 'loadingContent', 'dialogClose', 'title'];
+    static targets = ['dialog', 'dynamicContent', 'loadingContent', 'dialogClose', 'title', 'reportConfirm'];
 
     observer = null;
 
@@ -73,5 +73,18 @@ export default class extends Controller {
         this.titleTarget.classList.remove('fs-5')
         this.titleTarget.classList.add('fs-6', 'fw-normal')
         this.titleTarget.textContent = 'Chargement...'
+    }
+
+    /**
+     *
+     * @param {string} url
+     */
+    defineConfirmUrl(url)
+    {
+        if (this.hasReportConfirmTarget) {
+            this.reportConfirmTarget.href = url
+        } else {
+            console.log('missing target reportConfirm')
+        }
     }
 }
