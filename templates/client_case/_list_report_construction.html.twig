@@ -14,33 +14,7 @@
     </thead>
     <tbody>
     {% for report in groupedReports['construction'] %}
-        <tr>
-            <td>{{ report.reference }}</td>
-            <td>reviews->ReviewGroup->name</td>
-            <td>-</td>
-            <td>
-                {% if report.validatedAt is not null %}
-                    {{ report.validatedAt | date('d/m/Y') }}
-                {% else %}
-                    -
-                {% endif %}
-            </td>
-            <td>-</td>
-            <td>{{ report.createdBy.trigram }}</td>
-            <td>-</td>
-            <td>{{ report.reportStatus.name }}</td>
-            <td>
-                {% if report.draft == true %}
-                <button class="btn btn-secondary">
-                    <twig:Core:Icon name="eye"/>
-                </button>
-
-                <button class="btn btn-secondary">
-                    <twig:Core:Icon name="trash"/>
-                </button>
-                {% endif %}
-            </td>
-        </tr>
+        {{ include('client_case/_row_report.html.twig') }}
     {% else %}
         <tr>
             <td colspan="9" class="text-center">Aucun livrable en phrase de travaux</td>

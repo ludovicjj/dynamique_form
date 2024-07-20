@@ -16,9 +16,11 @@ export default class extends Controller {
             }
         }
 
+
         if (e.detail.success === true) {
-            const response = await e.detail.fetchResponse.response.json()
-            location.href = response.url
+            if (this.dialogOutlet.dialogTarget.open) {
+                this.dialogOutlet.close()
+            }
         }
     }
 }

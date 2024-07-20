@@ -82,9 +82,22 @@ export default class extends Controller {
     defineConfirmUrl(url)
     {
         if (this.hasReportConfirmTarget) {
-            this.reportConfirmTarget.href = url
-        } else {
-            console.log('missing target reportConfirm')
+            this.reportConfirmTarget.action = url
         }
+    }
+
+    async createReport(e)
+    {
+        e.preventDefault()
+        const url = this.reportConfirmTarget.href
+        this.reportConfirmTarget.classList.add('disabled')
+
+        const response = await fetch(url)
+        const json = await response.json()
+
+        this.reportConfirmTarget.classList.remove('disabled')
+        this.close()
+        window.location.href = json.url
+
     }
 }

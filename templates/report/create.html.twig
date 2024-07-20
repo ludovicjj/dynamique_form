@@ -1,0 +1,5 @@
+{% block stream_response %}
+    <turbo-stream action="append" targets=".tab-pane.active table tbody">
+        <template>{{ include('client_case/_row_report.html.twig') }}</template>
+    </turbo-stream>
+{% endblock %}

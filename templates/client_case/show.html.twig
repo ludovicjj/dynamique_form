@@ -194,6 +194,32 @@
                                         </div>
                                     {% endfor %}
                                 </div>
+
+                                {# Modal Confirm Create Report #}
+                                <twig:Core:Dialog size="w-25" class="dialog-report">
+                                    <twig:block name="dialog_title">
+                                        <h1 class="modal-title fs-5">Attention</h1>
+                                    </twig:block>
+                                    <p class="mb-4">
+                                        Il existe déjà un rapport en brouillon.
+                                        Êtes-vous sûr de vouloir créer un nouveau rapport ?
+                                    </p>
+                                    <div class="d-flex justify-content-between">
+                                        <button
+                                                class="btn btn-secondary"
+                                                data-action="dialog#close"
+                                        >
+                                            Annuler
+                                        </button>
+                                        <form
+                                                method="post"
+                                                action=""
+                                                data-dialog-target="reportConfirm"
+                                        >
+                                            <button class="btn btn-secondary">Créer</button>
+                                        </form>
+                                    </div>
+                                </twig:Core:Dialog>
                             </turbo-frame>
                         </div>
                     </div>
@@ -201,32 +227,6 @@
             </div>
         </div>
     </main>
-
-    {# Modal Confirm Create Report #}
-    <twig:Core:Dialog size="w-25" class="dialog-report">
-        <twig:block name="dialog_title">
-            <h1 class="modal-title fs-5">Attention</h1>
-        </twig:block>
-        <p class="mb-4">
-            Il existe déjà un rapport en brouillon.
-            Êtes-vous sûr de vouloir créer un nouveau rapport ?
-        </p>
-        <div class="d-flex justify-content-between">
-            <button
-                    class="btn btn-secondary"
-                    data-action="dialog#close"
-            >
-                Annuler
-            </button>
-            <a
-                    href="#"
-                    class="btn btn-secondary"
-                    data-dialog-target="reportConfirm"
-            >
-                Créer
-            </a>
-        </div>
-    </twig:Core:Dialog>
 
     {# Modal Partner Management #}
     <twig:Core:Dialog size="w-50">
