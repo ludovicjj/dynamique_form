@@ -11,6 +11,7 @@ use App\Repository\ClientCaseRepository;
 use App\Repository\ClientCaseStatusRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\PartnerRepository;
+use App\Repository\ReportRepository;
 use App\Repository\UserRepository;
 use App\Service\DocumentService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -150,15 +151,18 @@ class ClientCaseController extends AbstractController
         #[MapEntity(expr: 'repository.findClientCaseShow(id)')]
         ClientCase $clientCase,
         PartnerRepository $partnerRepository,
-        ClientCaseStatusRepository $clientCaseStatusRepository
+        ClientCaseStatusRepository $clientCaseStatusRepository,
+        ReportRepository $reportRepository
     ): Response {
         $partners = $partnerRepository->findPartnerByClientCase($clientCase);
+        $groupedReports = $reportRepository->findGroupedReports($clientCase);
 
         return $this->render('client_case/show.html.twig', [
             'clientCase' => $clientCase,
             'documents' => $clientCase->getDocuments(),
             'partners' => $partners,
-            'clientCaseStatus' => $clientCaseStatusRepository->findAll()
+            'clientCaseStatus' => $clientCaseStatusRepository->findAll(),
+            'groupedReports' => $groupedReports
         ]);
     }
 

@@ -14,7 +14,6 @@ export default class extends Controller {
                 this.dialogOutlet.defineConfirmUrl(response.url)
                 this.dialogOutlet.open()
             }
-            console.log(response)
         }
 
         if (e.detail.success === true) {

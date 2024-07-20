@@ -1,3 +1,53 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Ref</th>
+        <th>Objet</th>
+        <th>Nombre d'avis</th>
+        <th>Validation</th>
+        <th>Envoi</th>
+        <th>Créé par</th>
+        <th>Validé par</th>
+        <th>Statut</th>
+        <th>Livrable / édition</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for report in groupedReports['handover'] %}
+        <tr>
+            <td>{{ report.reference }}</td>
+            <td>reviews->ReviewGroup->name</td>
+            <td>-</td>
+            <td>
+                {% if report.validatedAt is not null %}
+                    {{ report.validatedAt | date('d/m/Y') }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>-</td>
+            <td>{{ report.createdBy.trigram }}</td>
+            <td>-</td>
+            <td>{{ report.reportStatus.name }}</td>
+            <td>
+                {% if report.draft == true %}
+                    <button class="btn btn-secondary">
+                        <twig:Core:Icon name="eye"/>
+                    </button>
+
+                    <button class="btn btn-secondary">
+                        <twig:Core:Icon name="trash"/>
+                    </button>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="9" class="text-center">Aucun livrable en phrase de réception</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 <div class="text-end mt-3">
     <button class="btn btn-secondary">
         Créer RFCT
