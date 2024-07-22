@@ -15,9 +15,13 @@
     <td>{{ report.reportStatus.name }}</td>
     <td>
         {% if report.draft == true %}
-            <button class="btn btn-secondary">
+            <a
+                    class="btn btn-secondary"
+                    href="{{ path('app_report_index', {'id': clientCase.id, 'report': report.id}) }}"
+                    target="_top"
+            >
                 <twig:Core:Icon name="eye"/>
-            </button>
+            </a>
 
             <button class="btn btn-secondary">
                 <twig:Core:Icon name="trash"/>

@@ -19,5 +19,16 @@
             </div>
         </div>
     </div>
+
+    <div class="container-fluid">
+        {{ component('Core:Breadcrumbs', {
+            items: [
+                {'label': 'Dashboard', 'url': path('app_home')},
+                {'label': 'Affaires', 'url': path('app_client_case_index')},
+                {'label': clientCase.reference, 'url': path('app_client_case_show', {'id': clientCase.id})},
+                {'text': report.reference}
+            ]
+        }) }}
+    </div>
 </main>
 {% endblock %}

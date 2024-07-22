@@ -178,51 +178,42 @@
                             {# Tabs Reports Content #}
                             <turbo-frame
                                     id="report-list"
+                                    class="tab-content"
                                     data-controller="listing-report"
                                     data-action="turbo:submit-end->listing-report#onSubmit"
                                     data-listing-report-dialog-outlet=".dialog-report"
                             >
-                                <div class="tab-content" id="report-tab-content">
-                                    {% for status in clientCaseStatus %}
-                                        <div
-                                                class="tab-pane fade{% if status.id == clientCase.clientCaseStatus.id %} show active{% endif%}"
-                                                id="status-{{ status.id }}"
-                                                role="tabpanel"
-                                                aria-labelledby="report-tab"
-                                        >
-                                            {% include('client_case/_list_report_' ~ status.code ~ '.html.twig') %}
-                                        </div>
-                                    {% endfor %}
-                                </div>
+                                {% for status in clientCaseStatus %}
+                                    <div
+                                            class="tab-pane fade{% if status.id == clientCase.clientCaseStatus.id %} show active{% endif%}"
+                                            id="status-{{ status.id }}"
+                                            role="tabpanel"
+                                            aria-labelledby="report-tab"
+                                    >
+                                        {% include('client_case/_tab_report_' ~ status.code ~ '.html.twig') %}
+                                    </div>
+                                {% endfor %}
 
                                 {# Modal Confirm Create Report #}
                                 <twig:Core:Dialog size="w-25" class="dialog-report">
                                     <twig:block name="dialog_title">
                                         <h1 class="modal-title fs-5">Attention</h1>
                                     </twig:block>
-                                    <p class="mb-4">
-                                        Il existe déjà un rapport en brouillon.
+                                    <p class="mb-4 text-center">
+                                        Il existe déjà un rapport en brouillon.<br>
                                         Êtes-vous sûr de vouloir créer un nouveau rapport ?
                                     </p>
                                     <div class="d-flex justify-content-between">
-                                        <button
-                                                class="btn btn-secondary"
-                                                data-action="dialog#close"
-                                        >
+                                        <button class="btn btn-secondary" data-action="dialog#close">
                                             Annuler
                                         </button>
-                                        <form
-                                                method="post"
-                                                action=""
-                                                data-dialog-target="reportConfirm"
-                                        >
+                                        <form method="post" action="" data-dialog-target="reportConfirm">
                                             <button class="btn btn-secondary">Créer</button>
                                         </form>
                                     </div>
                                 </twig:Core:Dialog>
                             </turbo-frame>
                         </div>
-                    </div>
                 </section>
             </div>
         </div>

@@ -38,7 +38,10 @@
         <button class="btn btn-secondary">Créer FCE</button>
     </form>
 
-    <button class="btn btn-secondary">
-        Créer SAv
-    </button>
+    <form
+            method="post"
+            action="{{ path('app_report_create', {'id': clientCase.id, 'reportType': 3}) }}"
+    >
+        <button class="btn btn-secondary">Créer SAv</button>
+    </form>
 </div>

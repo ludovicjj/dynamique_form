@@ -36,7 +36,7 @@ class ReportController extends AbstractController
                         'reportType' => $reportType->getId(),
                         'confirm' => true
                     ])
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             $report = $reportService->create($clientCase, $reportType);
@@ -57,6 +57,9 @@ class ReportController extends AbstractController
         Report $report
     ): Response
     {
-        return $this->render('report/index.html.twig');
+        return $this->render('report/index.html.twig', [
+            'clientCase' => $clientCase,
+            'report' => $report
+        ]);
     }
 }
