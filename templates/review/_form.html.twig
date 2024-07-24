@@ -1,0 +1,59 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-6">
+            {{ form_row(form.reviewValue) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.reviewGroup) }}
+        </div>
+    </div>
+
+    <div class="row">
+        {% if form.searchDocument is defined %}
+            <div class="col-12">
+                {{ form_row(form.searchDocument) }}
+            </div>
+        {% endif %}
+
+        {% if form.documents is defined %}
+            <div class="col-12 mb-4">
+                {{ form_label(form.documents) }}
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 45px"></th>
+                        <th>Nom</th>
+                        <th style="width: 125px">Date de créa</th>
+                        <th>Tag</th>
+                        <th style="width: 70px">Indice</th>
+                        <th style="width: 150px">Reference</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for document in form.documents %}
+                        <tr>
+                            <td>{{ form_widget(document) }}</td>
+                            <td class="name-doc">{{ document.vars.attr['data-name'] }}</td>
+                            <td class="text-center">{{ document.vars.attr['data-created-at'] }}</td>
+                            <td>{{ document.vars.attr['data-tag'] }}</td>
+                            <td class="text-center">{{ document.vars.attr['data-indice'] }}</td>
+                            <td>{{ document.vars.attr['data-reference'] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <div class="col-12">
+            {{ component("Core:Ckeditor", {field: form.observation}) }}
+        </div>
+    </div>
+
+    <div class="mb-3 text-end">
+        <button formnovalidate type="submit" class="btn btn-secondary">
+            {{ form.vars.value.id ? 'Modifier' : 'Ajouter' }}
+        </button>
+    </div>
+
+{{ form_end(form) }}

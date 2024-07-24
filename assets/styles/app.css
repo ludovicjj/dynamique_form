@@ -177,3 +177,31 @@ h1, .h1 {
 .choice-wrapper-7 {
     max-height: 184px;
 }
+
+.card-bg {
+    box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+    overflow: hidden;
+}
+.card-bg:before {
+    content: '';
+    inset: 0;
+    z-index: -1;
+    position: absolute;
+    --glass-color: 0 0 0;
+    --glass-opacity: .45;
+    background-color: #1f2428;
+}
+
+.badge-item {
+    background: var(--bs-secondary);
+    border-radius: 3px;
+    padding: 2.5px 10px;
+    margin: 0 5px 5px 0;
+    cursor: default;
+    user-select: none;
+}
+
+.badge-item-sm {
+    min-width: 30px;
+    text-align: center;
+}

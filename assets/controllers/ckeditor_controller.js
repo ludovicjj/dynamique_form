@@ -1,17 +1,10 @@
 import { Controller } from '@hotwired/stimulus';
-
+import '../styles/ckeditor.css';
 
 export default class extends Controller {
     static targets = ["input"]
-    datepicker
 
     connect() {
-        import('duck').then(module => {
-            const duck = new module.Duck()
-            duck.sayHello()
-        })
-
-
         ClassicEditor
             .create( this.inputTarget , {
                 toolbar: [
@@ -32,7 +25,6 @@ export default class extends Controller {
             .then(editor => {
             })
             .catch( /* ... */ );
-
     }
 
     disconnect() {

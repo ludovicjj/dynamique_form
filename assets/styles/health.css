@@ -1,0 +1,37 @@
+.health-wrapper  {
+    display: grid;
+    gap: 2px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 50px);
+    min-width: 300px;
+}
+.health-wrapper span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.health-wrapper .summary-F {
+    background-color: #71cc71;
+    border-top-left-radius: 8px;
+}
+.health-wrapper .summary-S {
+    background-color: #dede73;
+}
+.health-wrapper .summary-D {
+    background-color: #c73232;
+    border-top-right-radius: 8px;
+}
+.health-wrapper .summary-PM {
+    background-color: #4698de;
+    border-bottom-left-radius: 8px;
+}
+.health-wrapper .summary-SO {
+    background-color: #838080;
+}
+.health-wrapper .summary-HM {
+    background-color: #2f2d2d;
+    border-bottom-right-radius: 8px;
+    color: #fff
+}

@@ -48,6 +48,7 @@ class ReportController extends AbstractController
             ]);
         }
 
+        $report = $reportService->create($clientCase, $reportType);
         return $this->redirectToRoute('app_client_case_show', ['id' => $clientCase->getId()]);
     }
 

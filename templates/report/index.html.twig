@@ -1,6 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Livrable{% endblock %}
+{% block title %}Report{% endblock %}
+
+{% block stylesheets %}
+    <link type="text/css" rel="stylesheet" href="{{ asset('styles/health.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('styles/review_form.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}
 
 {% block body %}
 <main>
@@ -30,5 +40,94 @@
             ]
         }) }}
     </div>
+
+    <div class="container-fluid px-4 px-md-5 py-3">
+        {# Report Card #}
+        <div class="card bg-transparent border-secondary-subtle card-bg text-white mb-3">
+            <div class="card-body">
+                <div class="row">
+
+                    {# Report Card - Left side #}
+                    <div class="col-12 col-md-6 pb-2 mb-1 pb-md-0 mb-md-0 custom-border">
+                        <div class="row h-100">
+                            <div class="col-12 col-md-6 d-flex flex-md-column">
+                                <div class="h4 name">
+                                    {{ clientCase.projectName }}
+                                </div>
+                                <div class="mb-3 mb-md-0">
+                                    Livrable {{ clientCase.reference ~ '-' ~ report.reference }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 text-end">
+                                <div class="d-flex flex-row flex-md-column">
+                                    <ul class="badge-items list-unstyled">
+                                        {% for mission in clientCase.missions %}
+                                            <li class="d-inline-block badge-item badge-item-sm text-center">{{ mission.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Report Card - Right side #}
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="fw-bold">{{ clientCase.client.companyName }}</div>
+                                <div>{{ clientCase.address1 }}</div>
+                                <div>{{ clientCase.zipcode ~ ' ' ~  clientCase.city}}</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                {{ include('report/_report_health.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-4 px-md-5 py-3">
+        <div class="card bg-transparent border-secondary-subtle card-bg text-white mb-3">
+            <div class="card-header">
+                <a
+                        class="btn btn-secondary"
+                        href="{{ path('app_review_create', {'id': report.id}) }}"
+                        data-turbo-frame="modal"
+                >
+                    <twig:Core:Icon name="plus"/>
+                    Ajouter un avis
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>N°</th>
+                            <th>Objet</th>
+                            <th>Document</th>
+                            <th>Observation</th>
+                            <th>Avis</th>
+                            <th>Crée le</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for review in report.reviews %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center">
+                                    Aucun Avis actuellement disponible
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </main>
 {% endblock %}

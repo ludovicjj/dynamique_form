@@ -4,7 +4,8 @@ export default class extends Controller {
     connect() {
         console.log('Stimulus controller connected');
         this.refreshArticles = this.refreshArticles.bind(this);
-        document.addEventListener("visibilitychange", this.handleVisibilityChange.bind(this));
+        window.addEventListener("popstate", this.handlePopState.bind(this));
+        //document.addEventListener("visibilitychange", this.handleVisibilityChange.bind(this));
     }
 
     disconnect() {
@@ -17,6 +18,10 @@ export default class extends Controller {
             console.log('Stimulus need refresh articles !!')
             this.refreshArticles();
         }
+    }
+
+    handlePopState() {
+        console.log('Refreshing articles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     }
 
     refreshArticles() {

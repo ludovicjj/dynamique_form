@@ -19,5 +19,20 @@
                 </div>
             </div>
         </div>
+
+        <h1>Report</h1>
+        <div id="articles-list" data-controller="refresh">
+            {% for report in reports %}
+                <div id="article-{{ report.id }}">
+                    <p>{{ report.id }} -- {{ report.reference }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ path('app_report_create', {'id': 4, 'reportType': 2}) }}"
+           class="btn btn-secondary"
+           data-turbo="false">
+            Créer FCE
+        </a>
     </main>
 {% endblock %}
